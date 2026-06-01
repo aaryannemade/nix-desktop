@@ -77,7 +77,7 @@
   environment.shells = with pkgs; [ zsh ];
 
   environment.systemPackages = with pkgs; [
-    vim
+    neovim
     wget
     git
     curl
