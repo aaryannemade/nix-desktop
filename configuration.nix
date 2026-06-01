@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 
 {
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -7,7 +7,9 @@
       "nvidia-settings"
     ];
 
-  imports = [ ];
+  imports = [ 
+    inputs.mangowm.nixosModules.mango
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -27,13 +29,15 @@
       enable = true;
       autoRepeatDelay = 200;
       autoRepeatInterval = 35;
-       windowManager.qtile.enable = true;
+      windowManager.qtile.enable = true;
 
       videoDrivers = [ "modesetting" "nvidia" ];
   };
 
   services.displayManager.ly.enable = true;
 
+  programs.mango.enable = true;
+  
   # services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.graphics.enable = true;

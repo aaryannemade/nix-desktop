@@ -8,6 +8,11 @@
             inputs.nixpkgs.follows = "nixpkgs";
         };
 
+        mangowm = {
+            url = "github:mangowm/mango";
+            inputs.nixpkgs.follows = "nixpkgs";
+        };
+
         nur.url = "github:nix-community/nur";
 
     };
