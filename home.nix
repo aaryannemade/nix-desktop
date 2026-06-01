@@ -11,7 +11,6 @@ in
 {
     home.username = "aaryan";
     home.homeDirectory = "/home/aaryan";
-    programs.git.enable = true;
     home.stateVersion = "25.05";
 
     imports = [
