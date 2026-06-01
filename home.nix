@@ -16,6 +16,7 @@
       ./modules/zsh.nix
       ./modules/git.nix
       ./modules/bat.nix
+      ./modules/wl-clipboard.nix
       ./modules/neovim.nix
       ./modules/mangowm.nix
       ./modules/btop.nix

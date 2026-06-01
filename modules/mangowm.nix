@@ -6,14 +6,14 @@
 
     settings = {
         # Window effects
-        blur = 1;
-        blur_optimized = 1;
-        blur_params = {
-            radius = 5;
-            num_passes = 2;
-        };
-        border_radius = 6;
-        focused_opacity = 1.0;
+        blur = 0;
+	blur_layer = 0;
+	blur_optimized = 1;
+	blur_params_radius = 5;
+	blur_params_noise = 0.02;
+	blur_params_brightness = 0.9;
+	blur_params_contrast = 0.9;
+	blur_params_saturation = 1.2;
 
         # Animations - use underscores for multi-part keys
         animations = 1;
@@ -30,12 +30,11 @@
 
         # Use lists for duplicate keys like bind and tagrule
         bind = [
-            "SUPER,r,reload_config"
+            "Super,r,reload_config"
             # "Alt,space,spawn,rofi -show drun"
             "Alt,Return,spawn,ghostty"
             "Alt,q,killclient"
-            "SUPER+SHIFT,e,quit"
-            "ALT,R,setkeymode,resize"  # Enter resize mode
+            "Super,m,quit"
         ];
 
         tagrule = [

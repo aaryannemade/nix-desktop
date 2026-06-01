@@ -83,6 +83,7 @@
     git
     curl
     bat
+    wl-clipboard
     wlr-randr
     btop
     ncdu
