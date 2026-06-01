@@ -1,4 +1,4 @@
-{ config, inputs, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, mangowm, ... }:
 
 {
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -8,7 +8,7 @@
     ];
 
   imports = [ 
-    inputs.mangowm.nixosModules.mango
+    mangowm.nixosModules.mango
   ];
 
   boot.loader.systemd-boot.enable = true;

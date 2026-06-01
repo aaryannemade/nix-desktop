@@ -17,9 +17,9 @@
 
     };
 
-    outputs = { self, nixpkgs, home-manager, nur, ... }: {
+    outputs = inputs@{ self, nixpkgs, home-manager, nur, mangowm, ... }: {
         nixosConfigurations = import ./hosts {
-          inherit nixpkgs home-manager nur;
+          inherit nixpkgs home-manager nur mangowm;
         };
     };
 }

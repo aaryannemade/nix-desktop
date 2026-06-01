@@ -1,9 +1,12 @@
-{ nixpkgs, home-manager, nur, ... }:
+{ nixpkgs, home-manager, nur, mangowm, ... }:
 
 let
   # Helper function to create a host configuration
   mkHost = hostname: nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
+    specialArgs = {
+    	inherit mangowm;
+    };
     modules = [
       ./${hostname}/configuration.nix
 
