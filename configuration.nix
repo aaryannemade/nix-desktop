@@ -100,6 +100,13 @@
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 10d";
+  };
+
+  boot.loader.systemd-boot.configurationLimit = 5;
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
