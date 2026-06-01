@@ -11,6 +11,7 @@
       init.defaultBranch = "main";
       pull.rebase = false;
       push.autoSetupRemote = true;
+      credential.helper = "!glab auth git-credential";
     };
   };
 }
