@@ -18,6 +18,7 @@ let
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
+	  sharedModules = [ mangowm.hmModules.mango ];
           users.aaryan = import ../home.nix;
           backupFileExtension = "backup";
           

@@ -5,7 +5,6 @@
     enable = true;
 
     settings = {
-        {
         # Window effects
         blur = 1;
         blur_optimized = 1;
@@ -51,7 +50,6 @@
             ];
             };
         };
-        }
     };
   };
 }
