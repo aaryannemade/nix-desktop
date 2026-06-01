@@ -7,4 +7,7 @@
   ];
 
   # Phantom-specific overrides can go here in the future
+  programs.zsh.shellAliases = {
+    buddy = "echo looks like this works";
+  };
 }
