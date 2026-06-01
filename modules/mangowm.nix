@@ -33,6 +33,8 @@
             "SUPER,r,reload_config"
             # "Alt,space,spawn,rofi -show drun"
             "Alt,Return,spawn,ghostty"
+            "Alt,q,killclient"
+            "SUPER+SHIFT,e,quit"
             "ALT,R,setkeymode,resize"  # Enter resize mode
         ];
 
