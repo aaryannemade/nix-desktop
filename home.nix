@@ -17,6 +17,7 @@
       ./modules/git.nix
       ./modules/bat.nix
       ./modules/neovim.nix
+      ./modules/mangowm.nix
       ./modules/btop.nix
       ./apps/ghostty.nix
       ./apps/librewolf.nix
