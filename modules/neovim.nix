@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ...}:
+{ config, inputs, pkgs, lib, ...}:
 
 {
   home.packages = with pkgs; [
@@ -16,11 +16,17 @@
     nodejs
   ];
 
-  programs.neovim = {
-    enable = true;
-    viAlias = true;
-    vimAlias = true;
-    withRuby = false;
-    withPython3 = true;
+  programs.neovim.enable = true;
+
+  xdg.configFile."nvim" = {
+  	source = inputs.nvim-config;
+    recursive = true;
   };
+  #programs.neovim = {
+  #  enable = true;
+  #  viAlias = true;
+  #  vimAlias = true;
+  #  withRuby = false;
+  #  withPython3 = false;
+  #};
 }

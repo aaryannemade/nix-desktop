@@ -3,284 +3,353 @@
 {
   wayland.windowManager.mango = {
     enable = true;
+    
+    autostart_sh = ''
+      quickshell & 
+    '';
 
     settings = {
-      # Window effect
-      blur = 0;
-      blur_layer = 0;
-      blur_optimized = 1;
-      blur_params_num_passes = 2;
-      blur_params_radius = 5;
-      blur_params_noise = 0.02;
-      blur_params_brightness = 0.9;
-      blur_params_contrast = 0.9;
-      blur_params_saturation = 1.2;
+# MangoWM Config — meloworld
+# More options: https://github.com/DreamMaoMao/mango/wiki/
 
-      shadows = 0;
-      layer_shadows = 0;
-      shadow_only_floating = 1;
-      shadows_size = 10;
-      shadows_blur = 15;
-      shadows_position_x = 0;
-      shadows_position_y = 0;
-      # shadowscolor = 0x000000ff;
+# ─── Autostart ────────────────────────────────────────────────────────────────
+#exec-once = awww-daemon
+#exec-once = quickshell
+#exec-once = wl-paste --type text --watch cliphist store
+#exec-once = wl-paste --type image --watch cliphist store
+#exec-once = ~/.local/bin/nightlight.sh
+#exec-once = ~/.config/mango/scripts/chime.sh
+#exec-once = ~/.config/mango/scripts/usb-sound.sh
+#exec-once = hypridle
 
-      border_radius=6;
-      no_radius_when_single=0;
-      focused_opacity=1.0;
-      unfocused_opacity=1.0;
+# ─── Monitors ─────────────────────────────────────────────────────────────────
+allow_tearing=2;
 
-      
-      # Animation Configuration(support type:zoom,slide)
-      # tag_animation_direction: 1-horizontal,0-vertical
-      animations = 1;
-      layer_animations = 1;
-      animation_type_open = "slide";
-      animation_type_close = "slide";
-      animation_fade_in = 1;
-      animation_fade_out = 1;
-      tag_animation_direction = 1;
-      zoom_initial_ratio = 0.4;
-      zoom_end_ratio = 0.8;
-      fadein_begin_opacity = 0.5;
-      fadeout_begin_opacity = 0.8;
-      animation_duration_move = 500;
-      animation_duration_open = 400;
-      animation_duration_tag = 350;
-      animation_duration_close = 800;
-      animation_duration_focus = 0;
-      animation_curve_open = "0.46,1.0,0.29,1";
-      animation_curve_move = "0.46,1.0,0.29,1";
-      animation_curve_tag = "0.46,1.0,0.29,1";
-      animation_curve_close = "0.08,0.92,0,1";
-      animation_curve_focus = "0.46,1.0,0.29,1";
-      animation_curve_opafadeout = "0.5,0.5,0.5,0.5";
-      animation_curve_opafadein = "0.46,1.0,0.29,1";
+# ─── Window Effects ───────────────────────────────────────────────────────────
+blur=1;
+blur_layer=1;
+blur_optimized=0;
+blur_params_num_passes=4;
+blur_params_radius=8;
+blur_params_noise=0.02;
+blur_params_brightness=0.9;
+blur_params_contrast=0.9;
+blur_params_saturation=1.2;
 
-      # Scroller Layout Setting
-      scroller_structs = 20;
-      scroller_default_proportion = 0.8;
-      scroller_focus_center = 0;
-      scroller_prefer_center = 0;
-      edge_scroller_pointer_focus = 1;
-      edge_scroller_focus_allow_speed = 0.0;
-      scroller_default_proportion_single = 1.0;
-      scroller_proportion_preset = "0.5,0.8,1.0";
+shadows=0;
+layer_shadows=0;
+shadow_only_floating=1;
+shadows_size=10;
+shadows_blur=15;
+shadows_position_x=0;
+shadows_position_y=0;
+shadowscolor="0x000000ff";
+
+border_radius=8;
+no_radius_when_single=0;
+focused_opacity=1.0;
+unfocused_opacity=1.0;
+
+# ─── Animations ───────────────────────────────────────────────────────────────
+animations=1;
+layer_animations=1;
+animation_type_open="slide";
+animation_type_close="slide";
+animation_fade_in=1;
+animation_fade_out=1;
+tag_animation_direction=1;
+zoom_initial_ratio=0.3;
+zoom_end_ratio=0.8;
+fadein_begin_opacity=0.5;
+fadeout_begin_opacity=0.8;
+animation_duration_move=500;
+animation_duration_open=400;
+animation_duration_tag=350;
+animation_duration_close=400;
+animation_duration_focus=0;
+animation_curve_open="0.46,1.0,0.29,1";
+animation_curve_move="0.46,1.0,0.29,1";
+animation_curve_tag="0.46,1.0,0.29,1";
+animation_curve_close="0.08,0.92,0,1";
+animation_curve_focus="0.46,1.0,0.29,1";
+animation_curve_opafadeout="0.5,0.5,0.5,0.5";
+animation_curve_opafadein="0.46,1.0,0.29,1";
+
+# ─── Scroller Layout ──────────────────────────────────────────────────────────
+scroller_structs=20;
+scroller_default_proportion=0.8;
+scroller_focus_center=0;
+scroller_prefer_center=0;
+edge_scroller_pointer_focus=1;
+scroller_default_proportion_single=1.0;
+scroller_proportion_preset="0.5,0.8,1.0";
+
+# ─── Master-Stack Layout ──────────────────────────────────────────────────────
+new_is_master=1;
+default_mfact=0.5;
+default_nmaster=1;
+smartgaps=0;
+
+# ─── Dwindle Layout ───────────────────────────────────────────────────────────
+dwindle_smart_split = 1;
+dwindle_manual_split = 1;
+dwindle_drop_simple_split = 0;
+
+# ─── Overview ─────────────────────────────────────────────────────────────────
+hotarea_size=10;
+enable_hotarea=1;
+hotarea_corner = 3;
+ov_tab_mode=1;
+overviewgappi=5;
+overviewgappo=30;
+ov_no_resize = 1;
+
+# ─── Misc ─────────────────────────────────────────────────────────────────────
+no_border_when_single=0;
+axis_bind_apply_timeout=100;
+focus_on_activate=1;
+idleinhibit_ignore_visible=0;
+sloppyfocus=1;
+warpcursor=1;
+focus_cross_monitor=0;
+focus_cross_tag=0;
+enable_floating_snap=0;
+snap_distance=30;
+drag_tile_to_tile=1;
+tag_carousel = 1;
+
+# ─── Keyboard ─────────────────────────────────────────────────────────────────
+repeat_rate = 40;
+repeat_delay = 400;
+numlockon = 1;
+xkb_rules_layout = "us";
+xkb_rules_options = "caps:escape";
+
+# ─── Trackpad ─────────────────────────────────────────────────────────────────
+# (requires relogin to apply)
+disable_trackpad=0;
+tap_to_click=1;
+tap_and_drag=1;
+drag_lock=1;
+trackpad_natural_scrolling=1;
+disable_while_typing=1;
+left_handed=0;
+middle_button_emulation=0;
+swipe_min_threshold=1;
+trackpad_accel_profile=2;
+trackpad_accel_speed=0.0;
+
+# ─── Mouse ────────────────────────────────────────────────────────────────────
+# (requires relogin to apply)
+mouse_natural_scrolling=0;
+mouse_accel_profile=1;
+mouse_accel_speed=-0.2;
+
+# ─── Cursor ───────────────────────────────────────────────────────────────────
+cursor_size=22;
+cursor_theme="Bibata-Modern-Classic";
+
+# ─── Appearance ───────────────────────────────────────────────────────────────
+gappih=8;
+gappiv=8;
+gappoh=10;
+gappov=10;
+scratchpad_width_ratio=0.8;
+scratchpad_height_ratio=0.9;
+borderpx=4;
+rootcolor="0x201b14ff";
+bordercolor="0x37474fff";
+focuscolor="0x80cbc4ff";
+maximizescreencolor="0x89aa61ff";
+urgentcolor="0xef9a9aff";
+scratchpadcolor="0x516c93ff";
+globalcolor="0xb153a7ff";
+overlaycolor="0x14a57cff";
+
+splitcolor="0x80cbc4ff";
+dropcolor="0x37474fff";
+
+# ─── Tag Layout Rules ─────────────────────────────────────────────────────────
+# layout options: tile, scroller, grid, deck, monocle, center_tile, vertical_tile, vertical_scroller, dwindle
+tagrule= [
+  "id:1,layout_name:dwindle"
+  "id:2,layout_name:dwindle"
+  "id:3,layout_name:dwindle"
+  "id:4,layout_name:dwindle"
+  "id:5,layout_name:dwindle"
+  "id:6,layout_name:dwindle"
+  "id:7,layout_name:dwindle"
+  "id:8,layout_name:dwindle"
+  "id:9,layout_name:dwindle"
+];
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# KEY BINDINGS
+# key names: use `xev` or `wev` to find key names
+# mod keys: super, ctrl, alt, shift, none
+#
+# Modifier logic:
+#   SUPER           = window focus / navigation
+#   SUPER+SHIFT     = window manipulation (move, state change)
+#   SUPER+CTRL      = move client to tag
+#   SUPER+ALT       = layout-level controls (gaps, proportions, layout switch)
+#   ALT+SHIFT       = monitor focus / client-to-monitor
+#   CTRL+SHIFT      = floating window move
+#   CTRL+ALT        = floating window resize
+# ═══════════════════════════════════════════════════════════════════════════════
+bind = [
+# ─── Session ──────────────────────────────────────────────────────────────────
+  "SUPER,r,reload_config"
+  "SUPER+SHIFT,escape,quit"
+  # SUPER+SHIFT,l,spawn,quickshell -c ~/.config/quickshell/lockscreen
+  "SUPER,m,quit"
+
+# ─── Launch ───────────────────────────────────────────────────────────────────
+
+  #bind = ALT,space,spawn,qs ipc call launcher toggleg
+  "SUPER,Return,spawn,ghostty"
+
+  #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
+  #bind = SUPER,v,spawn,qs ipc call launcher openClipboard
+  #bind = SUPER,w,spawn,qs ipc call launcher openWallpaper
+  #bind = SUPER,n,spawn,nautilus
+
+# Old unused rofi shortcuts
+# bind = ALT,space,spawn,rofi -show drun
+# bind = SUPER,e,spawn,rofimoji --hidden-descriptions --use-icons --action copy --selector-args="-no-config -theme $HOME/.config/rofi/themes/emoji.rasi"
+# bind = SUPER,v,spawn, ~/.config/mango/scripts/clipboard.sh
+# bind = SUPER,w,spawn, ~/.config/rofi/scripts/wallpaper-select.sh
 
 
-      # Master-Stack Layout Setting
-      new_is_master = 1;
-      default_mfact = 0.55;
-      default_nmaster = 1;
-      smartgaps = 0;
+# ─── Window: Lifecycle ────────────────────────────────────────────────────────
+  "SUPER,q,killclient"
 
-      # Dwindle Layout Setting
-      dwindle_smart_split = 0;
-      dwindle_drop_simple_split = 1;
-      dwindle_manual_split = 0;
-      dwindle_hsplit = 1;
-      dwindle_vsplit = 1;
-      dwindle_preserve_split = 0;
+# ─── Window: Focus ────────────────────────────────────────────────────────────
+# Pure vi-style hjkl. SUPER,l (focus right) is unambiguous —
+  "SUPER,h,focusdir,left"
+  "SUPER,l,focusdir,right"
+  "SUPER,k,focusdir,up"
+  "SUPER,j,focusdir,down"
 
-      # Overview Setting
-      hotarea_size = 10;
-      enable_hotarea = 0;
-      ov_tab_mode = 1;
-      ov_no_resize = 1;
-      overviewgappi = 5;
-      overviewgappo = 30;
+# ─── Window: Overview & Stack Cycle ──────────────────────────────────────────
+  "SUPER,Tab,toggleoverview"
+  "SUPER+SHIFT,Tab,focusstack,next"
 
-      # Misc
-      no_border_when_single = 0;
-      axis_bind_apply_timeout = 100;
-      focus_on_activate = 1;
-      idleinhibit_ignore_visible = 0;
-      sloppyfocus = 1;
-      warpcursor = 1;
-      focus_cross_monitor = 0;
-      focus_cross_tag = 0;
-      enable_floating_snap = 0;
-      snap_distance = 30;
-      cursor_size = 24;
-      drag_tile_to_tile = 1;
-      drag_tile_small = 1;
+# ─── Window: Swap ─────────────────────────────────────────────────────────────
+  "SUPER+SHIFT,h,exchange_client,left"
+  "SUPER+SHIFT,j,exchange_client,down"
+  "SUPER+SHIFT,k,exchange_client,up"
 
-      # keyboard
-      repeat_rate = 25;
-      repeat_delay = 600;
-      numlockon = 0;
-      xkb_rules_layout = "us";
+# ─── Window: State ────────────────────────────────────────────────────────────
+  "SUPER,space,togglefloating"
+  "SUPER,f,togglefullscreen"
+  "SUPER+SHIFT,f,togglefakefullscreen"
+  "SUPER,m,togglemaximizescreen"
+  "SUPER,comma,minimized"
+  "SUPER+SHIFT,comma,restore_minimized"
+  "SUPER,g,toggleglobal"
+  "SUPER,o,toggleoverlay"
+  "SUPER,grave,toggle_scratchpad"
 
-      # Trackpad
-      # need relogin to make it apply
-      disable_trackpad = 0;
-      tap_to_click = 1;
-      tap_and_drag = 1;
-      drag_lock = 1;
-      trackpad_natural_scrolling = 0;
-      disable_while_typing = 1;
-      left_handed = 0;
-      middle_button_emulation = 0;
-      swipe_min_threshold = 1;
+# ─── Layout ───────────────────────────────────────────────────────────────────
+  "SUPER+ALT,space,switch_layout"
 
-      # mouse
-      # need relogin to make it apply
-      mouse_natural_scrolling = 0;
+  "SUPER+ALT,f,set_proportion,1.0"
+  "SUPER+ALT,p,switch_proportion_preset"
 
-      # Appearance
-      gappih = 5;
-      gappiv = 5;
-      gappoh = 10;
-      gappov = 10;
-      scratchpad_width_ratio = 0.8;
-      scratchpad_height_ratio = 0.9;
-      borderpx = 4;
-      rootcolor = "0x201b14ff";
-      bordercolor = "0x444444ff";
-      dropcolor = "0x8FBA7C55";
-      splitcolor = "0xEB441EFF";
-      focuscolor = "0xc9b890ff";
-      maximizescreencolor = "0x89aa61ff";
-      urgentcolor = "0xad401fff";
-      scratchpadcolor = "0x516c93ff";
-      globalcolor = "0xb153a7ff";
-      overlaycolor = "0x14a57cff";
+  "SUPER+ALT,h,spawn,mmsg split h"
+  "SUPER+ALT,v,spawn,mmsg split v"
 
-      # layout support:
-      # tile,scroller,grid,deck,monocle,center_tile,vertical_tile,vertical_scroller
-      tagrule = [
-        "id:1,layout_name:tile"
-        "id:2,layout_name:tile"
-        "id:3,layout_name:tile"
-        "id:4,layout_name:tile"
-        "id:5,layout_name:tile"
-        "id:6,layout_name:tile"
-        "id:7,layout_name:tile"
-        "id:8,layout_name:tile"
-        "id:9,layout_name:tile"
+# ─── Gaps ─────────────────────────────────────────────────────────────────────
+  "SUPER+ALT,equal,incgaps,1"
+  "SUPER+ALT,minus,incgaps,-1"
+  "SUPER+ALT,g,togglegaps"
+
+# ─── Tags: Switch ─────────────────────────────────────────────────────────────
+  "SUPER,Left,viewtoleft,0"
+  "SUPER,Right,viewtoright,0"
+  "SUPER+CTRL,Left,tagtoleft,0"
+  "SUPER+CTRL,Right,tagtoright,0"
+
+  "SUPER,1,view,1,0"
+  "SUPER,2,view,2,0"
+  "SUPER,3,view,3,0"
+  "SUPER,4,view,4,0"
+  "SUPER,5,view,5,0"
+  "SUPER,6,view,6,0"
+  "SUPER,7,view,7,0"
+  "SUPER,8,view,8,0"
+  "SUPER,9,view,9,0"
+
+# ─── Tags: Move Client ────────────────────────────────────────────────────────
+  "SUPER+SHIFT,1,tag,1,0"
+  "SUPER+SHIFT,2,tag,2,0"
+  "SUPER+SHIFT,3,tag,3,0"
+  "SUPER+SHIFT,4,tag,4,0"
+  "SUPER+SHIFT,5,tag,5,0"
+  "SUPER+SHIFT,6,tag,6,0"
+  "SUPER+SHIFT,7,tag,7,0"
+  "SUPER+SHIFT,8,tag,8,0"
+  "SUPER+SHIFT,9,tag,9,0"
+
+# ─── Monitor ──────────────────────────────────────────────────────────────────
+  "ALT+SHIFT,Left,focusmon,left"
+  "ALT+SHIFT,Right,focusmon,right"
+  "SUPER+ALT,Left,tagmon,left"
+  "SUPER+ALT,Right,tagmon,right"
+
+# ─── Window: Move (Floating) ──────────────────────────────────────────────────
+  "CTRL+SHIFT,Up,movewin,+0,-20"
+  "CTRL+SHIFT,Down,movewin,+0,+20"
+  "CTRL+SHIFT,Left,movewin,-20,+0"
+  "CTRL+SHIFT,Right,movewin,+20,+0"
+
+# ─── Window: Resize ───────────────────────────────────────────────────────────
+  "CTRL+ALT,Up,resizewin,+0,-20"
+  "CTRL+ALT,Down,resizewin,+0,+20"
+  "CTRL+ALT,Left,resizewin,-20,+0"
+  "CTRL+ALT,Right,resizewin,+20,+0"
+
+# ─── Mouse ────────────────────────────────────────────────────────────────────
+  #"SUPER,btn_left,moveresize,curmove"
+  #"SUPER,btn_right,moveresize,curresize"
+
+# ─── Scroll: Tag Navigation ───────────────────────────────────────────────────
+  "SUPER,UP,viewtoleft_have_client"
+  "SUPER,DOWN,viewtoright_have_client"
+
+# ─── Media & Hardware Keys ────────────────────────────────────────────────────
+#bind=NONE,XF86AudioRaiseVolume,spawn,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.0
+#bind=NONE,XF86AudioLowerVolume,spawn,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+#bind=NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+#bind=NONE,XF86AudioMicMute,spawn,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+#bind=NONE,XF86MonBrightnessUp,spawn,brightnessctl set 5%+
+#bind=NONE,XF86MonBrightnessDown,spawn,brightnessctl set 5%-
+
+# ─── Media Controls ───────────────────────────────────────────────────────────
+#bind=NONE,XF86AudioPlay,spawn,playerctl play-pause
+#bind=NONE,XF86AudioNext,spawn,playerctl next
+#bind=NONE,XF86AudioPrev,spawn,playerctl previous
+
+# ─── Screenshots ──────────────────────────────────────────────────────────────
+#bind=SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; quickshell -c ~/.config/quickshell/screenshot/'
+#bind=SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'
+#layerrule=noblur:1,layer_name:selection
+
+# Unblur Polkit
+#layerrule=noblur:1,layer_name:polkit-dialog
+
+# ─── Layer Animations ─────────────────────────────────────────────────────────
+#layerrule=animation_type_open:zoom,layer_name:rofi
+#layerrule=animation_type_close:zoom,layer_name:rofi
+
+# ─── Window Rules ─────────────────────────────────────────────────────────────
+#windowrule=isfloating:1,width:600,height:400,title:nmtui
+# windowrule=isfloating:1,width:860,height:600,title:Ghostty
+#windowrule=isfloating:1,width:1600,height:900,appid:Spotify
+#windowrule=isfloating:1,width:900,height:600,appid:org.gnome.Nautilus
+#windowrule=isfloating:1,width:1400,height:860,title:Vesktop
       ];
-
-      # Key Bindings
-      # key name refer to `xev` or `wev` command output,
-      # mod keys name: super,ctrl,alt,shift,none
-
-      # reload config
-      bind = [
-        "SUPER,r,reload_config"
-
-        # menu and terminal
-        # bind = "Alt,space,spawn,rofi -show drun"
-        "Alt,Return,spawn,ghostty"
-
-        # exit
-        "SUPER,m,quit"
-        "ALT,q,killclient"
-
-        # switch window focus
-        "SUPER,Tab,focusstack,next"
-        "ALT,Left,focusdir,left"
-        "ALT,Right,focusdir,right"
-        "ALT,Up,focusdir,up"
-        "ALT,Down,focusdir,down"
-
-        # swap window
-        "SUPER+SHIFT,Up,exchange_client,up"
-        "SUPER+SHIFT,Down,exchange_client,down"
-        "SUPER+SHIFT,Left,exchange_client,left"
-        "SUPER+SHIFT,Right,exchange_client,right"
-        
-        # switch window status
-        "SUPER,g,toggleglobal"
-        "ALT,Tab,toggleoverview"
-        "ALT,backslash,togglefloating"
-        "ALT,a,togglemaximizescreen"
-        "ALT,f,togglefullscreen"
-        "ALT+SHIFT,f,togglefakefullscreen"
-        "SUPER,i,minimized"
-        "SUPER,o,toggleoverlay"
-        "SUPER+SHIFT,I,restore_minimized"
-        "ALT,z,toggle_scratchpad"
-
-        # scroller layout
-        "ALT,e,set_proportion,1.0"
-        "ALT,x,switch_proportion_preset"
-        "alt+super+ctrl,Left,scroller_stack,left"
-        "alt+super+ctrl,Right,scroller_stack,right"
-        "alt+super+ctrl,Up,scroller_stack,up"
-        "alt+super+ctrl,Down,scroller_stack,down"
-
-        #dwindle layout(manual split mode)
-        "alt+shift,Return,dwindle_toggle_split_direction"
-
-        # switch layout
-        "SUPER,n,switch_layout"
-
-        # tag switch
-        "SUPER,Left,viewtoleft,0"
-        "CTRL,Left,viewtoleft_have_client,0"
-        "SUPER,Right,viewtoright,0"
-        "CTRL,Right,viewtoright_have_client,0"
-        "CTRL+SUPER,Left,tagtoleft,0"
-        "CTRL+SUPER,Right,tagtoright,0"
-        
-        "Ctrl,1,view,1,0"
-        "Ctrl,2,view,2,0"
-        "Ctrl,3,view,3,0"
-        "Ctrl,4,view,4,0"
-        "Ctrl,5,view,5,0"
-        "Ctrl,6,view,6,0"
-        "Ctrl,7,view,7,0"
-        "Ctrl,8,view,8,0"
-        "Ctrl,9,view,9,0"
-
-
-        # tag: move client to the tag and focus it
-        # tagsilent: move client to the tag and not focus it
-        # bind=Alt,1,tagsilent,1
-        "Alt,1,tag,1,0"
-        "Alt,2,tag,2,0"
-        "Alt,3,tag,3,0"
-        "Alt,4,tag,4,0"
-        "Alt,5,tag,5,0"
-        "Alt,6,tag,6,0"
-        "Alt,7,tag,7,0"
-        "Alt,8,tag,8,0"
-        "Alt,9,tag,9,0"
-
-        # monitor switch
-        "alt+shift,Left,focusmon,left"
-        "alt+shift,Right,focusmon,right"
-        "SUPER+Alt,Left,tagmon,left"
-        "SUPER+Alt,Right,tagmon,right"
-
-        # gaps 
-        "ALT+SHIFT,X,incgaps,1"
-        "ALT+SHIFT,Z,incgaps,-1"
-        "ALT+SHIFT,R,togglegaps"
-
-        # movewin
-        "CTRL+SHIFT,Up,movewin,+0,-50"
-        "CTRL+SHIFT,Down,movewin,+0,+50"
-        "CTRL+SHIFT,Left,movewin,-50,+0"
-        "CTRL+SHIFT,Right,movewin,+50,+0"
-
-        # resizewin
-        "CTRL+ALT,Up,resizewin,+0,-50"
-        "CTRL+ALT,Down,resizewin,+0,+50"
-        "CTRL+ALT,Left,resizewin,-50,+0"
-        "CTRL+ALT,Right,resizewin,+50,+0"
-      ];
-
-
-        # Keymodes (submaps) for modal keybindings
-        #keymode = {
-        #    resize = {
-        #    bind = [
-        #        "NONE,Left,resizewin,-10,0"
-        #        "NONE,Escape,setkeymode,default"
-        #    ];
-        #    };
-        #};
     };
   };
 }

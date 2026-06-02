@@ -147,12 +147,67 @@
         "type": "github"
       }
     },
+    "nvim-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1779177504,
+        "narHash": "sha256-Nb6Hwxwje3/8JE7+nlUoR8YglhbsbgnMUmG4IKhJvdU=",
+        "owner": "tonybanters",
+        "repo": "nvim",
+        "rev": "f900f6dcbcb2623cf09d8c235d118c9eeee89a1e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tonybanters",
+        "repo": "nvim",
+        "type": "github"
+      }
+    },
+    "quickshell": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1780303737,
+        "narHash": "sha256-7HgdJBG4BgAPDyHKKxWtxj7nziqsQo6zQCXtwy+L9fs=",
+        "ref": "refs/heads/master",
+        "rev": "b66495fcc5022681b56b61f928c7acbe910e722c",
+        "revCount": 821,
+        "type": "git",
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://git.outfoxxed.me/outfoxxed/quickshell"
+      }
+    },
+    "quickshell-config": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780407312,
+        "narHash": "sha256-o9eqU3pJiBIeLPq0dWrec0RkGYfXhdJ2BBvqLlnCYzg=",
+        "owner": "aaryandesignsgames",
+        "repo": "quickshell-dummy",
+        "rev": "03bca398646dd564456cb21cbb39b08c8eecb2b4",
+        "type": "gitlab"
+      },
+      "original": {
+        "owner": "aaryandesignsgames",
+        "repo": "quickshell-dummy",
+        "type": "gitlab"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "mangowm": "mangowm",
         "nixpkgs": "nixpkgs",
-        "nur": "nur"
+        "nur": "nur",
+        "nvim-config": "nvim-config",
+        "quickshell": "quickshell",
+        "quickshell-config": "quickshell-config"
       }
     },
     "scenefx": {

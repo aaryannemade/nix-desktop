@@ -1,4 +1,4 @@
-{ nixpkgs, home-manager, nur, mangowm, ... }:
+{ nixpkgs, home-manager, nur, mangowm, inputs, ... }:
 
 let
   # Helper function to create a host configuration
@@ -23,7 +23,7 @@ let
           backupFileExtension = "backup";
           
           extraSpecialArgs = {
-            inherit nur; 
+            inherit nur inputs;
           };
         };
       }
