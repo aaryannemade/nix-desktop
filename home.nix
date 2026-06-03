@@ -14,15 +14,13 @@ let
     let 
       inherit (lib) hasSuffix;
       inherit (builtins) readDir attrNames filter map;
+      names = attrNames (readDir dir);
+      nixFiles = filter (name:
+        hasSuffix ".nix" name &&
+        name != "default.nix"
+      ) names;
     in
-      dir
-      |> readDir
-      |> attrNames
-      |> filter (name: 
-           hasSuffix ".nix" name &&        # Only .nix files
-           name != "default.nix"           # Exclude default.nix
-         )
-      |> map (name: dir + "/${name}");
+      map (name: dir + "/${name}") nixFiles;
 in
 {
     home.username = "aaryan";
