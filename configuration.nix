@@ -67,10 +67,10 @@
     settings = {
       General = {
         Enable = "Source,Sink,Media,Socket";
-        Experimanetal = true;
-      }
-    }
-  }
+        Experimental = true;
+      };
+    };
+  };
 
   programs.zsh.enable = true;
 
@@ -109,11 +109,11 @@
     pipewire = {
       enable = true;
       pulse.enable = true;
-    }
-    # Enable Bluetooth
-    blueman = {
-      enable = true;
-    }
+    };
+    # # Enable Bluetooth
+    # blueman = {
+    #   enable = true;
+    # };
   };
 
   fonts.packages = with pkgs; [

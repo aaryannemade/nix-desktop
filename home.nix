@@ -21,6 +21,7 @@
       ./modules/neovim.nix
       ./modules/mangowm.nix
       ./modules/quickshell.nix
+      ./modules/bluetooth-ui.nix
       ./modules/btop.nix
       ./apps/ghostty.nix
       ./apps/librewolf.nix
@@ -42,6 +43,7 @@
 
     home.packages = with pkgs; [
       #quickshell
+      #overskride
       #waybar
     ];
 }
