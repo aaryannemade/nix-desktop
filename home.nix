@@ -8,6 +8,22 @@
 #     #nvim = "nvim";
 #   };
 # in
+let 
+  # Import function for all module and app .nix files
+  importModules = dir:
+    let 
+      inherit (lib) hasSuffix;
+      inherit (builtins) readDir attrNames filter map;
+    in
+      dir
+      |> readDir
+      |> attrNames
+      |> filter (name: 
+           hasSuffix ".nix" name &&        # Only .nix files
+           name != "default.nix"           # Exclude default.nix
+         )
+      |> map (name: dir + "/${name}");
+in
 {
     home.username = "aaryan";
     home.homeDirectory = "/home/aaryan";
@@ -17,21 +33,9 @@
       mkdir -p "$HOME/Pictures/Screenshots"
     '';
 
-    imports = [
-      ./modules/zsh.nix
-      ./modules/git.nix
-      ./modules/bat.nix
-      # ./modules/wl-clipboard.nix
-      ./modules/media-players.nix
-      ./modules/neovim.nix
-      ./modules/mangowm.nix
-      ./modules/quickshell.nix
-      ./modules/bluetooth-ui.nix
-      ./modules/btop.nix
-      ./modules/screenshot.nix
-      ./apps/ghostty.nix
-      ./apps/librewolf.nix
-    ];
+    imports = 
+      (importModules ./modules) ++
+      (importModules ./apps);
 
 
 #     xdg.configFile = builtins.mapAttrs (name: subpath: {
