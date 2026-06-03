@@ -94,6 +94,7 @@
     wl-clipboard
     wlr-randr
     brightnessctl
+    pulseaudio
     btop
     ncdu
     speedtest-cli
@@ -110,6 +111,9 @@
     pipewire = {
       enable = true;
       pulse.enable = true;
+      wireplumber= {
+        enable = true;
+      };
     };
     # # Enable Bluetooth
     # blueman = {
