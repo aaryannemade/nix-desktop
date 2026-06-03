@@ -93,6 +93,7 @@
     bat
     wl-clipboard
     wlr-randr
+    brightnessctl
     btop
     ncdu
     speedtest-cli
