@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 # let
 #   dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
 #   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
@@ -13,6 +13,10 @@
     home.homeDirectory = "/home/aaryan";
     home.stateVersion = "25.05";
 
+    home.activation.createPicturesDirectories = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      mkdir -p "$HOME/Pictures/Screenshots"
+    '';
+
     imports = [
       ./modules/zsh.nix
       ./modules/git.nix
@@ -24,6 +28,7 @@
       ./modules/quickshell.nix
       ./modules/bluetooth-ui.nix
       ./modules/btop.nix
+      ./modules/screenshot.nix
       ./apps/ghostty.nix
       ./apps/librewolf.nix
     ];

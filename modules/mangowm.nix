@@ -213,7 +213,7 @@ bind = [
   "SUPER,Return,spawn,ghostty"
 
   #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
-  #bind = SUPER,v,spawn,qs ipc call launcher openClipboard
+  "SUPER,v,spawn,qs ipc call launcher openClipboard"
   #bind = SUPER,w,spawn,qs ipc call launcher openWallpaper
   #bind = SUPER,n,spawn,nautilus
 
@@ -335,9 +335,9 @@ bind = [
 #bind=NONE,XF86AudioPrev,spawn,playerctl previous
 
 # ─── Screenshots ──────────────────────────────────────────────────────────────
-#bind=SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; quickshell -c ~/.config/quickshell/screenshot/'
-#bind=SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'
-#layerrule=noblur:1,layer_name:selection
+  #"SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; quickshell -c ~/.config/quickshell/screenshot/'"
+ "SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'"
+  #layerrule=noblur:1,layer_name:selection
 
 # Unblur Polkit
 #layerrule=noblur:1,layer_name:polkit-dialog
