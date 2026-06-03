@@ -1,26 +1,8 @@
 { config, lib, pkgs, ... }:
-# let
-#   dotfiles = "${config.home.homeDirectory}/nixos-dotfiles/config";
-#   create_symlink = path: config.lib.file.mkOutOfStoreSymlink path;
-#   configs = {
-#     #mango = "mango";
-#     #quickshell = "quickshell";
-#     #nvim = "nvim";
-#   };
-# in
+
 let 
-  # Import function for all module and app .nix files
-  importModules = dir:
-    let 
-      inherit (lib) hasSuffix;
-      inherit (builtins) readDir attrNames filter map;
-      names = attrNames (readDir dir);
-      nixFiles = filter (name:
-        hasSuffix ".nix" name &&
-        name != "default.nix"
-      ) names;
-    in
-      map (name: dir + "/${name}") nixFiles;
+  # Import shared helper function
+  importModules = import ./helpers/importModules.nix { inherit lib; };
 in
 {
     home.username = "aaryan";
@@ -35,12 +17,6 @@ in
       (importModules ./modules) ++
       (importModules ./apps);
 
-
-#     xdg.configFile = builtins.mapAttrs (name: subpath: {
-#       source = create_symlink "${dotfiles}/${subpath}";
-#       recursive = true;
-#     }) configs;
-
     wayland.windowManager.mango.enable = true;
 
     services = {
@@ -50,8 +26,7 @@ in
     };
 
     home.packages = with pkgs; [
-      #quickshell
-      #overskride
-      #waybar
+      # Packages are now auto-imported from ./apps/ and ./modules/
+      # Add any additional one-off packages here if needed
     ];
 }

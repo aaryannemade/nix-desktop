@@ -1,5 +1,9 @@
 { config, inputs, lib, pkgs, mangowm, ... }:
 
+let
+  # Import shared helper function
+  importModules = import ./helpers/importModules.nix { inherit lib; };
+in
 {
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) [
@@ -9,7 +13,7 @@
 
   imports = [ 
     mangowm.nixosModules.mango
-  ];
+  ] ++ (importModules ./core);
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -24,7 +28,6 @@
   time.timeZone = "Asia/Calcutta";
 
   # Enable the X11 windowing system.
-  # services.xserver.enable = false;
   services.xserver = {
       enable = true;
       autoRepeatDelay = 200;
@@ -85,22 +88,9 @@
 
   environment.shells = with pkgs; [ zsh ];
 
-  environment.systemPackages = with pkgs; [
-    neovim
-    wget
-    git
-    curl
-    bat
-    wl-clipboard
-    wlr-randr
-    brightnessctl
-    pulseaudio
-    btop
-    ncdu
-    speedtest-cli
-    asusctl
-    power-profiles-daemon
-    glab
+  environment.systemPackages = [
+    # Packages are now auto-imported from ./core/
+    # Add any additional one-off packages here if needed
   ];
 
   security.wrappers.btop = {
