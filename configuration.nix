@@ -99,8 +99,16 @@
     ncdu
     speedtest-cli
     asusctl
+    power-profiles-daemon
     glab
   ];
+
+  security.wrappers.btop = {
+    owner = "root";
+    group = "root";
+    capabilities = "cap_perfmon+ep cap_dac_read_search+ep";
+    source = "${pkgs.btop.override { cudaSupport = true; }}/bin/btop";
+  };
 
   services = {
     # Enable asus laptop control
@@ -148,4 +156,3 @@
 
   system.stateVersion = "25.05";
 }
-
