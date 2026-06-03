@@ -61,6 +61,17 @@
     };
   };
 
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    settings = {
+      General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimanetal = true;
+      }
+    }
+  }
+
   programs.zsh.enable = true;
 
   users.users.aaryan = {
@@ -90,9 +101,19 @@
   ];
 
   services = {
+    # Enable asus laptop control
     asusd = {
       enable = true;
     };
+    # Enable sound.
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+    }
+    # Enable Bluetooth
+    blueman = {
+      enable = true;
+    }
   };
 
   fonts.packages = with pkgs; [
@@ -111,12 +132,6 @@
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
-
-  # Enable sound.
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
