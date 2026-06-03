@@ -34,6 +34,12 @@
 
     wayland.windowManager.mango.enable = true;
 
+    services = {
+      mpris-proxy = {
+        enable = true;
+      };
+    };
+
     home.packages = with pkgs; [
       #quickshell
       #waybar
