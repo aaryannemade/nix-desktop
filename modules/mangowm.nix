@@ -23,6 +23,9 @@
 #exec-once = hypridle
 
 # ─── Monitors ─────────────────────────────────────────────────────────────────
+monitorrule = [
+  "make:BOE,model:0x0A07,width:2560,height:1440,refresh:165.003006,x:0,y:0,scale:1.4"
+];
 allow_tearing=2;
 
 # ─── Window Effects ───────────────────────────────────────────────────────────

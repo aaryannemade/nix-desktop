@@ -29,7 +29,6 @@
       enable = true;
       autoRepeatDelay = 200;
       autoRepeatInterval = 35;
-      windowManager.qtile.enable = true;
 
       videoDrivers = [ "modesetting" "nvidia" ];
   };
@@ -37,8 +36,6 @@
   services.displayManager.ly.enable = true;
 
   programs.mango.enable = true;
-  
-  # services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.graphics.enable = true;
 
@@ -95,7 +92,6 @@
   services = {
     asusd = {
       enable = true;
-      # enableUserService = true;
     };
   };
 
@@ -112,6 +108,7 @@
   };
 
   boot.loader.systemd-boot.configurationLimit = 5;
+
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
@@ -130,6 +127,5 @@
   services.openssh.enable = true;
 
   system.stateVersion = "25.05";
-
 }
 

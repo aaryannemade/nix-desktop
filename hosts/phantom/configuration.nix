@@ -8,6 +8,6 @@
 
   # Phantom-specific overrides can go here in the future
   programs.zsh.shellAliases = {
-    nix-rebuild = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#phantom";
+    nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#phantom";
   };
 }

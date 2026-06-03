@@ -21,7 +21,7 @@
     shellAliases = {
       c = "clear";
       ll = "ls -la";
-      btw = "echo I use nixos, btw";
+      btw = "echo I use nixos now, btw";
     };
   };
 }
