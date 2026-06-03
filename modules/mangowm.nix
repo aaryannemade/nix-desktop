@@ -209,7 +209,7 @@ bind = [
 
 # ─── Launch ───────────────────────────────────────────────────────────────────
 
-  #bind = ALT,space,spawn,qs ipc call launcher toggleg
+  "ALT,space,spawn,qs ipc call launcher toggle"
   "SUPER,Return,spawn,ghostty"
 
   #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
