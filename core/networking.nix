@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
-{ 
+{
     environment.systemPackages = with pkgs; [
-        bat
+        wget
+        curl
     ];
 }

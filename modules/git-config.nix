@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    glab
+  ];
+  
   programs.git = {
     enable = true;
 
