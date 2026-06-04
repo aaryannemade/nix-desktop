@@ -22,11 +22,11 @@ in
         music = "${config.home.homeDirectory}/music";
         videos = "${config.home.homeDirectory}/videos";
         projects = "${config.home.homeDirectory}/projects";
-      };
-      extraConfig = {
-        screenshots = "${config.home.homeDirectory}/pictures/screenshots";
-        screenrecordings = "${config.home.homeDirectory}/videos/screenrecordings";
-        trash = "${config.home.homeDirectory}/trash";
+        extraConfig = {
+          screenshots = "${config.home.homeDirectory}/pictures/screenshots";
+          screenrecordings = "${config.home.homeDirectory}/videos/screenrecordings";
+          trash = "${config.home.homeDirectory}/trash";
+        };
       };
     };
 
