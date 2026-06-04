@@ -11,16 +11,24 @@ in
     home.stateVersion = "25.05";
 
     # Create standard home directories on activation
-    home.activation.createHomeDirectories = createDirectories [
-      "Desktop"
-      "Documents"
-      "Downloads"
-      "Pictures"
-      "Pictures/Screenshots"
-      "Music"
-      "Videos"
-      "Projects"
-    ];
+    xdg = {
+      userDirs = {
+        enable = true;
+        createDirectories = true;
+        desktop = "${config.home.homeDirectory}/desktop";
+        documents = "${config.home.homeDirectory}/documents";
+        download = "${config.home.homeDirectory}/downloads";
+        pictures = "${config.home.homeDirectory}/pictures";
+        music = "${config.home.homeDirectory}/music";
+        videos = "${config.home.homeDirectory}/videos";
+        projects = "${config.home.homeDirectory}/projects";
+      };
+      extraConfig = {
+        screenshots = "${config.home.homeDirectory}/pictures/screenshots";
+        screenrecordings = "${config.home.homeDirectory}/videos/screenrecordings";
+        trash = "${config.home.homeDirectory}/trash";
+      };
+    };
 
     imports = 
       (importModules ./modules) ++
