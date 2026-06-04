@@ -9,14 +9,12 @@
         "nvidia-settings"
     ];
     
-    # Override btop globally so core/btop.nix installs the CUDA version.
-    # Avoids having two separate btop builds (plain + CUDA) on disk.
+    # Override btop globally so core/system-monitoring.nix installs the CUDA version.
     nixpkgs.config.packageOverrides = pkgs: {
         btop = pkgs.btop.override { cudaSupport = true; };
     };
 
     # Security wrapper so btop can read the Intel iGPU performance counters.
-    # Without cap_perfmon, btop only sees the NVIDIA dGPU (via CUDA/NVML).
     security.wrappers.btop = {
         owner = "root";
         group = "root";
