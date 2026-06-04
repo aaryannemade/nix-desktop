@@ -4,6 +4,7 @@
   imports = [
     ../../configuration.nix # Import common config
     ./hardware-configuration.nix  # Import hardware config
+    ./packages.nix # Import host specific packages
     ./graphics.nix # Import graphcis/display config    
   ];
 
@@ -23,5 +24,5 @@
   programs.zsh.shellAliases = {
     nrs = "sudo nixos-rebuild switch --flake ~/nixos-dotfiles#phantom";
   };
-  
+
 }
