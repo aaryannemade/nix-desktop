@@ -5,23 +5,16 @@ let
   importModules = import ./helpers/importModules.nix { inherit lib; };
 in
 {
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "nvidia-x11"
-      "nvidia-settings"
-    ];
-
   imports = [ 
     mangowm.nixosModules.mango
   ] ++ (importModules ./core);
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.systemd-boot.configurationLimit = 5;
 
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  networking.hostName = "phantom";
 
   networking.networkmanager.enable = true;
 
@@ -32,35 +25,44 @@ in
       enable = true;
       autoRepeatDelay = 200;
       autoRepeatInterval = 35;
-
-      videoDrivers = [ "modesetting" "nvidia" ];
   };
 
   services.displayManager.ly.enable = true;
 
   programs.mango.enable = true;
 
-  hardware.graphics.enable = true;
+  users.users.aaryan = {
+      isNormalUser = true;
+      extraGroups = [ "wheel" ];
+      packages = with pkgs; [
+        tree
+      ];
+      shell = pkgs.zsh;
+  };
 
-  hardware.nvidia = {
-    modesetting.enable = true;
+  environment.shells = with pkgs; [ zsh ];
+  programs.zsh.enable = true;
 
-    powerManagement.enable = false;
-    powerManagement.finegrained = false;
+  environment.systemPackages = [
+    # Packages are now auto-imported from ./core/
+    # Add any additional one-off packages here if needed
+  ];
 
-    open = true;
-    nvidiaSettings = true;
-
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-
-    prime = {
-      offload = {
+  services = {
+    # Enable sound.
+    pipewire = {
+      enable = true;
+      pulse.enable = true;
+      wireplumber= {
         enable = true;
-        enableOffloadCmd = true;
       };
-      
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
+    };
+    #Enable SSH Server Daemon
+    openssh = {
+      enable = true;
+    };
+    printing = {
+      enable = true;
     };
   };
 
@@ -75,50 +77,6 @@ in
     };
   };
 
-  programs.zsh.enable = true;
-
-  users.users.aaryan = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      packages = with pkgs; [
-        tree
-      ];
-      shell = pkgs.zsh;
-  };
-
-  environment.shells = with pkgs; [ zsh ];
-
-  environment.systemPackages = [
-    # Packages are now auto-imported from ./core/
-    # Add any additional one-off packages here if needed
-  ];
-
-  security.wrappers.btop = {
-    owner = "root";
-    group = "root";
-    capabilities = "cap_perfmon+ep cap_dac_read_search+ep";
-    source = "${pkgs.btop.override { cudaSupport = true; }}/bin/btop";
-  };
-
-  services = {
-    # Enable asus laptop control
-    asusd = {
-      enable = true;
-    };
-    # Enable sound.
-    pipewire = {
-      enable = true;
-      pulse.enable = true;
-      wireplumber= {
-        enable = true;
-      };
-    };
-    # # Enable Bluetooth
-    # blueman = {
-    #   enable = true;
-    # };
-  };
-
   fonts.packages = with pkgs; [
     nerd-fonts.jetbrains-mono
   ];
@@ -131,18 +89,6 @@ in
     options = "--delete-older-than 10d";
   };
 
-  boot.loader.systemd-boot.configurationLimit = 5;
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.libinput.enable = true;
-
-  # programs.firefox.enable = true;
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
-
   system.stateVersion = "25.05";
+  
 }
