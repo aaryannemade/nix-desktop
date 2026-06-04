@@ -15,6 +15,7 @@ dir:
     names = attrNames (readDir dir);
     nixFiles = filter (name:
       hasSuffix ".nix" name &&
+      !hasSuffix ".disabled" name &&
       name != "default.nix"
     ) names;
   in
