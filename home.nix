@@ -26,8 +26,6 @@ in
       (importModules ./modules) ++
       (importModules ./apps);
 
-    wayland.windowManager.mango.enable = true;
-
     services = {
       mpris-proxy = {
         enable = true;
