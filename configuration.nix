@@ -34,7 +34,7 @@ in
 
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ];
+    extraGroups = [ "wheel" "networkmanager" ];
     packages = with pkgs; [
       tree
     ];
@@ -68,6 +68,9 @@ in
       enable = true;
     };
     printing = {
+      enable = true;
+    };
+    gnome.gnome-keyring = {
       enable = true;
     };
   };
