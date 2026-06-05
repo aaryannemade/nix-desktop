@@ -23,9 +23,9 @@ in
 
   # Enable the X11 windowing system.
   services.xserver = {
-      enable = true;
-      autoRepeatDelay = 200;
-      autoRepeatInterval = 35;
+    enable = true;
+    autoRepeatDelay = 200;
+    autoRepeatInterval = 35;
   };
 
   services.displayManager.ly.enable = true;
@@ -33,16 +33,21 @@ in
   programs.mango.enable = true;
 
   users.users.${username} = {
-      isNormalUser = true;
-      extraGroups = [ "wheel" ];
-      packages = with pkgs; [
-        tree
-      ];
-      shell = pkgs.zsh;
+    isNormalUser = true;
+    extraGroups = [ "wheel" ];
+    packages = with pkgs; [
+      tree
+    ];
+    shell = pkgs.zsh;
   };
 
   environment.shells = with pkgs; [ zsh ];
-  programs.zsh.enable = true;
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
+      nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#${hostname}";
+    };
+  };
 
   environment.systemPackages = [
     # Packages are now auto-imported from ./core/

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, hostname, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports = [
@@ -17,10 +17,4 @@
       enable = true;
     };
   };
-
-  # Phantom-specific overrides can go here in the future
-  programs.zsh.shellAliases = {
-    nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#${hostname}";
-  };
-
 }
