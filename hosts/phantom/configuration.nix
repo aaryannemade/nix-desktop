@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, hostname, ... }:
 
 {
   imports = [
@@ -7,8 +7,6 @@
     ./packages.nix # Import host specific packages
     ./graphics.nix # Import graphcis/display config    
   ];
-
-  networking.hostName = "phantom";
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
@@ -22,7 +20,7 @@
 
   # Phantom-specific overrides can go here in the future
   programs.zsh.shellAliases = {
-    nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#phantom";
+    nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#${hostname}";
   };
 
 }

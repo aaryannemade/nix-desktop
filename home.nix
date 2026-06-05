@@ -1,12 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, username, ... }:
 
 let 
   # Import shared helper functions
   importModules = import ./helpers/importModules.nix { inherit lib; };
 in
 {
-    home.username = "aaryan";
-    home.homeDirectory = "/home/aaryan";
+    home.username = username;
+    home.homeDirectory = "/home/${username}";
     home.stateVersion = "25.05";
 
     # Create standard home directories on activation

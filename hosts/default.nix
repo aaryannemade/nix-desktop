@@ -2,10 +2,10 @@
 
 let
   # Helper function to create a host configuration
-  mkHost = hostname: nixpkgs.lib.nixosSystem {
+  mkHost = { hostname, username }: nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     specialArgs = {
-    	inherit mangowm;
+      inherit mangowm inputs hostname username;
     };
     modules = [
       ./${hostname}/configuration.nix
@@ -18,12 +18,12 @@ let
         home-manager = {
           useGlobalPkgs = true;
           useUserPackages = true;
-	  sharedModules = [ mangowm.hmModules.mango ];
-          users.aaryan = import ../home.nix;
+          sharedModules = [ mangowm.hmModules.mango ];
+          users.${username} = import ../home.nix;
           backupFileExtension = "backup";
-          
+
           extraSpecialArgs = {
-            inherit nur inputs;
+            inherit nur inputs username;
           };
         };
       }
@@ -31,6 +31,6 @@ let
   };
 in
 {
-  phantom = mkHost "phantom";
+  phantom = mkHost { hostname = "phantom"; username = "aaryan"; };
   # Future hosts go here:
 }

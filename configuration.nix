@@ -1,4 +1,4 @@
-{ config, inputs, lib, pkgs, mangowm, ... }:
+{ config, inputs, lib, pkgs, mangowm, username, hostname, ... }:
 
 let
   # Import shared helper function
@@ -16,6 +16,7 @@ in
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  networking.hostName = hostname;
   networking.networkmanager.enable = true;
 
   time.timeZone = "Asia/Calcutta";
@@ -31,7 +32,7 @@ in
 
   programs.mango.enable = true;
 
-  users.users.aaryan = {
+  users.users.${username} = {
       isNormalUser = true;
       extraGroups = [ "wheel" ];
       packages = with pkgs; [
