@@ -73,6 +73,9 @@ in
     gnome.gnome-keyring = {
       enable = true;
     };
+    ollama = {
+      enable = true;
+    };
   };
 
   virtualisation.docker = {

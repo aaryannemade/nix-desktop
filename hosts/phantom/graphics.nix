@@ -7,6 +7,10 @@
     builtins.elem (lib.getName pkg) [
         "nvidia-x11"
         "nvidia-settings"
+        "cuda_cudart"
+        "cuda_nvcc"
+        "cuda_cccl"
+        "libcublas"
         "steam"
         "steam-unwrapped"
     ];
@@ -27,6 +31,9 @@
     services.xserver = {
         videoDrivers = [ "modesetting" "nvidia" ];
     };
+
+    # Enable Cuda for Ollama
+    services.ollama.package = pkgs.ollama-cuda;
 
     hardware.graphics.enable = true;
     
