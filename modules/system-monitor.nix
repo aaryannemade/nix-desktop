@@ -2,10 +2,9 @@
 
 {
   home.packages = with pkgs; [
-    nvtop
     iotop
     htop
-  ]
+  ];
   
   programs.btop = {
     enable = true;
