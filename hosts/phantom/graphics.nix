@@ -13,11 +13,23 @@
         "libcublas"
         "steam"
         "steam-unwrapped"
+        "blender"
     ];
     
     # Override btop globally so core/system-monitoring.nix installs the CUDA version.
     nixpkgs.config.packageOverrides = pkgs: {
         btop = pkgs.btop.override { cudaSupport = true; };
+        blender = pkgs.blender.override { cudaSupport = true; };
+    };
+
+    # Enable Cuda Cache
+    nix.settings = {
+      substituters = [
+        "https://cache.nixos-cuda.org"
+      ];
+      trusted-public-keys = [
+        "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      ];
     };
 
     # Security wrapper so btop can read the Intel iGPU performance counters.

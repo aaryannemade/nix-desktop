@@ -5,5 +5,6 @@
         git
         neovim
         docker-compose
+        blender
     ];
 }
