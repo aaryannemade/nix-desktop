@@ -26,12 +26,18 @@
     };
 
     shellAliases = {
+      cat = "bat";
       c = "clear";
       ll = "ls -la";
       btw = "echo I use nixos now, btw";
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
     };
+  };
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
   };
 
   # Terminal Apps
