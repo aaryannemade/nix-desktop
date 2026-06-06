@@ -7,6 +7,8 @@
     builtins.elem (lib.getName pkg) [
         "nvidia-x11"
         "nvidia-settings"
+        "steam"
+        "steam-unwrapped"
     ];
     
     # Override btop globally so core/system-monitoring.nix installs the CUDA version.
@@ -28,6 +30,8 @@
 
     hardware.graphics.enable = true;
     
+    hardware.graphics.enable32Bit = true;
+
     hardware.nvidia = {
         modesetting.enable = true;
 

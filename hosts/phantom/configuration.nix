@@ -11,6 +11,13 @@
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
+  programs.steam = {
+    enable = true;
+    extraCompatPackages = [
+      pkgs.proton-ge-bin
+    ];
+  };
+
   services = {
     # Enable asus laptop control
     asusd = {
