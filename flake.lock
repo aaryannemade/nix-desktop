@@ -186,11 +186,11 @@
     "quickshell-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1780719387,
-        "narHash": "sha256-E/jhRPLo/n/Npyc3EIZtgUnuVqwJjNY04AZCPt/lASw=",
+        "lastModified": 1780731945,
+        "narHash": "sha256-BDmxpZEdDVFzVrB+EkrsV259LYE4UASyWBQg1rJwHRE=",
         "owner": "aaryandesignsgames",
         "repo": "quickshell-dummy",
-        "rev": "0362afe2e74228cf3a726a453a08fc790f7e293b",
+        "rev": "0367d62742f07523c1f1df7bba599e01a06b8795",
         "type": "gitlab"
       },
       "original": {
