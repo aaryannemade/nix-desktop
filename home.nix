@@ -23,9 +23,7 @@ in
       };
     };
 
-    imports = 
-      (importModules ./modules) ++
-      (importModules ./apps);
+    imports = (importModules ./modules);
 
     services = {
       mpris-proxy = {

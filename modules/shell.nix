@@ -1,10 +1,13 @@
 { config, pkgs, ... }:
 
 {
+  # Shell Apps
   home.packages = with pkgs; [
     bat
+    zoxide
   ];
 
+  #Shell Config
   programs.zsh = {
     enable = true;
     dotDir = "${config.home.homeDirectory}/.config/zsh";
@@ -28,6 +31,15 @@
       btw = "echo I use nixos now, btw";
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
+    };
+  };
+
+  # Terminal Apps
+  programs.ghostty = {
+    enable = true;
+    enableZshIntegration = true;
+    settings = {
+      window-theme = "dark";
     };
   };
 }
