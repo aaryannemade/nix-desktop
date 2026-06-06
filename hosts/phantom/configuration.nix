@@ -23,5 +23,12 @@
     asusd = {
       enable = true;
     };
+    # Enable Power Management
+    upower = {
+      enable = true;
+    };
+    power-profiles-daemon = {
+      enable = true;
+    };
   };
 }
