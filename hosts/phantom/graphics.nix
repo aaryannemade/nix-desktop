@@ -20,6 +20,7 @@
     nixpkgs.config.packageOverrides = pkgs: {
         btop = pkgs.btop.override { cudaSupport = true; };
         blender = pkgs.blender.override { cudaSupport = true; };
+        obs-studio = pkgs.obs-studio.override { cudaSupport = true; };
     };
 
     # Enable Cuda Cache

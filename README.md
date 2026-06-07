@@ -7,7 +7,7 @@
 - [ ] download wallpapers
 - [ ] Install color themer
 - [ ] install media player
-- [ ] Install OBS
+- [x] Install OBS
 - [ ] Figure out Stream Deck set up
 - [ ] Install Zed IDE (backup for neovim)
 - [ ] set up fzf
