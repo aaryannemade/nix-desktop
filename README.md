@@ -12,4 +12,5 @@
 - [ ] Figure out Stream Deck set up
 - [ ] Install Zed IDE (backup for neovim)
 - [ ] set up fzf
+- [x] add avahi and mdns resolution
 
