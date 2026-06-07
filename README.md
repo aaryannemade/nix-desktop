@@ -7,7 +7,7 @@
 - [x] Install Opencode and cluade auth plugin
 - [ ] download wallpapers
 - [ ] Install color themer
-- [ ] install media player
+- [x] install media player (mpv)
 - [x] Install OBS
 - [ ] Figure out Stream Deck set up
 - [ ] Install Zed IDE (backup for neovim)
