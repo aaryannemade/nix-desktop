@@ -10,7 +10,7 @@
 - [x] install media player (mpv)
 - [x] Install OBS
 - [ ] Figure out Stream Deck set up
-- [ ] Install Zed IDE (backup for neovim)
+- [x] Install Zed IDE (backup for neovim)
 - [ ] set up fzf
 - [x] add avahi and mdns resolution
 - [x] Set up wallpapers (awww)
