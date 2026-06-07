@@ -14,6 +14,7 @@
         "steam"
         "steam-unwrapped"
         "blender"
+        "claude-code"
     ];
     
     # Override btop globally so core/system-monitoring.nix installs the CUDA version.

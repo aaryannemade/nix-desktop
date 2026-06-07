@@ -4,6 +4,7 @@
 - [x] Install Ollama
 - [x] Fix issue with nvidia dgpu battery management - no change to config, laptop batter was just shitty
 - [x] Install Blender
+- [x] Install Opencode and cluade auth plugin
 - [ ] download wallpapers
 - [ ] Install color themer
 - [ ] install media player

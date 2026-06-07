@@ -38,6 +38,8 @@
 
   programs.mango.enable = true;
 
+  users.defaultUserShell = pkgs.zsh;
+
   users.users.${username} = {
     isNormalUser = true;
     extraGroups = [
