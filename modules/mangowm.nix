@@ -1,11 +1,18 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  home.packages = with pkgs; [
+    awww
+  ];
+  
   wayland.windowManager.mango = {
     enable = true;
     
     autostart_sh = ''
       quickshell & 
+      awww-daemon &
+      wl-paste --type text --watch cliphist store &
+      wl-paste --type text --watch cliphist store &
     '';
 
     settings = {
@@ -214,7 +221,7 @@ bind = [
 
   #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
   "SUPER,v,spawn,qs ipc call launcher openClipboard"
-  #bind = SUPER,w,spawn,qs ipc call launcher openWallpaper
+  "SUPER,w,spawn,qs ipc call launcher openWallpaper"
   #bind = SUPER,n,spawn,nautilus
 
 # Old unused rofi shortcuts

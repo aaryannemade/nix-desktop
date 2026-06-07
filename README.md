@@ -5,7 +5,7 @@
 - [x] Fix issue with nvidia dgpu battery management - no change to config, laptop batter was just shitty
 - [x] Install Blender
 - [x] Install Opencode and cluade auth plugin
-- [ ] download wallpapers
+- [x] download wallpapers
 - [ ] Install color themer
 - [x] install media player (mpv)
 - [x] Install OBS
@@ -13,4 +13,5 @@
 - [ ] Install Zed IDE (backup for neovim)
 - [ ] set up fzf
 - [x] add avahi and mdns resolution
+- [x] Set up wallpapers (awww)
 
