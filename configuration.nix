@@ -1,13 +1,19 @@
-{ config, inputs, lib, pkgs, mangowm, username, hostname, ... }:
-
-let
-  # Import shared helper function
-  importModules = import ./helpers/importModules.nix { inherit lib; };
-in
 {
-  imports = [ 
+  config,
+  inputs,
+  pkgs,
+  mangowm,
+  import-tree,
+  username,
+  hostname,
+  ...
+}:
+
+{
+  imports = [
     mangowm.nixosModules.mango
-  ] ++ (importModules ./core);
+    (import-tree ./core)
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -34,7 +40,10 @@ in
 
   users.users.${username} = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [
+      "wheel"
+      "networkmanager"
+    ];
     packages = with pkgs; [
       tree
     ];
@@ -59,7 +68,7 @@ in
     pipewire = {
       enable = true;
       pulse.enable = true;
-      wireplumber= {
+      wireplumber = {
         enable = true;
       };
     };
@@ -108,7 +117,10 @@ in
     nerd-fonts.jetbrains-mono
   ];
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   nix.gc = {
     automatic = true;
@@ -117,5 +129,5 @@ in
   };
 
   system.stateVersion = "25.05";
-  
+
 }
