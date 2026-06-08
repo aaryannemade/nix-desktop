@@ -7,6 +7,14 @@
     fd
     fzf
 
+    #tools needed for lazyvim
+    tree-sitter
+    gcc
+    luarocks
+    lazygit
+    trash-cli
+    glib
+
     #language Servers
     lua-language-server
     nil # nix language server

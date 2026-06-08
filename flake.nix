@@ -22,7 +22,7 @@
     };
 
     nvim-config = {
-      url = "github:tonybanters/nvim";
+      url = "github:lazyvim/starter";
       flake = false;
     };
 
