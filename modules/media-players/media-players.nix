@@ -1,0 +1,5 @@
+{
+  imports = [
+    ./_mpv.nix
+  ];
+}

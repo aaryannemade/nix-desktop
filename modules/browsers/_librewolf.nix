@@ -4,7 +4,7 @@
   programs.librewolf = {
     enable = true;
 
-    #Optional, but explicit
+    # Optional, but explicit.
     package = pkgs.librewolf;
 
     profiles.default = {

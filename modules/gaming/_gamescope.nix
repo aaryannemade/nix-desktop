@@ -49,8 +49,6 @@ let
 in
 {
   home.packages = with pkgs; [
-    protonup-qt
-    mangohud
     gamescope
     steamGamescopeNative
   ];

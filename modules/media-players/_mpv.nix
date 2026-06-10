@@ -19,7 +19,4 @@
     };
   };
 
-  home.packages = with pkgs; [
-    playerctl
-  ];
 }

@@ -4,6 +4,7 @@
   programs.quickshell.enable = true;
 
   home.packages = with pkgs; [
+    playerctl
     power-profiles-daemon
   ];
 
