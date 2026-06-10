@@ -33,11 +33,35 @@
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
     };
+
+    initExtra = ''
+      function __zoxide_fzf() {
+        local dir
+        dir=$(zoxide query -l | fzf --preview 'ls -la --color=always -- {}' --height 40% --reverse)
+        if [[ -n "$dir" ]]; then
+          builtin cd -- "$dir"
+          zle reset-prompt
+        fi
+      }
+
+      zle -N __zoxide_fzf
+      bindkey '^g' __zoxide_fzf
+    '';
   };
 
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
+  };
+
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;
+    defaultOptions = [
+      "--height 40%"
+      "--reverse"
+      "--border"
+    ];
   };
 
   programs.yazi = {

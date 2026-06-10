@@ -5,7 +5,6 @@
     #tools required for Telescope
     ripgrep
     fd
-    fzf
 
     #tools needed for lazyvim
     tree-sitter

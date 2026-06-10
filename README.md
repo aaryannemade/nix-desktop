@@ -11,7 +11,7 @@
 - [x] Install OBS
 - [ ] Figure out Stream Deck set up
 - [x] Install Zed IDE (backup for neovim)
-- [ ] set up fzf
+- [x] set up fzf
 - [x] add avahi and mdns resolution
 - [x] Set up wallpapers (awww)
 - [x] Install Yazi terminal file browser
