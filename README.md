@@ -14,4 +14,5 @@
 - [ ] set up fzf
 - [x] add avahi and mdns resolution
 - [x] Set up wallpapers (awww)
+- [x] Install Yazi terminal file browser
 
