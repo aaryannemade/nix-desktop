@@ -325,12 +325,12 @@ bind = [
   "SUPER,DOWN,viewtoright_have_client"
 
 # ─── Media & Hardware Keys ────────────────────────────────────────────────────
-#bind=NONE,XF86AudioRaiseVolume,spawn,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.0
-#bind=NONE,XF86AudioLowerVolume,spawn,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-#bind=NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-#bind=NONE,XF86AudioMicMute,spawn,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-#bind=NONE,XF86MonBrightnessUp,spawn,brightnessctl set 5%+
-#bind=NONE,XF86MonBrightnessDown,spawn,brightnessctl set 5%-
+  "NONE,XF86AudioRaiseVolume,spawn,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ --limit 1.0"
+  "NONE,XF86AudioLowerVolume,spawn,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+  "NONE,XF86AudioMute,spawn,wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+  "NONE,XF86AudioMicMute,spawn,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
+  "NONE,XF86MonBrightnessUp,spawn,brightnessctl set 5%+"
+  "NONE,XF86MonBrightnessDown,spawn,brightnessctl set 5%-"
 
 # ─── Media Controls ───────────────────────────────────────────────────────────
 #bind=NONE,XF86AudioPlay,spawn,playerctl play-pause
@@ -339,7 +339,7 @@ bind = [
 
 # ─── Screenshots ──────────────────────────────────────────────────────────────
   #"SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; quickshell -c ~/.config/quickshell/screenshot/'"
- "SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'"
+  "SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'"
   #layerrule=noblur:1,layer_name:selection
 
 # Unblur Polkit
