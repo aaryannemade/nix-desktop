@@ -34,7 +34,21 @@
     autoRepeatInterval = 35;
   };
 
-  services.displayManager.ly.enable = true;
+  services.displayManager.ly = {
+    enable = true;
+    settings = {
+      animation = "matrix";
+      bg = "0x00000000";
+      fg = "0x00FFFFFF";
+      border_fg = "0x00FFFFFF";
+      error_fg = "0x01FFFFFF";
+      cmatrix_fg = "0x00FFFFFF";
+      cmatrix_head_col = "0x01FFFFFF";
+      initial_info_text = "${hostname}";
+      hide_version_string = true;
+      clock = "%H:%M";
+    };
+  };
 
   programs.mango.enable = true;
 
