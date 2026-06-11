@@ -31,7 +31,7 @@
       vpn-disconnect = "protonvpn disconnect";
     };
 
-    initExtra = ''
+    initContent = ''
       function __zoxide_fzf() {
         local dir
         dir=$(zoxide query -l | fzf --preview 'ls -la --color=always -- {}' --height 40% --reverse)

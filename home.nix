@@ -9,6 +9,7 @@
   xdg = {
     userDirs = {
       enable = true;
+      setSessionVariables = false;
       createDirectories = true;
       extraConfig = {
         docker = "${config.home.homeDirectory}/docker";
