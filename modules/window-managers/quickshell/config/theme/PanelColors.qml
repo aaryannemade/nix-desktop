@@ -27,6 +27,7 @@ Singleton {
     readonly property color launcher:          isDark ? Colors.teal200 : Colors.teal200
     readonly property color battery:           isDark ? Colors.orange200 : Colors.orange200
     readonly property color network:           isDark ? Colors.purple200 : Colors.purple200
+    readonly property color vpn:               isDark ? Colors.cyan200   : Colors.cyan200
     readonly property color audio:             isDark ? Colors.teal200 : Colors.teal200
     readonly property color clock:             isDark ? Colors.white : Colors.lightBlue200
     readonly property color date:              isDark ? Colors.green200 : Colors.green200

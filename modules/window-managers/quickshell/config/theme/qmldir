@@ -3,6 +3,7 @@ singleton PanelColors 1.0 PanelColors.qml
 singleton SessionState 1.0 SessionState.qml
 singleton AudioState 1.0 AudioState.qml
 singleton NetworkState 1.0 NetworkState.qml
+singleton VpnState 1.0 VpnState.qml
 singleton BrightnessState 1.0 BrightnessState.qml
 singleton TrayState 1.0 TrayState.qml
 singleton CalendarState 1.0 CalendarState.qml

@@ -241,7 +241,60 @@ PanelWindow {
                 }
             }
 
-            // 2. Active Connection  (right-click to forget)
+            // 2. VPN Toggle
+            Rectangle {
+                width: parent.width; height: 34; radius: 6
+                color: {
+                    let base = VpnState.connected ? PanelColors.network : PanelColors.rowBackground
+                    return vpnToggleMouse.containsMouse ? Qt.lighter(base, 1.15) : base
+                }
+                Behavior on color { ColorAnimation { duration: 150 } }
+
+                Rectangle {
+                    visible: !VpnState.connected && !VpnState.connecting && !VpnState.disconnecting
+                    width: 3; height: parent.height - 10; radius: 2
+                    anchors { left: parent.left; leftMargin: 4; verticalCenter: parent.verticalCenter }
+                    color: PanelColors.network
+                }
+
+                Row {
+                    anchors { left: parent.left; leftMargin: 14; verticalCenter: parent.verticalCenter }
+                    spacing: 8
+                    Text {
+                        text: VpnState.connected ? "󰦝" : "󰦞"
+                        font.pixelSize: 15; font.family: "JetBrainsMono Nerd Font"
+                        color: VpnState.connected ? PanelColors.pillForeground : PanelColors.textMain
+                        anchors.verticalCenter: parent.verticalCenter
+                        SequentialAnimation on opacity {
+                            running: VpnState.connecting || VpnState.disconnecting
+                            loops: Animation.Infinite
+                            NumberAnimation { to: 0.4; duration: 600; easing.type: Easing.InOutSine }
+                            NumberAnimation { to: 1.0; duration: 600; easing.type: Easing.InOutSine }
+                            onStopped: opacity = 1.0
+                        }
+                    }
+                    Text {
+                        text: {
+                            if (VpnState.connecting)    return "VPN Connecting…"
+                            if (VpnState.disconnecting) return "VPN Disconnecting…"
+                            return VpnState.connected ? "VPN On" : "VPN Off"
+                        }
+                        font.pixelSize: 13; font.bold: true; font.family: "JetBrainsMono Nerd Font"
+                        color: VpnState.connected ? PanelColors.pillForeground : PanelColors.textMain
+                        anchors.verticalCenter: parent.verticalCenter
+                    }
+                }
+
+                MouseArea {
+                    id: vpnToggleMouse
+                    anchors.fill: parent; hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    enabled: !VpnState.connecting && !VpnState.disconnecting
+                    onClicked: VpnState.toggle()
+                }
+            }
+
+            // 3. Active Connection  (right-click to forget)
             Rectangle {
                 id: activeRow
                 visible: Networking.wifiEnabled && root.activeNetwork !== null
