@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     awww
+    cliphist
   ];
   
   wayland.windowManager.mango = {
@@ -12,7 +13,7 @@
       quickshell & 
       awww-daemon &
       wl-paste --type text --watch cliphist store &
-      wl-paste --type text --watch cliphist store &
+      wl-paste --type image --watch cliphist store &
     '';
 
     settings = {
