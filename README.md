@@ -15,4 +15,4 @@
 - [x] add avahi and mdns resolution
 - [x] Set up wallpapers (awww)
 - [x] Install Yazi terminal file browser
-
+- [x] Move Quickshell config to window-managers directory instead of flake input

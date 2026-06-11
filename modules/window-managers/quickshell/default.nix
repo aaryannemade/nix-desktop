@@ -1,5 +1,4 @@
-{ pkgs, inputs, ... }:
-
+{ config, pkgs, ... }:
 {
   programs.quickshell.enable = true;
 
@@ -9,7 +8,7 @@
   ];
 
   xdg.configFile."quickshell" = {
-    source = inputs.quickshell-config;
+    source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-desktop/modules/window-managers/quickshell/config";
     recursive = true;
   };
 }

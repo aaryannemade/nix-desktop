@@ -26,11 +26,6 @@
       flake = false;
     };
 
-    quickshell-config = {
-      url = "gitlab:aaryandesignsgames/quickshell-dummy";
-      flake = false;
-    };
-
     nur.url = "github:nix-community/nur";
 
   };
