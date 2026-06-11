@@ -6,7 +6,7 @@
 - [x] Install Blender
 - [x] Install Opencode and cluade auth plugin
 - [x] download wallpapers
-- [ ] Install color themer
+- [x] Install color themer
 - [x] install media player (mpv)
 - [x] Install OBS
 - [ ] Figure out Stream Deck set up
@@ -16,3 +16,4 @@
 - [x] Set up wallpapers (awww)
 - [x] Install Yazi terminal file browser
 - [x] Move Quickshell config to window-managers directory instead of flake input
+- [x] Convert from quickshell to Noctalia-shell

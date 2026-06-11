@@ -1,6 +1,6 @@
 {
   imports = [
-    ./_mangowm.nix
-    ./quickshell/_quickshell.nix
+    ./_mangowm.nix 
+    ./_notalia-shell.nix
   ];
 }
