@@ -10,8 +10,8 @@
 
 let
   # Helper function to create a host configuration
-  mkHost =
-    { hostname, username }:
+   mkHost =
+    { hostname, username, shownGpus ? [ ] }:
     nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
@@ -45,6 +45,7 @@ let
                 import-tree
                 inputs
                 username
+                shownGpus
                 ;
             };
           };
@@ -56,6 +57,7 @@ in
   phantom = mkHost {
     hostname = "phantom";
     username = "aaryan";
+    shownGpus = [ "nvidia" "intel" ];
   };
   # Future hosts go here:
 }

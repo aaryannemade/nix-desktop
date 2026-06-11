@@ -1,6 +1,6 @@
 {
   imports = [
     ./_mangowm.nix
-    ./quickshell
+    ./quickshell/_quickshell.nix
   ];
 }

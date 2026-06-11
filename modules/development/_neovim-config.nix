@@ -1,4 +1,4 @@
-{ config, inputs, pkgs, lib, ...}:
+{ config, inputs, pkgs, ... }:
 
 {
   home.packages = with pkgs; [
@@ -29,11 +29,4 @@
   	source = inputs.nvim-config;
     recursive = true;
   };
-  #programs.neovim = {
-  #  enable = true;
-  #  viAlias = true;
-  #  vimAlias = true;
-  #  withRuby = false;
-  #  withPython3 = false;
-  #};
 }

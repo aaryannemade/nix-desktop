@@ -14,7 +14,7 @@
 
       settings = {
         # Enable WebGL
-        "webgl.disable" = true;
+        "webgl.disable" = false;
 
         "widget.wayland.fractional-scale.enabled" = false;
 

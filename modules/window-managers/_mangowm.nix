@@ -1,11 +1,6 @@
 { pkgs, ... }:
 
 {
-  home.packages = with pkgs; [
-    awww
-    cliphist
-  ];
-  
   wayland.windowManager.mango = {
     enable = true;
     
