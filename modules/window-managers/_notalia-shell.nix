@@ -100,10 +100,10 @@
           end = [
             # "media"
             "tray"
-            "notifications"
+            # "notifications"
             # "clipboard"
             "network"
-            "bluetooth"
+            # "bluetooth"
             # "volume"
             # "brightness"
             "battery"
