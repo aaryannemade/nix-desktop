@@ -159,11 +159,11 @@ cursor_theme="Bibata-Modern-Classic";
 # ─── Appearance ───────────────────────────────────────────────────────────────
 gappih=8;
 gappiv=8;
-gappoh=10;
-gappov=10;
+gappoh=8;
+gappov=8;
 scratchpad_width_ratio=0.8;
 scratchpad_height_ratio=0.9;
-borderpx=4;
+borderpx=2;
 rootcolor="0x201b14ff";
 bordercolor="0x37474fff";
 focuscolor="0x80cbc4ff";
