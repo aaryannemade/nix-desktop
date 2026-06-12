@@ -101,7 +101,7 @@
             # "media"
             "tray"
             # "notifications"
-            # "clipboard"
+            "clipboard"
             "network"
             # "bluetooth"
             # "volume"

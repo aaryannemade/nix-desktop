@@ -216,6 +216,7 @@ bind = [
   #"ALT,space,spawn,qs ipc call launcher toggle"
   "ALT,space,spawn,noctalia msg panel-toggle launcher"
   "ALT,m,spawn,noctalia msg settings-toggle"
+  "SUPER,s,spawn,noctalia msg panel-toggle control-center"
   "SUPER,Return,spawn,ghostty"
 
   #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
