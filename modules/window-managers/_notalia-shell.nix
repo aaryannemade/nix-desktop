@@ -62,7 +62,7 @@
       osd = {
         position = "center-left";
         orientation = "vertical";
-      }
+      };
     };
   };
 }
