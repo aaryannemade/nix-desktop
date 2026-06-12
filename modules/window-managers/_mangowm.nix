@@ -4,8 +4,8 @@
   wayland.windowManager.mango = {
     enable = true;
     
+# quickshell & 
     autostart_sh = ''
-      quickshell & 
       awww-daemon &
       wl-paste --type text --watch cliphist store &
       wl-paste --type image --watch cliphist store &
@@ -212,7 +212,9 @@ bind = [
 
 # ─── Launch ───────────────────────────────────────────────────────────────────
 
-  "ALT,space,spawn,qs ipc call launcher toggle"
+  #"ALT,space,spawn,qs ipc call launcher toggle"
+  "ALT,space,spawn,noctalia msg panel-toggle launcher"
+  "ALT,m,spawn,noctalia msg settings-toggle"
   "SUPER,Return,spawn,ghostty"
 
   #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
