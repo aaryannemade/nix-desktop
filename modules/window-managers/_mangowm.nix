@@ -6,6 +6,7 @@
     
 # quickshell & 
     autostart_sh = ''
+      noctalia
       awww-daemon &
       wl-paste --type text --watch cliphist store &
       wl-paste --type image --watch cliphist store &
