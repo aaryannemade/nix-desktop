@@ -18,5 +18,5 @@
 - [x] Move Quickshell config to window-managers directory instead of flake input
 - [x] Convert from quickshell to Noctalia-shell
 - [x] Add Caveman skill to Opencode
-- [ ] Remove awww daemon
+- [x] Remove awww daemon
 - [ ] figure out approach to hide API keys

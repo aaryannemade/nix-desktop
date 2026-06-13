@@ -22,8 +22,6 @@
 source = "~/.config/mango/noctalia.conf";
 
 # ─── Autostart ────────────────────────────────────────────────────────────────
-#exec-once = awww-daemon
-#exec-once = quickshell
 #exec-once = wl-paste --type text --watch cliphist store
 #exec-once = wl-paste --type image --watch cliphist store
 #exec-once = ~/.local/bin/nightlight.sh
