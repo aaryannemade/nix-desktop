@@ -229,7 +229,7 @@ bind = [
 
   #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
   "SUPER,v,spawn, noctalia msg panel-toggle clipboard"
-  "SUPER,w,spawn, noctalia msg panel-toggle wallaper"
+  "SUPER,w,spawn, noctalia msg panel-toggle wallpaper"
   #bind = SUPER,n,spawn,nautilus
 
 # Old unused rofi shortcuts
