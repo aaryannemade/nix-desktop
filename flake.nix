@@ -23,6 +23,11 @@
 
     noctalia.url = "github:noctalia-dev/noctalia";
 
+    caveman = {
+      url = "github:JuliusBrussee/caveman";
+      flake = false;
+    };
+
     nvim-config = {
       url = "github:lazyvim/starter";
       flake = false;
