@@ -7,7 +7,6 @@
 # quickshell & 
     autostart_sh = ''
       noctalia
-      awww-daemon &
       wl-paste --type text --watch cliphist store &
       wl-paste --type image --watch cliphist store &
     '';
@@ -229,8 +228,8 @@ bind = [
   "SUPER,Return,spawn,ghostty"
 
   #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
-  "SUPER,v,spawn,qs ipc call launcher openClipboard"
-  "SUPER,w,spawn,qs ipc call launcher openWallpaper"
+  "SUPER,v,spawn, noctalia msg panel-toggle clipboard"
+  "SUPER,w,spawn, noctalia msg panel-toggle wallaper"
   #bind = SUPER,n,spawn,nautilus
 
 # Old unused rofi shortcuts
@@ -243,7 +242,7 @@ bind = [
 # ─── Window: Lifecycle ────────────────────────────────────────────────────────
   "SUPER,q,killclient"
 
-# ─── Window: Focus ────────────────────────────────────────────────────────────
+# ─── Window: Focus ──────── ────────────────────────────────────────────────────
 # Pure vi-style hjkl. SUPER,l (focus right) is unambiguous —
   "SUPER,h,focusdir,left"
   "SUPER,l,focusdir,right"
@@ -353,7 +352,7 @@ bind = [
 
 # ─── Screenshots ──────────────────────────────────────────────────────────────
   #"SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; quickshell -c ~/.config/quickshell/screenshot/'"
-  "SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'"
+  # "SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'"
   #layerrule=noblur:1,layer_name:selection
 
 # Unblur Polkit
