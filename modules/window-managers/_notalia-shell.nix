@@ -11,6 +11,13 @@
         mode = "dark";
         source = "wallpaper";
         wallpaper_scheme = "m3-rainbow";
+        # Render the generated theme into these apps' config dirs. The nix
+        # configs already reference the theme (btop color_theme, ghostty theme,
+        # mango source=) since noctalia can't edit the read-only store configs.
+        templates = {
+          enable_builtin_templates = true;
+          builtin_ids = [ "btop" "ghostty" "mango" ];
+        };
       };
       shell = {
         ui_scale = 1.0;

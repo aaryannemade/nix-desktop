@@ -6,7 +6,7 @@
 - [x] Install Blender
 - [x] Install Opencode and cluade auth plugin
 - [x] download wallpapers
-- [ ] Install color themer
+- [x] Install color themer
 - [x] install media player (mpv)
 - [x] Install OBS
 - [ ] Figure out Stream Deck set up
