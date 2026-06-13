@@ -86,7 +86,7 @@ animation_curve_opafadeout="0.5,0.5,0.5,0.5";
 animation_curve_opafadein="0.46,1.0,0.29,1";
 
 # ─── Scroller Layout ──────────────────────────────────────────────────────────
-scroller_structs=20;
+scroller_structs=8;
 scroller_default_proportion=0.8;
 scroller_focus_center=0;
 scroller_prefer_center=0;
