@@ -30,6 +30,8 @@ let
       modules = [
         ./${hostname}/configuration.nix
 
+        inputs.agenix.nixosModules.default
+
         {
           nixpkgs.overlays = [ nur.overlays.default ];
         }

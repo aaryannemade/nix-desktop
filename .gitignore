@@ -1,1 +1,8 @@
-result 
+result
+
+# Plaintext secrets — never commit. *.age files ARE encrypted and SHOULD be committed.
+*.pem
+*.key
+id_ed25519
+id_rsa
+secrets/*.plain
