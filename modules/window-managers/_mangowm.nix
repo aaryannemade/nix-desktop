@@ -4,7 +4,6 @@
   wayland.windowManager.mango = {
     enable = true;
 
-    # quickshell &
     autostart_sh = ''
       noctalia
       wl-paste --type text --watch cliphist store &
@@ -215,7 +214,6 @@
         "SUPER,r,reload_config"
         "SUPER+SHIFT,escape,quit"
         # SUPER+SHIFT,l,spawn,quickshell -c ~/.config/quickshell/lockscreen
-        "SUPER,m,quit"
 
         # ─── Launch ───────────────────────────────────────────────────────────────────
 
@@ -260,7 +258,7 @@
         "SUPER,space,togglefloating"
         "SUPER,f,togglefullscreen"
         "SUPER+SHIFT,f,togglefakefullscreen"
-        "SUPER,m,togglemaximizescreen"
+        "SUPER,period,togglemaximizescreen"
         "SUPER,comma,minimized"
         "SUPER+SHIFT,comma,restore_minimized"
         "SUPER,g,toggleglobal"
