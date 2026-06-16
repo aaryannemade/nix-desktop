@@ -5,7 +5,9 @@
     enable = true;
 
     autostart_sh = ''
-      noctalia
+      systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE DBUS_SESSION_BUS_ADDRESS
+      dbus-update-activation-environment --systemd WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE DBUS_SESSION_BUS_ADDRESS
+      systemctl --user restart noctalia.service
       wl-paste --type text --watch cliphist store &
       wl-paste --type image --watch cliphist store &
     '';
