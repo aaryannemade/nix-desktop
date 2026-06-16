@@ -1,8 +1,8 @@
 { pkgs, ... }:
 
 {
-    environment.systemPackages = with pkgs; [
-        wl-clipboard
-        wlr-randr
-    ];
+  environment.systemPackages = with pkgs; [
+    wl-clipboard
+    wlr-randr
+  ];
 }

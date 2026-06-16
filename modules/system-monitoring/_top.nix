@@ -1,4 +1,8 @@
-{ pkgs, shownGpus ? [ ], ... }:
+{
+  pkgs,
+  shownGpus ? [ ],
+  ...
+}:
 
 {
   home.packages = with pkgs; [

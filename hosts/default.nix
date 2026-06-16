@@ -10,8 +10,12 @@
 
 let
   # Helper function to create a host configuration
-   mkHost =
-    { hostname, username, shownGpus ? [ ] }:
+  mkHost =
+    {
+      hostname,
+      username,
+      shownGpus ? [ ],
+    }:
     nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
@@ -57,7 +61,10 @@ in
   phantom = mkHost {
     hostname = "phantom";
     username = "aaryan";
-    shownGpus = [ "nvidia" "intel" ];
+    shownGpus = [
+      "nvidia"
+      "intel"
+    ];
   };
   # Future hosts go here:
 }

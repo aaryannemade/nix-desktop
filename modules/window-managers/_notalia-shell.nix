@@ -5,7 +5,8 @@
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
-    settings = { # This may also be a string or path to a .toml file.
+    settings = {
+      # This may also be a string or path to a .toml file.
       launch_apps_as_systemd_services = true;
       theme = {
         mode = "dark";
@@ -16,7 +17,11 @@
         # mango source=) since noctalia can't edit the read-only store configs.
         templates = {
           enable_builtin_templates = true;
-          builtin_ids = [ "btop" "ghostty" "mango" ];
+          builtin_ids = [
+            "btop"
+            "ghostty"
+            "mango"
+          ];
         };
       };
       shell = {
@@ -61,10 +66,10 @@
         };
       };
       desktop_widgets = {
-        enabled = false;  
+        enabled = false;
       };
       dock = {
-        enabled =false;
+        enabled = false;
       };
       osd = {
         position = "center-left";
@@ -72,7 +77,7 @@
       };
       bar = {
         order = [ "main" ];
-        
+
         main = {
           position = "top";
           enabled = true;

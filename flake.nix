@@ -3,7 +3,9 @@
 
   nixConfig = {
     extra-substituters = [ "https://noctalia.cachix.org" ];
-    extra-trusted-public-keys = [ "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4=" ];
+    extra-trusted-public-keys = [
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+    ];
   };
 
   inputs = {
@@ -59,6 +61,22 @@
           ;
       };
 
-      formatter.x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
+      formatter.x86_64-linux =
+        let
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        in
+        pkgs.writeShellApplication {
+          name = "nixfmt-tree";
+          runtimeInputs = [
+            pkgs.nixfmt
+            pkgs.findutils
+          ];
+          text = ''
+            if [ "$#" -eq 0 ]; then
+              set -- .
+            fi
+            find "$@" -type f -name '*.nix' -print0 | xargs -0 -r nixfmt
+          '';
+        };
     };
 }

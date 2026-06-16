@@ -1,11 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
     ../../configuration.nix # Import common config
-    ./hardware-configuration.nix  # Import hardware config
+    ./hardware-configuration.nix # Import hardware config
     ./packages.nix # Import host specific packages
-    ./graphics.nix # Import graphcis/display config    
+    ./graphics.nix # Import graphcis/display config
   ];
 
   # Enable touchpad support (enabled default in most desktopManager).
