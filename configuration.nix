@@ -6,10 +6,6 @@
     (import-tree ./core)
   ];
 
-  # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-
   services = {
     ollama = {
       enable = true;

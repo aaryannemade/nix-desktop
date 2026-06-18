@@ -12,5 +12,6 @@
     ./virtualization.nix
     ./users.nix
     ./game-development.nix
+    ./kernel.nix
   ];
 }

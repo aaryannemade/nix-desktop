@@ -8,5 +8,6 @@
     ./shell.nix
     ./system-monitoring.nix
     ./development.nix
+    ./network.nix
   ];
 }

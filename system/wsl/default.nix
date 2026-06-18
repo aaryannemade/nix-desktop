@@ -6,5 +6,6 @@
   #   imports = [ ../nixos/network.nix ];
   imports = [
     ./users.nix
+    ./kernel.nix
   ];
 }
