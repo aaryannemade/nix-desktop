@@ -1,6 +1,16 @@
+{ lib, platform, ... }:
+
 {
-  imports = [
-    ./_mangowm.nix
-    ./_noctalia-shell.nix
-  ];
+  imports =
+    [
+      # shared (all platforms)
+    ]
+    ++ lib.optionals (platform == "nixos") [
+      ./_mangowm.nix
+      ./_noctalia-shell.nix
+    ]
+    ++ lib.optionals (platform == "wsl") [
+    ]
+    ++ lib.optionals (platform == "darwin") [
+    ];
 }

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, platform, ... }:
 
 {
   home.packages = with pkgs; [
@@ -7,6 +7,9 @@
 
   programs.zed-editor = {
     enable = true;
+
+    package = lib.mkIf (platform != "nixos") null;
+
     extensions = [
       "nix"
       "toml"

@@ -1,10 +1,4 @@
-{
-  config,
-  lib,
-  pkgs,
-  hostname,
-  ...
-}:
+{ config, lib, pkgs, hostname, ... }:
 
 {
   imports = [
@@ -16,7 +10,7 @@
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
-  
+
   time.timeZone = "Asia/Calcutta";
 
   programs = {
