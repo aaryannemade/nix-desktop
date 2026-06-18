@@ -1,9 +1,8 @@
-{ config, inputs, pkgs, import-tree, ... }:
+{ config, inputs, pkgs, ... }:
 
 {
   imports = [
     ./system
-    (import-tree ./core)
   ];
 
   services = {

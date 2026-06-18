@@ -9,5 +9,6 @@
     ./system-monitoring.nix
     ./development.nix
     ./network.nix
+    ./secrets.nix
   ];
 }
