@@ -1,22 +1,29 @@
-{
-  nixpkgs,
-  home-manager,
-  nur,
-  mangowm,
-  import-tree,
-  inputs,
-  ...
-}:
+{ nixpkgs, home-manager, nur, mangowm, import-tree, inputs, ... }:
 
 let
   # Helper function to create a host configuration
+  #
+  # homeDirectory is optional. When omitted it defaults to the standard path
+  # for the platform (/Users/<username> on darwin, /home/<username> otherwise).
+  # On the darwin platform it can be explicitly stated, e.g. when the macOS home
+  # lives on an external drive (homeDirectory = "/Volumes/external-home/...").
   mkHost =
     {
       hostname,
       username,
       platform ? "nixos",
+      homeDirectory ? null,
       shownGpus ? [ ],
     }:
+    let
+      effectiveHomeDirectory =
+        if homeDirectory != null then
+          homeDirectory
+        else if platform == "darwin" then
+          "/Users/${username}"
+        else
+          "/home/${username}";
+    in
     nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = {
@@ -28,6 +35,7 @@ let
           username
           platform
           ;
+        homeDirectory = effectiveHomeDirectory;
       };
       modules = [
         ./${hostname}/configuration.nix
@@ -59,6 +67,7 @@ let
                 shownGpus
                 platform
                 ;
+              homeDirectory = effectiveHomeDirectory;
             };
           };
         }

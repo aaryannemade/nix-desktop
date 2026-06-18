@@ -1,19 +1,16 @@
-{
-  config,
-  pkgs,
-  import-tree,
-  username,
-  platform,
-  ...
-}:
+{ config, lib, pkgs, import-tree, username, platform, homeDirectory, ... }:
 
 {
+  imports = [
+    (import-tree ./modules)
+  ];
+
   home.username = username;
-  home.homeDirectory = "/home/${username}";
+  home.homeDirectory = homeDirectory;
   home.stateVersion = "25.05";
 
-  # Create standard home directories on activation
-  xdg = {
+  # Create standard home directories on activation.
+  xdg = lib.mkIf (platform != "darwin") {
     userDirs = {
       enable = true;
       setSessionVariables = false;
@@ -26,19 +23,4 @@
       };
     };
   };
-
-  imports = [
-    (import-tree ./modules)
-  ];
-
-  services = {
-    mpris-proxy = {
-      enable = true;
-    };
-  };
-
-  home.packages = with pkgs; [
-    # Packages are now auto-imported from ./apps/ and ./modules/
-    # Add any additional one-off packages here if needed
-  ];
 }
