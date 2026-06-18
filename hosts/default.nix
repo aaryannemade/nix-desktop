@@ -32,6 +32,9 @@ let
       modules = [
         ./${hostname}/configuration.nix
 
+        # agenix module is platform-specific: nixosModules.default for NixOS/WSL.
+        # A future macOS (nix-darwin) host must use agenix.darwinModules.default
+        # instead. The shared system/shared/secrets.nix declaration stays the same.
         inputs.agenix.nixosModules.default
 
         {
