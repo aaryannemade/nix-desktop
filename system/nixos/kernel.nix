@@ -1,4 +1,4 @@
-{ config, ... }:
+{ pkgs, ... }:
 
 {
   # Use latest kernel.
