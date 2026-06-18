@@ -1,11 +1,13 @@
-{ pkgs, ... }:
+{ hostname, pkgs, ... }:
 
 {
   environment.systemPackages = with pkgs; [
-    wget
-    curl
     proton-vpn-cli
   ];
+
+  networking.hostName = hostname;
+  networking.networkmanager.enable = true;
+
 
   services = {
     avahi = {

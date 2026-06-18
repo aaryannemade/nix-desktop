@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  hostname,
   ...
 }:
 
@@ -27,6 +28,9 @@
     gamescope = {
       enable = true;
       # capSysNice = true;
+    };
+    zsh.shellAliases = {
+      nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#${hostname}";
     };
   };
 

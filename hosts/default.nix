@@ -14,6 +14,7 @@ let
     {
       hostname,
       username,
+      platform ? "nixos",
       shownGpus ? [ ],
     }:
     nixpkgs.lib.nixosSystem {
@@ -25,6 +26,7 @@ let
           inputs
           hostname
           username
+          platform
           ;
       };
       modules = [
@@ -63,6 +65,7 @@ in
   phantom = mkHost {
     hostname = "phantom";
     username = "aaryan";
+    platform = "nixos";
     shownGpus = [
       "nvidia"
       "intel"
