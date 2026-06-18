@@ -10,5 +10,6 @@
     ./development.nix
     ./network.nix
     ./secrets.nix
+    ./ai.nix
   ];
 }
