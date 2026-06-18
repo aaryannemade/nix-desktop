@@ -2,6 +2,13 @@
 {
   imports = [ inputs.noctalia.homeModules.default ];
 
+  # mpris-proxy needed for proper media player widget
+  services = {
+    mpris-proxy = {
+      enable = true;
+    };
+  };
+
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
