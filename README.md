@@ -21,6 +21,6 @@
 - [x] Remove awww daemon
 - [x] figure out approach to hide API keys (used agenix)
 - [ ] Create new host for pc
-- [ ] Create optimize core modules for better management with nix-darwin(macos)
+- [x] Create optimize core modules for better management with nix-darwin(macos)
 - [ ] add support for devenv for development
 - [ ] transfer bootloader from systemd to grub
