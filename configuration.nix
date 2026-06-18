@@ -9,7 +9,6 @@
   # Use latest kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
-  time.timeZone = "Asia/Calcutta";
 
   services = {
     ollama = {
