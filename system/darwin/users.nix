@@ -1,4 +1,9 @@
-{ pkgs, username, homeDirectory, ... }:
+{
+  pkgs,
+  username,
+  homeDirectory,
+  ...
+}:
 
 {
   # nix-darwin user config. macOS uses a DIFFERENT users schema than NixOS:
@@ -8,7 +13,7 @@
   #
   # `home` must match what macOS reports as the user's home directory so that
   # nix-darwin and Home Manager agree. `homeDirectory` is computed per-host in
-  # hosts/default.nix and can be explicitly set on darwin 
+  # hosts/default.nix and can be explicitly set on darwin
   # (e.g. an external drive home like /Volumes/external-home/...).
   users.users.${username} = {
     home = homeDirectory;
