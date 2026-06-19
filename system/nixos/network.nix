@@ -5,7 +5,6 @@
     proton-vpn-cli
   ];
 
-  networking.hostName = hostname;
   networking.networkmanager.enable = true;
 
 
