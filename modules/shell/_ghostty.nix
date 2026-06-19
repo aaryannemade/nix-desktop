@@ -6,6 +6,10 @@
 
     package = lib.mkIf (platform != "nixos") null;
 
+    # When package is null (non-nixos: WSL/darwin) the systemd user service has
+    # nothing to launch and the module asserts. Disable it off-nixos.
+    systemd.enable = lib.mkIf (platform != "nixos") false;
+
     enableZshIntegration = true;
     settings = {
       window-theme = "dark";

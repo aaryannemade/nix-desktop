@@ -1,4 +1,11 @@
-{ nixpkgs, home-manager, mangowm, import-tree, inputs, ... }:
+{
+  nixpkgs,
+  home-manager,
+  mangowm,
+  import-tree,
+  inputs,
+  ...
+}:
 
 let
   # Helper function to create a host configuration
@@ -46,6 +53,11 @@ let
         inputs.agenix.nixosModules.default
 
         home-manager.nixosModules.home-manager
+      ]
+      # NixOS-WSL module: only pulled in for WSL hosts. It provides `wsl.enable`,
+      # the WSL boot/init machinery, and the Windows<->Linux interop layer.
+      ++ nixpkgs.lib.optional (platform == "wsl") inputs.nixos-wsl.nixosModules.default
+      ++ [
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -74,6 +86,16 @@ in
     hostname = "phantom";
     username = "aaryan";
     platform = "nixos";
+    shownGpus = [
+      "nvidia"
+      "intel"
+    ];
+  };
+
+  specter = mkHost {
+    hostname = "specter";
+    username = "aaryan";
+    platform = "wsl";
     shownGpus = [
       "nvidia"
       "intel"
