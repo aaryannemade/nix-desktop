@@ -40,8 +40,6 @@
       flake = false;
     };
 
-    nur.url = "github:nix-community/nur";
-
   };
 
   outputs =
@@ -49,7 +47,6 @@
       self,
       nixpkgs,
       home-manager,
-      nur,
       mangowm,
       import-tree,
       ...
@@ -59,7 +56,6 @@
         inherit
           nixpkgs
           home-manager
-          nur
           mangowm
           import-tree
           inputs

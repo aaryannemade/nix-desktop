@@ -1,4 +1,4 @@
-{ nixpkgs, home-manager, nur, mangowm, import-tree, inputs, ... }:
+{ nixpkgs, home-manager, mangowm, import-tree, inputs, ... }:
 
 let
   # Helper function to create a host configuration
@@ -45,10 +45,6 @@ let
         # instead. The shared system/shared/secrets.nix declaration stays the same.
         inputs.agenix.nixosModules.default
 
-        {
-          nixpkgs.overlays = [ nur.overlays.default ];
-        }
-
         home-manager.nixosModules.home-manager
         {
           home-manager = {
@@ -60,7 +56,6 @@ let
 
             extraSpecialArgs = {
               inherit
-                nur
                 import-tree
                 inputs
                 username
