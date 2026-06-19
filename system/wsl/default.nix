@@ -8,6 +8,7 @@
     ./users.nix
     ./kernel.nix
     ./graphics.nix
+    ./systemd.nix
   ];
 
   # Core NixOS-WSL switch. Provides the WSL boot/init layer and the
