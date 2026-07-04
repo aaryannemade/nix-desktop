@@ -273,6 +273,26 @@
         "type": "github"
       }
     },
+    "opencode": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1783138095,
+        "narHash": "sha256-hOxhhoBDw3W584u6sJ+fzc8SoXz2pie/6gMOs+r1Ic8=",
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "rev": "a22676720d6108dc09b1dcfca1dcf02d505906dd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -283,7 +303,8 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs",
         "noctalia": "noctalia",
-        "nvim-config": "nvim-config"
+        "nvim-config": "nvim-config",
+        "opencode": "opencode"
       }
     },
     "scenefx": {

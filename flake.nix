@@ -35,6 +35,11 @@
 
     noctalia.url = "github:noctalia-dev/noctalia";
 
+    opencode = {
+      url = "github:anomalyco/opencode";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     caveman = {
       url = "github:JuliusBrussee/caveman";
       flake = false;

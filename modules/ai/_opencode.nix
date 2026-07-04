@@ -1,8 +1,8 @@
 { pkgs, inputs, osConfig, ... }:
 
 {
-  home.packages = with pkgs; [
-    opencode
+  home.packages = [
+    inputs.opencode.packages.${pkgs.system}.opencode
   ];
 
   xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
