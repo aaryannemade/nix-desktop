@@ -1,4 +1,9 @@
-{ lib, pkgs, platform, ... }:
+{
+  lib,
+  pkgs,
+  platform,
+  ...
+}:
 
 # Ollama, set up per-platform from one shared file.
 #

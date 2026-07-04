@@ -1,4 +1,9 @@
-{ pkgs, hostname, mangowm, ... }:
+{
+  pkgs,
+  hostname,
+  mangowm,
+  ...
+}:
 
 {
   imports = [

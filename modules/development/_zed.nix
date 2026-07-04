@@ -1,4 +1,9 @@
-{ lib, pkgs, platform, ... }:
+{
+  lib,
+  pkgs,
+  platform,
+  ...
+}:
 
 {
   home.packages = with pkgs; [

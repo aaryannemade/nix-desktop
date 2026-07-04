@@ -1,4 +1,13 @@
-{ config, lib, pkgs, import-tree, username, platform, homeDirectory, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  import-tree,
+  username,
+  platform,
+  homeDirectory,
+  ...
+}:
 
 {
   imports = [

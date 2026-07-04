@@ -7,7 +7,7 @@
     casks = [
       "ghostty"
 
-      # NOTE: no-quarantine has been deprecated by homebrew, working in current 
+      # NOTE: no-quarantine has been deprecated by homebrew, working in current
       # version but might be deleted, careful during updating
       {
         name = "librewolf";
