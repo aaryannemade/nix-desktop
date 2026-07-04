@@ -90,52 +90,62 @@
           '';
         };
 
-      # Build the specter WSL image with the host SSH key baked in.
-      #   Usage: nix run .#specter-wsl [output.wsl]
-      # Defaults output to ./specter.wsl. Requires root (uses sudo) because the
-      # underlying tarballBuilder must set ownership inside the rootfs.
-      apps.x86_64-linux.specter-wsl =
+      # Build a WSL image for a host with its SSH host key baked in.
+      #   Usage: nix run .#<host>-wsl -- [output.wsl] [key-dir]
+      # Defaults output to ./<host>.wsl and key-dir to $HOME/wsl-key/<host>.
+      # The key dir must contain ssh_host_ed25519_key (and optionally .pub).
+      # Requires root (uses sudo) because the underlying tarballBuilder must
+      # set ownership inside the rootfs.
+      apps.x86_64-linux =
         let
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          tarballBuilder = self.nixosConfigurations.specter.config.system.build.tarballBuilder;
-          keyDir = "$HOME/wsl-key";
-          script = pkgs.writeShellApplication {
-            name = "build-specter-wsl";
-            runtimeInputs = [ pkgs.coreutils ];
-            text = ''
-              out="''${1:-specter.wsl}"
+          mkWslImageApp =
+            host:
+            let
+              tarballBuilder = self.nixosConfigurations.${host}.config.system.build.tarballBuilder;
+              script = pkgs.writeShellApplication {
+                name = "build-${host}-wsl";
+                runtimeInputs = [ pkgs.coreutils ];
+                text = ''
+                  out="''${1:-${host}.wsl}"
+                  key_dir="''${2:-$HOME/wsl-key/${host}}"
 
-              key_priv="${keyDir}/ssh_host_ed25519_key"
-              key_pub="${keyDir}/ssh_host_ed25519_key.pub"
+                  key_priv="$key_dir/ssh_host_ed25519_key"
+                  key_pub="$key_dir/ssh_host_ed25519_key.pub"
 
-              if [ ! -f "$key_priv" ]; then
-                echo "error: missing host private key at $key_priv" >&2
-                exit 1
-              fi
+                  if [ ! -f "$key_priv" ]; then
+                    echo "error: missing host private key at $key_priv" >&2
+                    exit 1
+                  fi
 
-              # Stage an --extra-files tree containing the pre-seeded host key so
-              # the image decrypts agenix secrets on first boot.
-              extra="$(mktemp -d)"
-              trap 'rm -rf "$extra"' EXIT
-              mkdir -p "$extra/etc/ssh"
-              install -m600 "$key_priv" "$extra/etc/ssh/ssh_host_ed25519_key"
-              if [ -f "$key_pub" ]; then
-                install -m644 "$key_pub" "$extra/etc/ssh/ssh_host_ed25519_key.pub"
-              fi
+                  # Stage an --extra-files tree containing the pre-seeded host key so
+                  # the image decrypts agenix secrets on first boot.
+                  extra="$(mktemp -d)"
+                  trap 'rm -rf "$extra"' EXIT
+                  mkdir -p "$extra/etc/ssh"
+                  install -m600 "$key_priv" "$extra/etc/ssh/ssh_host_ed25519_key"
+                  if [ -f "$key_pub" ]; then
+                    install -m644 "$key_pub" "$extra/etc/ssh/ssh_host_ed25519_key.pub"
+                  fi
 
-              echo "[specter-wsl] Building image -> $out (requires sudo)"
-              sudo "${tarballBuilder}/bin/nixos-wsl-tarball-builder" \
-                --extra-files "$extra" \
-                --chown /etc/ssh/ssh_host_ed25519_key 0:0 \
-                "$out"
+                  echo "[${host}-wsl] Building image -> $out (requires sudo)"
+                  sudo "${tarballBuilder}/bin/nixos-wsl-tarball-builder" \
+                    --extra-files "$extra" \
+                    --chown /etc/ssh/ssh_host_ed25519_key 0:0 \
+                    "$out"
 
-              echo "[specter-wsl] Done: $out"
-            '';
-          };
+                  echo "[${host}-wsl] Done: $out"
+                '';
+              };
+            in
+            {
+              type = "app";
+              program = "${script}/bin/build-${host}-wsl";
+            };
         in
         {
-          type = "app";
-          program = "${script}/bin/build-specter-wsl";
+          specter-wsl = mkWslImageApp "specter";
+          banshee-wsl = mkWslImageApp "banshee";
         };
     };
 }

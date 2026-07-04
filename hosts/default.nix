@@ -101,5 +101,15 @@ in
       "intel"
     ];
   };
+
+  banshee = mkHost {
+    hostname = "banshee";
+    username = "aaryan";
+    platform = "wsl";
+    shownGpus = [
+      "nvidia"
+      "intel"
+    ];
+  };
   # Future hosts go here:
 }

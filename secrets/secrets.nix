@@ -14,9 +14,14 @@ let
   # Host keys: /etc/ssh/ssh_host_ed25519_key.pub
   phantom = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINwHNRIdQaIZLFtpnbBMqr6RWU7Wf+JobXBwa3Jttyqs root@phantom";
   specter = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAwd5Nfaw0hUQ7IKqrJ3RH95IqhJAbF27pcu+7dF/F7a root@specter";
+  banshee = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDfapYcOVwNEX6me+5ig8H+bJPEo9lVReSPya0XUTRKy root@banshee";
 
   users = [ aaryan ];
-  allHosts = [ phantom specter ];
+  allHosts = [
+    phantom
+    specter
+    banshee
+  ];
 in
 {
   "deepseek.age".publicKeys = users ++ allHosts;
