@@ -23,4 +23,4 @@
 - [ ] Create new host for pc
 - [x] Create optimize core modules for better management with nix-darwin(macos)
 - [ ] add support for devenv for development
-- [ ] transfer bootloader from systemd to grub
+- [x] transfer bootloader from systemd to grub
