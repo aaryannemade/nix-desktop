@@ -33,6 +33,7 @@
       };
       shell = {
         ui_scale = 1.0;
+        time_format = "{:%-I:%M %p}";
         # font_family = "";
         lang = "en";
         shadow = {
@@ -51,7 +52,7 @@
           clipboard_placement = "centered";
           control_center_placement = "attached";
           wallpaper_placement = "attached";
-          session_placement = "attached";
+          session_placement = "centered";
           open_near_click_control_center = false;
           open_near_click_launcher = false;
           open_near_click_clipboard = false;
@@ -128,6 +129,11 @@
             "battery"
             "session"
           ];
+        };
+      };
+      widget = {
+        clock = {
+          format = "{:%-I:%M %p}";
         };
       };
     };
