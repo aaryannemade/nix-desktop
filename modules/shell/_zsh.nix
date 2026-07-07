@@ -29,6 +29,7 @@
       btw = "echo I use nixos now, btw";
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
+      claude-activation = "nix develop gitlab:aaryandesignsgames/claude-activation";
     };
 
     initContent = ''
