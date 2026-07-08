@@ -10,6 +10,7 @@
   services = {
     avahi = {
       enable = true;
+      ipv6 = false;
       nssmdns4 = true;
       openFirewall = true;
       publish = {
