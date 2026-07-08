@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -26,7 +27,7 @@
   # Override btop globally so core/system-monitoring.nix installs the CUDA version.
   nixpkgs.config.packageOverrides = pkgs: {
     btop = pkgs.btop.override { cudaSupport = true; };
-    blender = pkgs.blender.override { cudaSupport = true; };
+    blender = inputs.blender-cuda.packages.${pkgs.system}.blender-with-cuda;
     obs-studio = pkgs.obs-studio.override { cudaSupport = true; };
   };
 
@@ -34,9 +35,11 @@
   nix.settings = {
     substituters = [
       "https://cache.nixos-cuda.org"
+      "https://adithyagenie.cachix.org"
     ];
     trusted-public-keys = [
       "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+      "adithyagenie.cachix.org-1:h6BSMboeVfxyrULWuRQqAyweo4AJRATekb88xotfQwc="
     ];
   };
 
