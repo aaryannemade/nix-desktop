@@ -6,6 +6,7 @@
     ./bluetooth.nix
     ./network.nix
     ./display.nix
+    ./graphics-offload.nix
     ./sound.nix
     ./printing.nix
     ./authentication.nix

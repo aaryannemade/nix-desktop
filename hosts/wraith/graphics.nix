@@ -74,7 +74,8 @@
     package = config.boot.kernelPackages.nvidiaPackages.stable;
 
     # PRIME offload is configured centrally in system/nixos/graphics-offload.nix,
-    # enabled per-host via its offloadHosts map.
+    # enabled per-host via its offloadHosts map. wraith is a desktop: everything
+    # runs on the dGPU, so it is intentionally not in that map.
   };
 
 }

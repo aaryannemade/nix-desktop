@@ -111,5 +111,14 @@ in
       "intel"
     ];
   };
+  wraith = mkHost {
+    hostname = "wraith";
+    username = "aaryan";
+    platform = "nixos";
+    shownGpus = [
+      "nvidia"
+      "intel"
+    ];
+  };
   # Future hosts go here:
 }
