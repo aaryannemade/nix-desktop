@@ -9,7 +9,6 @@
 - [x] Install color themer
 - [x] install media player (mpv)
 - [x] Install OBS
-- [ ] Figure out Stream Deck set up
 - [x] Install Zed IDE (backup for neovim)
 - [x] set up fzf
 - [x] add avahi and mdns resolution
@@ -24,3 +23,8 @@
 - [x] Create optimize core modules for better management with nix-darwin(macos)
 - [ ] add support for devenv for development
 - [x] transfer bootloader from systemd to grub
+- [ ] Set up RGB controls for PC host
+- [ ] Set up fan controls for PC host
+- [ ] Figure out Stream Deck set up
+- [ ] Set up auto-sleep on all hosts
+- [ ] Fix opencode github flake input
