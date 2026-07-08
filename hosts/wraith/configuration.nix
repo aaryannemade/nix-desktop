@@ -9,7 +9,7 @@
 {
   imports = [
     ../../configuration.nix # Import common config
-    # ./hardware-configuration.nix # TODO: generate with `nixos-generate-config` and uncomment
+    ./hardware-configuration.nix
     ./packages.nix # Import host specific packages
     ./graphics.nix # Import graphics/display config
   ];
