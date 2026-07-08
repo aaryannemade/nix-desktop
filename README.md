@@ -52,14 +52,18 @@ in bootloader.nix adds the Windows entry to the boot menu.
       numbering may differ. Commands below assume `/dev/nvme0n1` with
       `p1` = 200 MB ESP and the new partition created as `p5` — adjust
       to what lsblk actually shows.
-- [ ] Create the LVM partition in the unallocated space, then the
-      volume group and logical volumes (16G swap, rest root):
+- [ ] Create the LVM partition in the unallocated space with cfdisk:
+      `sudo cfdisk /dev/nvme0n1`, then:
+      - select the **Free space** entry (the ~525 GB one) -> `New` ->
+        accept the full size
+      - with the new partition selected: `Type` -> **Linux LVM**
+      - `Write` (type `yes` to confirm) -> `Quit`
+      - do NOT touch the existing ESP/NTFS/MSR partitions
+- [ ] Create the volume group and logical volumes (16G swap, rest
+      root). Check the new partition's number first with `lsblk`
+      (assumed `p5` below — adjust):
 
       ```sh
-      # New partition in the largest free block, type Linux LVM (8e00)
-      sudo sgdisk -n 0:0:0 -t 0:8e00 -c 0:nixos-lvm /dev/nvme0n1
-      sudo partprobe /dev/nvme0n1 && lsblk   # find the new partition, e.g. p5
-
       sudo pvcreate /dev/nvme0n1p5
       sudo vgcreate vg0 /dev/nvme0n1p5
       sudo lvcreate -L 16G -n swap vg0
