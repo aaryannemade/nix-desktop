@@ -32,7 +32,12 @@
 
       # ─── Monitors ─────────────────────────────────────────────────────────────────
       monitorrule = [
+        # Laptop Internal Display
         "make:BOE,model:0x0A07,width:2560,height:1440,refresh:165.003006,x:0,y:0,scale:1.4"
+        # Mini Monitor
+        "make:BOE,model:J560T09,serial:0x01010101,width:2560,height:1600,refresh:119.999001,x:2327,y:0,scale:1.5"
+        # Gigabyte Monitor
+        "model:M27Q,serial:20120B000001,width:2560,height:1440,refresh:169.830994,x:0,y:0,scale:1.1"
       ];
       allow_tearing = 2;
 
@@ -273,8 +278,8 @@
         "SUPER+ALT,f,set_proportion,1.0"
         "SUPER+ALT,p,switch_proportion_preset"
 
-        "SUPER+ALT,h,spawn,mmsg split h"
-        "SUPER+ALT,v,spawn,mmsg split v"
+        # "SUPER+ALT,h,spawn,mmsg split h"
+        # "SUPER+ALT,v,spawn,mmsg split v"
 
         # ─── Gaps ─────────────────────────────────────────────────────────────────────
         "SUPER+ALT,equal,incgaps,1"
@@ -309,10 +314,10 @@
         "SUPER+SHIFT,9,tag,9,0"
 
         # ─── Monitor ──────────────────────────────────────────────────────────────────
-        "ALT+SHIFT,Left,focusmon,left"
-        "ALT+SHIFT,Right,focusmon,right"
-        "SUPER+ALT,Left,tagmon,left"
-        "SUPER+ALT,Right,tagmon,right"
+        "ALT+SHIFT,h,focusmon,left"
+        "ALT+SHIFT,l,focusmon,right"
+        "SUPER+ALT,h,tagmon,left"
+        "SUPER+ALT,l,tagmon,right"
 
         # ─── Window: Move (Floating) ──────────────────────────────────────────────────
         "CTRL+SHIFT,Up,movewin,+0,-20"

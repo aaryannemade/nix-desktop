@@ -84,11 +84,14 @@
         orientation = "vertical";
       };
       bar = {
-        order = [ "main" ];
+        order = [
+          "main"
+          "second"
+        ];
 
         main = {
           position = "top";
-          enabled = true;
+          enabled = false;
           auto_hide = false;
           reserve_space = true;
           layer = "top";
@@ -129,11 +132,75 @@
             "battery"
             "session"
           ];
+
+          monitor = {
+            laptop = {
+              match = "0x0A07";
+              enabled = true;
+            };
+            gigabyte = {
+              match = "M27Q";
+              enabled = true;
+            };
+          };
+        };
+
+        second = {
+          position = "top";
+          enabled = false;
+          auto_hide = false;
+          reserve_space = true;
+          layer = "top";
+
+          thickness = 40;
+          background_opacity = 1.2;
+          border = "primary";
+          border_width = 2;
+          shadow = false;
+          contact_shadow = false;
+          panel_overlap = 2;
+          radius = 8;
+          margin_ends = 8;
+          margin_edge = 8;
+          padding = 10;
+          widget_spacing = 12;
+          scale = 1.0;
+          font_weight = "regular";
+
+          capsule = false;
+
+          start = [
+          ];
+          center = [
+            "workspaces"
+          ];
+          end = [
+            # "media"
+            # "tray"
+            # "notifications"
+            # "clipboard"
+            # "network"
+            # "bluetooth"
+            # "volume"
+            # "brightness"
+            # "battery"
+            # "session"
+          ];
+
+          monitor = {
+            mini = {
+              match = "J560T09";
+              enabled = true;
+            };
+          };
         };
       };
       widget = {
         clock = {
           format = "{:%-I:%M %p}";
+        };
+        control-center = {
+          glyph = "ghost-3-filled";
         };
       };
     };
