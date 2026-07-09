@@ -25,6 +25,6 @@
 - [x] transfer bootloader from systemd to grub
 - [ ] Set up RGB controls for PC host
 - [ ] Set up fan controls for PC host
-- [ ] Figure out Stream Deck set up
+- [x] Figure out Stream Deck set up
 - [ ] Set up auto-sleep on all hosts
 - [ ] Fix opencode github flake input

@@ -36,6 +36,8 @@
     };
 
     noctalia.url = "github:noctalia-dev/noctalia";
+    
+    opendeck-nix.url = "github:Yeradon/opendeck-nix";
 
     helium = {
       url = "github:AlvaroParker/helium-nix";

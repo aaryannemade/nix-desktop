@@ -364,6 +364,22 @@
         "url": "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz"
       }
     },
+    "nixpkgs_4": {
+      "locked": {
+        "lastModified": 1771848320,
+        "narHash": "sha256-0MAd+0mun3K/Ns8JATeHT1sX28faLII5hVLq0L3BdZU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "2fc6539b481e1d2569f25f8799236694180c0993",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "noctalia": {
       "inputs": {
         "nixpkgs": "nixpkgs_3"
@@ -398,6 +414,24 @@
         "type": "github"
       }
     },
+    "opendeck-nix": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1782658451,
+        "narHash": "sha256-OyBrH6xGWotpdS8BJZyP87IUC+6r1TeZqXBCTj/Oqi8=",
+        "owner": "Yeradon",
+        "repo": "opendeck-nix",
+        "rev": "76c99e4db1aa5f81da83592e978d4767a83d8527",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Yeradon",
+        "repo": "opendeck-nix",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -410,7 +444,8 @@
         "nixos-wsl": "nixos-wsl",
         "nixpkgs": "nixpkgs_2",
         "noctalia": "noctalia",
-        "nvim-config": "nvim-config"
+        "nvim-config": "nvim-config",
+        "opendeck-nix": "opendeck-nix"
       }
     },
     "scenefx": {
