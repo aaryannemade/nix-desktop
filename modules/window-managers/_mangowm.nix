@@ -10,6 +10,7 @@
       systemctl --user restart noctalia.service
       wl-paste --type text --watch cliphist store &
       wl-paste --type image --watch cliphist store &
+      opendeck
     '';
 
     settings = {
