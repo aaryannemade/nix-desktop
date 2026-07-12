@@ -353,6 +353,9 @@
         #bind=NONE,XF86AudioPrev,spawn,playerctl previous
 
         # ─── Screenshots ──────────────────────────────────────────────────────────────
+        "SUPER+SHIFT,s,spawn,noctalia msg screenshot-region"
+        "SUPER+SHIFT,Print,spawn,noctalia msg screenshot-fullscreen"
+        "NONE,Print,spawn,noctalia msg screenshot-fullscreen all"
         #"SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; quickshell -c ~/.config/quickshell/screenshot/'"
         # "SUPER+SHIFT,s,spawn,sh -c 'grim /tmp/qs-master.png; qs ipc call screenshot capture'"
         #layerrule=noblur:1,layer_name:selection
@@ -364,6 +367,9 @@
         #layerrule=animation_type_open:zoom,layer_name:rofi
         #layerrule=animation_type_close:zoom,layer_name:rofi
 
+      ];
+      windowrule = [
+        "isfloating:1,appid:satty"
         # ─── Window Rules ─────────────────────────────────────────────────────────────
         #windowrule=isfloating:1,width:600,height:400,title:nmtui
         # windowrule=isfloating:1,width:860,height:600,title:Ghostty

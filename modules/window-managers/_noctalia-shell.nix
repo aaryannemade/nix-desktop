@@ -1,4 +1,9 @@
-{ inputs, config, ... }:
+{
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
 {
   imports = [ inputs.noctalia.homeModules.default ];
 
@@ -8,6 +13,10 @@
       enable = true;
     };
   };
+
+  home.packages = with pkgs; [
+    satty
+  ];
 
   programs.noctalia = {
     enable = true;
@@ -43,6 +52,16 @@
         screen_corners = {
           enabled = true;
           size = 32;
+        };
+        screenshot = {
+          save_to_file = false;
+          directory = "${config.home.homeDirectory}/Pictures/screenshots";
+          filename_pattern = "screenshot_%Y%m%d_%H%M%S";
+          copy_to_clipboard = true;
+          freeze_screen = true;
+          confirm_region = true;
+          pipe_to_command = true;
+          pipe_command = "satty -f -";
         };
         panel = {
           transparency_mode = "soft";
