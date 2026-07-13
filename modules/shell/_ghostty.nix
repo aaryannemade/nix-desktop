@@ -14,6 +14,8 @@
     settings = {
       window-theme = "dark";
       theme = if (platform == "nixos") then "noctalia" else "catppuccin-macchiato";
+      background-opacity = 0.8;
+      background-opacity-cells = true;
     };
   };
 }

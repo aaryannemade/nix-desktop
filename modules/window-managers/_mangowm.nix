@@ -36,7 +36,7 @@
         # Laptop Internal Display
         "make:BOE,model:0x0A07,width:2560,height:1440,refresh:165.003006,x:0,y:0,scale:1.4"
         # Mini Monitor
-        "make:BOE,model:J560T09,serial:0x01010101,width:2560,height:1600,refresh:119.999001,x:2327,y:0,scale:1.5"
+        "make:BOE,model:J560T09,serial:0x01010101,width:2560,height:1600,refresh:119.999001,x:2327,y:0,scale:1.7"
         # Gigabyte Monitor
         "model:M27Q,serial:20120B000001,width:2560,height:1440,refresh:169.830994,x:0,y:0,scale:1.1"
       ];
@@ -45,7 +45,7 @@
       # ─── Window Effects ───────────────────────────────────────────────────────────
       blur = 1;
       blur_layer = 1;
-      blur_optimized = 0;
+      blur_optimized = 1;
       blur_params_num_passes = 4;
       blur_params_radius = 8;
       blur_params_noise = 0.02;
@@ -93,7 +93,7 @@
       animation_curve_opafadein = "0.46,1.0,0.29,1";
 
       # ─── Scroller Layout ──────────────────────────────────────────────────────────
-      scroller_structs = 8;
+      scroller_structs = 24;
       scroller_default_proportion = 0.8;
       scroller_focus_center = 0;
       scroller_prefer_center = 0;
@@ -166,7 +166,7 @@
       mouse_accel_speed = -0.2;
 
       # ─── Cursor ───────────────────────────────────────────────────────────────────
-      cursor_size = 22;
+      cursor_size = 28;
       cursor_theme = "Bibata-Modern-Classic";
 
       # ─── Appearance ───────────────────────────────────────────────────────────────
