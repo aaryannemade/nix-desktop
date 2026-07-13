@@ -24,7 +24,7 @@
 - [ ] add support for devenv for development
 - [x] transfer bootloader from systemd to grub
 - [x] Set up RGB controls for PC host
-- [ ] Set up fan controls for PC host
+- [x] Set up fan controls for PC host
 - [x] Figure out Stream Deck set up
 - [ ] Set up auto-sleep on all hosts
 - [ ] Fix opencode github flake input

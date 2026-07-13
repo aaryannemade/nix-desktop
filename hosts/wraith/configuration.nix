@@ -13,13 +13,19 @@
     ./packages.nix # Import host specific packages
     ./graphics.nix # Import graphics/display config
     ./drive-mounts.nix # Import for local drive mounts
-    ./rgb.nix # Import RGB controller config
   ];
 
   # Enable touchpad support (enabled default in most desktopManager).
   services.libinput.enable = true;
 
   time.timeZone = "Asia/Calcutta";
+
+  hardware.i2c.enable = true;
+
+  boot.kernelModules = [
+    "i2c-dev"
+    "nct6775"
+  ];
 
   programs = {
     steam = {
