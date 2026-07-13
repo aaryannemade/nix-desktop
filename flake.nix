@@ -12,7 +12,11 @@
     import-tree = {
       url = "github:denful/import-tree";
     };
-    nixpkgs.url = "nixpkgs/nixos-26.05";
+
+    nixpkgs = {
+      url = "nixpkgs/nixos-26.05";
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -28,16 +32,26 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    blender-cuda.url = "github:adithyagenie/blender-cuda-nixos";
+    blender-cuda = {
+      url = "github:adithyagenie/blender-cuda-nixos";
+    };
 
     mangowm = {
       url = "github:mangowm/mango";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    noctalia.url = "github:noctalia-dev/noctalia";
+    noctalia = {
+      url = "github:noctalia-dev/noctalia";
+    };
 
-    opendeck-nix.url = "github:Yeradon/opendeck-nix";
+    opendeck-nix = {
+      url = "github:Yeradon/opendeck-nix";
+    };
+
+    opencode-nix = {
+      url = "github:dominicnunez/opencode-nix";
+    };
 
     helium = {
       url = "github:AlvaroParker/helium-nix";

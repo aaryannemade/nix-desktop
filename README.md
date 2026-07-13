@@ -27,4 +27,4 @@
 - [x] Set up fan controls for PC host
 - [x] Figure out Stream Deck set up
 - [ ] Set up auto-sleep on all hosts
-- [ ] Fix opencode github flake input
+- [x] Fix opencode github flake input

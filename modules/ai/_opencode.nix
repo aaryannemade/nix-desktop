@@ -7,7 +7,7 @@
 
 {
   home.packages = [
-    pkgs.opencode
+    inputs.opencode-nix.packages.${pkgs.system}.opencode
   ];
 
   xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
