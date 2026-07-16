@@ -23,6 +23,10 @@ let
       shownGpus ? [ ],
     }:
     let
+      unstablePkgs = import inputs.nixpkgs-unstable {
+        system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
       effectiveHomeDirectory =
         if homeDirectory != null then
           homeDirectory
@@ -41,6 +45,7 @@ let
           hostname
           username
           platform
+          unstablePkgs
           ;
         homeDirectory = effectiveHomeDirectory;
       };

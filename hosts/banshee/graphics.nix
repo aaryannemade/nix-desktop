@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  unstablePkgs,
   ...
 }:
 
@@ -46,7 +47,7 @@
   };
 
   # Enable Cuda for Ollama (uses the WSL-passthrough NVIDIA driver).
-  services.ollama.package = pkgs.ollama-cuda;
+  services.ollama.package = unstablePkgs.ollama-cuda;
   systemd.services.ollama.environment.LD_LIBRARY_PATH =
     lib.mkForce "/usr/lib/wsl/lib:/run/opengl-driver/lib";
 }

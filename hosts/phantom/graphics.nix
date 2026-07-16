@@ -3,6 +3,7 @@
   inputs,
   lib,
   pkgs,
+  unstablePkgs,
   ...
 }:
 
@@ -59,7 +60,7 @@
   };
 
   # Enable Cuda for Ollama
-  services.ollama.package = pkgs.ollama-cuda;
+  services.ollama.package = unstablePkgs.ollama-cuda;
 
   hardware.graphics.enable = true;
 

@@ -1,7 +1,7 @@
 {
   lib,
-  pkgs,
   platform,
+  unstablePkgs,
   ...
 }:
 
@@ -14,13 +14,19 @@
 # darwin (macOS): there is no `services.ollama` module. Install the package and
 # run it as a launchd user agent instead. nix-darwin exposes `launchd.user.agents`.
 lib.optionalAttrs (platform == "nixos" || platform == "wsl") {
-  services.ollama.enable = true;
+  services.ollama = {
+    enable = true;
+    package = lib.mkDefault unstablePkgs.ollama;
+    environmentVariables = {
+      OLLAMA_CONTEXT_LENGTH = "64000";
+    };
+  };
 }
 // lib.optionalAttrs (platform == "darwin") {
-  environment.systemPackages = [ pkgs.ollama ];
+  environment.systemPackages = [ unstablePkgs.ollama ];
 
   launchd.user.agents.ollama = {
-    command = "${pkgs.ollama}/bin/ollama serve";
+    command = "${unstablePkgs.ollama}/bin/ollama serve";
     serviceConfig = {
       KeepAlive = true;
       RunAtLoad = true;
