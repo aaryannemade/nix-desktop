@@ -18,7 +18,7 @@ lib.optionalAttrs (platform == "nixos" || platform == "wsl") {
     enable = true;
     package = lib.mkDefault unstablePkgs.ollama;
     environmentVariables = {
-      OLLAMA_CONTEXT_LENGTH = "64000";
+      OLLAMA_CONTEXT_LENGTH = "98304";
     };
   };
 }
