@@ -1,10 +1,6 @@
-{ pkgs, osConfig, ... }:
+{ osConfig, ... }:
 
 {
-  home.packages = with pkgs; [
-    glab
-  ];
-
   programs.git = {
     enable = true;
     lfs.enable = true;
@@ -16,7 +12,6 @@
       init.defaultBranch = "main";
       pull.rebase = false;
       push.autoSetupRemote = true;
-      credential.helper = "!glab auth git-credential";
     };
   };
 
