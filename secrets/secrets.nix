@@ -27,4 +27,5 @@ let
 in
 {
   "deepseek.age".publicKeys = users ++ allHosts;
+  "opencode-api.age".publicKeys = users ++ allHosts;
 }

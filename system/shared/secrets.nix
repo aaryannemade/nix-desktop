@@ -14,4 +14,10 @@
     owner = username;
     mode = "0400";
   };
+
+  age.secrets.opencode-api = {
+    file = ../../secrets/opencode-api.age;
+    owner = username;
+    mode = "0400";
+  };
 }
