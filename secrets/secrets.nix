@@ -28,4 +28,9 @@ in
 {
   "deepseek.age".publicKeys = users ++ allHosts;
   "opencode-api.age".publicKeys = users ++ allHosts;
+
+  "gitlab-main.age".publicKeys = users ++ allHosts;
+  "gitlab-burner.age".publicKeys = users ++ allHosts;
+  "github-main.age".publicKeys = users ++ allHosts;
+  "github-burner.age".publicKeys = users ++ allHosts;
 }
