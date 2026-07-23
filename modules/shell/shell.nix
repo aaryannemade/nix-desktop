@@ -8,6 +8,7 @@
     ./_fzf.nix
     ./_yazi.nix
     ./_ghostty.nix
+    ./_ssh.nix
   ]
   ++ lib.optionals (platform == "nixos") [
   ]

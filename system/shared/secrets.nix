@@ -47,4 +47,10 @@
     owner = username;
     mode = "0600";
   };
+
+  age.secrets.nerv-centr = {
+    file = ../../secrets/nerv-centr.age;
+    owner = username;
+    mode = "0600";
+  };
 }

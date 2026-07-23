@@ -1,12 +1,14 @@
 # agenix recipient registry. NOT encrypted, safe to commit.
 # Maps each .age secret to the public keys allowed to decrypt it.
 #
-# - User keys: let you (the human) edit secrets with `agenix -e`.
+# - User keys: let you edit secrets with
+#   `nix run github:ryantm/agenix -- -e <secret>.age -i /etc/ssh/ssh_host_ed25519_key`.
 # - Host keys: let the machine decrypt at activation (-> /run/agenix/<name>).
 #
 # Shared-key multi-host model: list every host in `allHosts`. When adding a
 # host, append its /etc/ssh/ssh_host_ed25519_key.pub here and rekey:
-#   agenix -r   (re-encrypts all secrets to the updated recipient set)
+#   nix run github:ryantm/agenix -- -r -i /etc/ssh/ssh_host_ed25519_key
+#   (re-encrypts all secrets to the updated recipient set)
 let
   # User key: ~/.ssh/id_ed25519.pub
   aaryan = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPAtYcb36NJoUWDF/nBKjNtTbTQqrPTvyOXJ3SGtfxHg aaryan@phantom";
@@ -26,11 +28,16 @@ let
   ];
 in
 {
+  # API Keys
   "deepseek.age".publicKeys = users ++ allHosts;
   "opencode-api.age".publicKeys = users ++ allHosts;
 
+  # Git SHH Keys
   "gitlab-main.age".publicKeys = users ++ allHosts;
   "gitlab-burner.age".publicKeys = users ++ allHosts;
   "github-main.age".publicKeys = users ++ allHosts;
   "github-burner.age".publicKeys = users ++ allHosts;
+
+  # Local SSH Keys
+  "nerv-centr.age".publicKeys = users ++ allHosts;
 }
