@@ -28,3 +28,4 @@
 - [x] Figure out Stream Deck set up
 - [ ] Set up auto-sleep on all hosts
 - [x] Fix opencode github flake input
+- [x] Implement the binary cache rollout above
