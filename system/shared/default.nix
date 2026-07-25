@@ -12,5 +12,6 @@
     ./secrets.nix
     ./ai.nix
     ./unfree.nix
+    ./seed-repo.nix
   ];
 }

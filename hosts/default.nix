@@ -137,5 +137,15 @@ in
     modules = [ ./installer/configuration.nix ];
   };
 
+  # Generic, keyless WSL image. Standalone (does not use mkHost): minimal,
+  # secret-free, carries a read-only copy of the repo and seeds ~/nix-desktop on
+  # first boot. Converge to a real host after import with `nrs`.
+  # Build: nix run .#installer-wsl -- [out.wsl]
+  installer-wsl = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    specialArgs = { inherit inputs self; };
+    modules = [ ./installer-wsl/configuration.nix ];
+  };
+
   # Future hosts go here:
 }
