@@ -97,8 +97,14 @@
           mangowm
           import-tree
           inputs
+          self
           ;
       };
+
+      # Convenience package for the installer ISO:
+      #   nix build .#installer-iso  ->  result/iso/nix-desktop-installer.iso
+      packages.x86_64-linux.installer-iso =
+        self.nixosConfigurations.installer.config.system.build.isoImage;
 
       formatter.x86_64-linux =
         let

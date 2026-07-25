@@ -4,6 +4,7 @@
   mangowm,
   import-tree,
   inputs,
+  self,
   ...
 }:
 
@@ -125,5 +126,16 @@ in
       "intel"
     ];
   };
+
+  # Thin custom installer ISO. Not a normal host: no per-host hardware config,
+  # no home-manager/agenix — just a minimal live image carrying a read-only copy
+  # of this repo plus the `nix-desktop-install` helper.
+  # Build: nix build .#installer-iso
+  installer = nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
+    specialArgs = { inherit inputs self; };
+    modules = [ ./installer/configuration.nix ];
+  };
+
   # Future hosts go here:
 }
