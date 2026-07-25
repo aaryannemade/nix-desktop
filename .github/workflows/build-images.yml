@@ -1,0 +1,168 @@
+name: Build installation images
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag (for example: v2026.07.25)"
+        required: true
+        type: string
+      release_notes:
+        description: "Optional notes to show before the generated commit changelog"
+        required: false
+        type: string
+      prerelease:
+        description: "Mark this release as a prerelease"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: installation-images
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    name: Build and publish images
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Free runner disk space
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: false
+          swap-storage: false
+          tool-cache: false
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            accept-flake-config = true
+            extra-substituters = https://noctalia.cachix.org https://cache.nixos-cuda.org https://adithyagenie.cachix.org
+            extra-trusted-public-keys = noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4= cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M= adithyagenie.cachix.org-1:h6BSMboeVfxyrULWuRQqAyweo4AJRATekb88xotfQwc=
+
+      - name: Validate release tag
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          if [[ ! "$RELEASE_TAG" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+            echo "Release tag may contain only letters, numbers, dots, underscores, and hyphens." >&2
+            exit 1
+          fi
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release '$RELEASE_TAG' already exists." >&2
+            exit 1
+          fi
+
+          if git rev-parse --verify --quiet "refs/tags/$RELEASE_TAG" >/dev/null; then
+            echo "Tag '$RELEASE_TAG' already exists." >&2
+            exit 1
+          fi
+
+      - name: Build installer ISO
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+
+          nix build .#installer-iso --out-link result-iso
+
+          shopt -s nullglob
+          images=(result-iso/iso/*.iso)
+          if (( ${#images[@]} != 1 )); then
+            echo "Expected exactly one ISO, found ${#images[@]}." >&2
+            exit 1
+          fi
+
+          install -m 0644 \
+            "${images[0]}" \
+            "artifacts/nix-desktop-installer-$RELEASE_TAG.iso"
+
+      - name: Build generic WSL image
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          builder="$(nix build --no-link --print-out-paths \
+            .#nixosConfigurations.installer-wsl.config.system.build.tarballBuilder)"
+
+          sudo "$builder/bin/nixos-wsl-tarball-builder" \
+            "$PWD/artifacts/nix-desktop-wsl-$RELEASE_TAG.wsl"
+
+      - name: Generate changelog and checksums
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          MANUAL_NOTES: ${{ inputs.release_notes }}
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
+        run: |
+          set -euo pipefail
+
+          previous_tag="$(gh release list \
+            --exclude-drafts \
+            --limit 1 \
+            --json tagName \
+            --jq '.[0].tagName // empty')"
+
+          if [[ -n "$previous_tag" ]] && ! git rev-parse --verify --quiet "refs/tags/$previous_tag" >/dev/null; then
+            git fetch --force origin "refs/tags/$previous_tag:refs/tags/$previous_tag"
+          fi
+
+          {
+            if [[ -n "$MANUAL_NOTES" ]]; then
+              printf '%s\n\n' "$MANUAL_NOTES"
+            fi
+
+            if [[ -n "$previous_tag" ]]; then
+              echo "## Changes since $previous_tag"
+              range="$previous_tag..HEAD"
+            else
+              echo "## Changes in the first image release"
+              range="HEAD"
+            fi
+
+            echo
+            if [[ -n "$(git log "$range" --format=%H)" ]]; then
+              git log "$range" \
+                --format="- [\`%h\`]($REPOSITORY_URL/commit/%H) %s (%an)"
+            else
+              echo "- No commits since the previous image release."
+            fi
+          } > release-notes.md
+
+          (
+            cd artifacts
+            sha256sum ./* > "SHA256SUMS-$RELEASE_TAG.txt"
+          )
+
+          cat release-notes.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          name: Nix desktop images ${{ inputs.release_tag }}
+          target_commitish: ${{ github.sha }}
+          body_path: release-notes.md
+          prerelease: ${{ inputs.prerelease }}
+          fail_on_unmatched_files: true
+          files: artifacts/*
