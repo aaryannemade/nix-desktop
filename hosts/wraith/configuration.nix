@@ -1,6 +1,4 @@
 {
-  config,
-  lib,
   pkgs,
   hostname,
   ...
@@ -12,20 +10,11 @@
     ./hardware-configuration.nix
     ./packages.nix # Import host specific packages
     ./graphics.nix # Import graphics/display config
+    ./overrides.nix # Import CUDA/feature overrides
     ./drive-mounts.nix # Import for local drive mounts
   ];
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.libinput.enable = true;
-
   time.timeZone = "Asia/Calcutta";
-
-  hardware.i2c.enable = true;
-
-  boot.kernelModules = [
-    "i2c-dev"
-    "nct6775"
-  ];
 
   programs = {
     steam = {
@@ -37,7 +26,6 @@
     };
     gamescope = {
       enable = true;
-      # capSysNice = true;
     };
     zsh.shellAliases = {
       nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#${hostname}";

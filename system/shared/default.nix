@@ -11,5 +11,6 @@
     ./network.nix
     ./secrets.nix
     ./ai.nix
+    ./unfree.nix
   ];
 }

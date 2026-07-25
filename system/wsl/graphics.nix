@@ -1,6 +1,11 @@
 { lib, ... }:
 
 {
+  my.unfreePackages = [
+    "nvidia-x11"
+    "nvidia-settings"
+  ];
+
   hardware.graphics = {
     enable = true;
     enable32Bit = true;

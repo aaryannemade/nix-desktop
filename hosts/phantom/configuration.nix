@@ -12,6 +12,7 @@
     ./hardware-configuration.nix # Import hardware config
     ./packages.nix # Import host specific packages
     ./graphics.nix # Import graphics/display config
+    ./overrides.nix # Import CUDA/feature overrides
   ];
 
   # Enable touchpad support (enabled default in most desktopManager).
@@ -29,7 +30,6 @@
     };
     gamescope = {
       enable = true;
-      # capSysNice = true;
     };
     zsh.shellAliases = {
       nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#${hostname}";
