@@ -5,6 +5,7 @@
   import-tree,
   inputs,
   self,
+  repoBundle,
   ...
 }:
 
@@ -117,6 +118,7 @@ in
       "intel"
     ];
   };
+
   wraith = mkHost {
     hostname = "wraith";
     username = "aaryan";
@@ -127,25 +129,21 @@ in
     ];
   };
 
+  # Future hosts go here:
+
   # Thin custom installer ISO. Not a normal host: no per-host hardware config,
-  # no home-manager/agenix — just a minimal live image carrying a read-only copy
-  # of this repo plus the `nix-desktop-install` helper.
   # Build: nix build .#installer-iso
   installer = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
-    specialArgs = { inherit inputs self; };
+    specialArgs = { inherit inputs self repoBundle; };
     modules = [ ./installer/configuration.nix ];
   };
 
   # Generic, keyless WSL image. Standalone (does not use mkHost): minimal,
-  # secret-free, carries a read-only copy of the repo and seeds ~/nix-desktop on
-  # first boot. Converge to a real host after import with `nrs`.
   # Build: nix run .#installer-wsl -- [out.wsl]
   installer-wsl = nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
-    specialArgs = { inherit inputs self; };
+    specialArgs = { inherit inputs self repoBundle; };
     modules = [ ./installer-wsl/configuration.nix ];
   };
-
-  # Future hosts go here:
 }

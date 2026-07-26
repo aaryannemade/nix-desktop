@@ -76,6 +76,20 @@ jobs:
             exit 1
           fi
 
+      - name: Create release repository bundle
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          # Include the pending release tag in the offline checkout embedded in
+          # both images. The release action publishes the same tag afterward.
+          git tag "$RELEASE_TAG" "$GITHUB_SHA"
+          bundle="$RUNNER_TEMP/nix-desktop.bundle"
+          git bundle create "$bundle" --all
+          git bundle verify "$bundle"
+          echo "NIX_DESKTOP_GIT_BUNDLE=$bundle" >> "$GITHUB_ENV"
+
       - name: Build installer ISO
         env:
           RELEASE_TAG: ${{ inputs.release_tag }}
@@ -83,7 +97,7 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts
 
-          nix build .#installer-iso --out-link result-iso
+          nix build --impure .#installer-iso --out-link result-iso
 
           shopt -s nullglob
           images=(result-iso/iso/*.iso)
@@ -102,7 +116,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          builder="$(nix build --no-link --print-out-paths \
+          builder="$(nix build --impure --no-link --print-out-paths \
             .#nixosConfigurations.installer-wsl.config.system.build.tarballBuilder)"
 
           sudo "$builder/bin/nixos-wsl-tarball-builder" \

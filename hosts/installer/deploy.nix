@@ -5,9 +5,10 @@
 #   2. Write a minimal, secret-free, bootable configuration.nix to /mnt.
 #   3. nixos-install (prompts for the root password), then set the aaryan
 #      password interactively inside the target.
-#   4. Drop a writable copy of this repo into the installed ~/nix-desktop and
-#      place the generated hardware-config at hosts/<hostname>/.
-#   5. Print the post-boot convergence steps (ssh host key, secrets, nrs).
+#   4. Clone the embedded release bundle into the installed ~/nix-desktop.
+#   5. Scaffold a new host when needed and place the generated hardware config
+#      at hosts/<hostname>/ (existing host configuration is preserved).
+#   6. Print the post-boot convergence steps (ssh host key, secrets, nrs).
 #
 # Assumes the target drives are already mounted under /mnt (ESP at /mnt/boot).
 # It does NOT partition disks and does NOT bake any secrets.
@@ -25,8 +26,8 @@ pkgs.writeShellApplication {
   text = ''
     set -euo pipefail
 
-    # Read-only copy of the repo baked into the ISO (see configuration.nix).
-    REPO_SRC="/etc/nix-desktop"
+    REPO_URL="https://github.com/aaryannemade/nix-desktop.git"
+    REPO_BUNDLE="/etc/nix-desktop.bundle"
     USER_NAME="aaryan"
     USER_UID="1000"
     USER_GID="100"
@@ -45,6 +46,11 @@ pkgs.writeShellApplication {
       exit 1
     fi
 
+    if [[ ! "$hostname" =~ ^[a-z0-9][a-z0-9-]{0,62}$ ]]; then
+      echo "error: hostname must contain only lowercase letters, numbers, and hyphens." >&2
+      exit 1
+    fi
+
     if ! mountpoint -q /mnt; then
       echo "error: /mnt is not a mountpoint." >&2
       echo "Partition and mount the target first, e.g.:" >&2
@@ -55,6 +61,79 @@ pkgs.writeShellApplication {
 
     echo "[nix-desktop-install] Generating hardware configuration for /mnt ..."
     nixos-generate-config --root /mnt
+
+    echo "[nix-desktop-install] Preparing release repository ..."
+    dest="/mnt/home/$USER_NAME/nix-desktop"
+    rm -rf "$dest"
+    mkdir -p "$(dirname "$dest")"
+
+    if [ -f "$REPO_BUNDLE" ]; then
+      git clone "$REPO_BUNDLE" "$dest"
+      git -C "$dest" remote set-url origin "$REPO_URL"
+    else
+      echo "warning: image has no embedded bundle; cloning $REPO_URL" >&2
+      git clone "$REPO_URL" "$dest"
+    fi
+
+    host_dir="$dest/hosts/$hostname"
+    if [ ! -f "$host_dir/configuration.nix" ]; then
+      echo "[nix-desktop-install] Scaffolding new host '$hostname' ..."
+      mkdir -p "$host_dir"
+
+      cat > "$host_dir/configuration.nix" <<EOF
+    { hostname, ... }:
+
+    {
+      imports = [
+        ../../configuration.nix
+        ./hardware-configuration.nix
+      ];
+
+      time.timeZone = "Asia/Calcutta";
+
+      programs.zsh.shellAliases.nrs =
+        "sudo nixos-rebuild switch --flake ~/nix-desktop#$hostname";
+    }
+    EOF
+
+      defaults="$dest/hosts/default.nix"
+      defaults_new="$(mktemp)"
+      inserted=false
+      while IFS= read -r line || [ -n "$line" ]; do
+        if [ "$inserted" = false ] && [[ "$line" == *"# Future hosts go here:"* ]]; then
+          cat >> "$defaults_new" <<EOF
+      "$hostname" = mkHost {
+        hostname = "$hostname";
+        username = "$USER_NAME";
+        platform = "nixos";
+        shownGpus = [
+          "nvidia"
+          "intel"
+        ];
+      };
+
+    EOF
+          inserted=true
+        fi
+        printf '%s\n' "$line" >> "$defaults_new"
+      done < "$defaults"
+
+      if [ "$inserted" = false ]; then
+        echo "error: could not find the host insertion marker in $defaults" >&2
+        rm -f "$defaults_new"
+        exit 1
+      fi
+      mv "$defaults_new" "$defaults"
+    fi
+
+    # Place the freshly generated hardware-config into the host dir so it is
+    # ready in the working tree. Existing host configuration remains untouched.
+    mkdir -p "$host_dir"
+    cp --no-preserve=mode,ownership \
+      /mnt/etc/nixos/hardware-configuration.nix \
+      "$host_dir/hardware-configuration.nix"
+
+    chown -R "$USER_UID:$USER_GID" "$dest"
 
     echo "[nix-desktop-install] Writing minimal bootable configuration.nix ..."
     cat > /mnt/etc/nixos/configuration.nix <<EOF
@@ -105,49 +184,26 @@ pkgs.writeShellApplication {
     echo "[nix-desktop-install] Set a password for user '$USER_NAME':"
     nixos-enter --root /mnt -c "passwd $USER_NAME"
 
-    echo "[nix-desktop-install] Placing repo copy in /home/$USER_NAME/nix-desktop ..."
-    dest="/mnt/home/$USER_NAME/nix-desktop"
-    rm -rf "$dest"
-    mkdir -p "$(dirname "$dest")"
-    cp -r --no-preserve=mode,ownership "$REPO_SRC" "$dest"
-
-    # Place the freshly generated hardware-config into the host dir so it is
-    # ready in the working tree (create the dir for a brand-new host).
-    host_dir="$dest/hosts/$hostname"
-    mkdir -p "$host_dir"
-    cp --no-preserve=mode,ownership \
-      /mnt/etc/nixos/hardware-configuration.nix \
-      "$host_dir/hardware-configuration.nix"
-
-    chown -R "$USER_UID:$USER_GID" "$dest"
-
     cat <<EOF
 
     [nix-desktop-install] Done. Minimal system installed.
 
     Next steps:
       1. Reboot into the new system.
-      2. Set the SSH host key so agenix can decrypt secrets, either:
-           sudo ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ""
-         or copy an existing key in:
+      2. Inspect the SSH host key generated on first boot:
+           cat /etc/ssh/ssh_host_ed25519_key.pub
+         For an existing host, you may instead restore its previous key:
            sudo scp you@other:/path/ssh_host_ed25519_key /etc/ssh/
-      3. Add this host's public key (cat /etc/ssh/ssh_host_ed25519_key.pub) to
-         allHosts in ~/nix-desktop/secrets/secrets.nix, then rekey:
-           nix run github:ryantm/agenix -- -r -i /etc/ssh/ssh_host_ed25519_key
-      4. If '$hostname' is a NEW host, add this block to ~/nix-desktop/hosts/default.nix:
-
-           $hostname = mkHost {
-             hostname = "$hostname";
-             username = "$USER_NAME";
-             platform = "nixos";
-             shownGpus = [ "nvidia" "intel" ];
-           };
-
-      5. Commit the generated hardware config:
-           git -C ~/nix-desktop add hosts/$hostname/hardware-configuration.nix
-      6. Converge to the real host config:
+      3. On another authorized host, add the new public key to secrets/secrets.nix,
+         rekey with that host's existing identity, commit, and push the changes.
+      4. Pull those changes here and review the generated host files:
+           git -C ~/nix-desktop pull --ff-only
+           git -C ~/nix-desktop status
+      5. Converge to the real host config only after its key can decrypt secrets:
            sudo nixos-rebuild switch --flake ~/nix-desktop#$hostname
          (your 'nrs' alias does this once the host is defined)
+
+      Until then, the minimal installed system remains fully bootable and usable.
 
     EOF
   '';

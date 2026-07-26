@@ -89,6 +89,11 @@
       import-tree,
       ...
     }:
+    let
+      imageOutputs = import ./images {
+        inherit self nixpkgs;
+      };
+    in
     {
       nixosConfigurations = import ./hosts {
         inherit
@@ -99,12 +104,11 @@
           inputs
           self
           ;
+        repoBundle = imageOutputs.repoBundle;
       };
 
-      # Convenience package for the installer ISO:
-      #   nix build .#installer-iso  ->  result/iso/nix-desktop-installer.iso
-      packages.x86_64-linux.installer-iso =
-        self.nixosConfigurations.installer.config.system.build.isoImage;
+      packages.x86_64-linux = imageOutputs.packages;
+      apps.x86_64-linux = imageOutputs.apps;
 
       formatter.x86_64-linux =
         let
@@ -122,38 +126,6 @@
             fi
             find "$@" -type f -name '*.nix' -print0 | xargs -0 -r nixfmt
           '';
-        };
-
-      # Build the generic, keyless WSL image. No SSH key is baked in; the image
-      # seeds the repo into ~/nix-desktop on first boot so you can converge to a
-      # real host with `nrs`. Requires root (uses sudo) because the underlying
-      # tarballBuilder must set ownership inside the rootfs.
-      #   Usage: nix run .#installer-wsl -- [output.wsl]   (default nixos.wsl)
-      apps.x86_64-linux =
-        let
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          installerWslApp =
-            let
-              tarballBuilder =
-                self.nixosConfigurations.installer-wsl.config.system.build.tarballBuilder;
-              script = pkgs.writeShellApplication {
-                name = "build-installer-wsl";
-                runtimeInputs = [ pkgs.coreutils ];
-                text = ''
-                  out="''${1:-nixos.wsl}"
-                  echo "[installer-wsl] Building generic image -> $out (requires sudo)"
-                  sudo "${tarballBuilder}/bin/nixos-wsl-tarball-builder" "$out"
-                  echo "[installer-wsl] Done: $out"
-                '';
-              };
-            in
-            {
-              type = "app";
-              program = "${script}/bin/build-installer-wsl";
-            };
-        in
-        {
-          installer-wsl = installerWslApp;
         };
     };
 }

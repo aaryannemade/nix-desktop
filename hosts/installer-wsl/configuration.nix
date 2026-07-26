@@ -1,8 +1,8 @@
 # Generic, keyless WSL image.
 #
 # Mirrors the installer ISO philosophy: a minimal, secret-free WSL system that
-# carries a read-only copy of this repo and seeds it into ~/nix-desktop on first
-# boot. After `wsl --import`, converge to a real host with:
+# clones the public repo into ~/nix-desktop on first boot. After `wsl --import`,
+# converge to a real host with:
 #   sudo nixos-rebuild switch --flake ~/nix-desktop#<host>
 #
 # It deliberately does NOT import the full ./system tree (which declares agenix
@@ -15,8 +15,8 @@
 {
   pkgs,
   lib,
-  self,
   inputs,
+  repoBundle,
   ...
 }:
 
@@ -59,10 +59,15 @@ in
 
   environment.systemPackages = [ pkgs.git ];
 
-  # Seed a writable repo copy into ~/nix-desktop on first boot so `nrs` works.
+  environment.etc = lib.mkIf (repoBundle != null) {
+    "nix-desktop.bundle".source = repoBundle;
+  };
+
+  # Clone a functional repo into ~/nix-desktop on first boot so `nrs` works.
   my.seedRepo = {
     enable = true;
-    source = self;
+    bundle = lib.optionalString (repoBundle != null) "/etc/nix-desktop.bundle";
+    url = "https://github.com/aaryannemade/nix-desktop.git";
     user = username;
   };
 

@@ -1,17 +1,17 @@
 # Thin custom NixOS installer ISO.
 #
-# A minimal (no desktop) live image that carries a read-only copy of this repo
-# at /etc/nix-desktop plus the `nix-desktop-install` helper. Boot it, mount the
-# target under /mnt (ESP at /mnt/boot), then run `sudo nix-desktop-install
-# <hostname>` to install a minimal bootable system and drop the repo into the
-# installed ~/nix-desktop. Converge to the real host after reboot via `nrs`.
+# A minimal (no desktop) live image with the `nix-desktop-install` helper. Boot
+# it, mount the target under /mnt (ESP at /mnt/boot), then run
+# `sudo nix-desktop-install <hostname>` to install a minimal bootable system and
+# clone the embedded release repository into the installed ~/nix-desktop.
+# Converge to the real host after reboot via `nrs`.
 #
 # Build: nix build .#installer-iso  ->  result/iso/nix-desktop-installer.iso
 {
   modulesPath,
   pkgs,
   lib,
-  self,
+  repoBundle,
   ...
 }:
 
@@ -30,9 +30,12 @@ in
     "flakes"
   ];
 
-  # Read-only copy of the whole flake, available in the live env at
-  # /etc/nix-desktop. The install helper copies this into the target's home.
-  environment.etc."nix-desktop".source = self;
+  # Release/local app builds provide a full-history bundle for an offline,
+  # exact-revision checkout. Plain low-level builds omit it and the helper
+  # falls back to the public remote.
+  environment.etc = lib.mkIf (repoBundle != null) {
+    "nix-desktop.bundle".source = repoBundle;
+  };
 
   environment.systemPackages = [
     pkgs.git

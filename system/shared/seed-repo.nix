@@ -1,23 +1,15 @@
-# Optional: seed a writable copy of this repo into a user's home on first boot.
+# Optional: clone this repo into a user's home on first boot.
 #
-# Used by the generic distributable images (the installer ISO's installed
-# system and the generic WSL image) so that after boot/import the repo already
+# Used by the generic WSL image so that after import a functional Git checkout
 # lives at ~/nix-desktop and you can converge to the real host with `nrs`
 # (nixos-rebuild switch --flake ~/nix-desktop#<host>).
 #
-# It copies from a read-only store path (self) exactly once: it will not clobber
-# an existing ~/nix-desktop, so it is a no-op on machines that already have the
-# repo checked out.
-#
-# NOTE: the baremetal ISO does NOT use this module. Its installer
-# (hosts/installer/deploy.nix) copies the repo at install time into the target's
-# /mnt so it can also drop the freshly generated hardware-configuration.nix into
-# the host dir. That install-time copy has no access to `self` from within the
-# standalone minimal config it writes, so activation-based seeding does not apply
-# there. This module is for images with no install step (i.e. WSL).
+# The service does not clobber an existing ~/nix-desktop. It waits for the
+# network and retries if GitHub is temporarily unavailable.
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -26,11 +18,17 @@ let
 in
 {
   options.my.seedRepo = {
-    enable = lib.mkEnableOption "seeding a writable repo copy into a user's home";
+    enable = lib.mkEnableOption "cloning the config repo into a user's home";
 
-    source = lib.mkOption {
-      type = lib.types.path;
-      description = "Read-only store path to copy from (typically the flake `self`).";
+    url = lib.mkOption {
+      type = lib.types.str;
+      description = "Public Git URL to clone.";
+    };
+
+    bundle = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      description = "Optional embedded Git bundle path used instead of the network.";
     };
 
     user = lib.mkOption {
@@ -42,19 +40,50 @@ in
       type = lib.types.str;
       default = "/home/${cfg.user}/nix-desktop";
       defaultText = "/home/<user>/nix-desktop";
-      description = "Absolute path to seed the repo into.";
+      description = "Absolute path to clone the repo into.";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    system.activationScripts.seed-nix-desktop-repo = {
-      text = ''
-        if [ ! -e "${cfg.destination}" ]; then
-          echo "[seed-repo] seeding ${cfg.destination} from ${cfg.source}"
-          mkdir -p "$(dirname "${cfg.destination}")"
-          cp -r --no-preserve=mode,ownership "${cfg.source}" "${cfg.destination}"
-          chown -R "${cfg.user}" "${cfg.destination}"
+    systemd.services.seed-nix-desktop-repo = {
+      description = "Clone the nix-desktop configuration repository";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+      path = [
+        pkgs.coreutils
+        pkgs.git
+      ];
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        Restart = "on-failure";
+        RestartSec = "15s";
+      };
+
+      script = ''
+        if [ -L "${cfg.destination}" ] && [ ! -e "${cfg.destination}" ]; then
+          rm -f "${cfg.destination}"
         fi
+
+        if [ ! -e "${cfg.destination}" ]; then
+          mkdir -p "$(dirname "${cfg.destination}")"
+          rm -rf "${cfg.destination}.tmp"
+
+          if [ -n "${cfg.bundle}" ] && [ -f "${cfg.bundle}" ]; then
+            echo "[seed-repo] cloning embedded bundle to ${cfg.destination}"
+            git clone "${cfg.bundle}" "${cfg.destination}.tmp"
+            git -C "${cfg.destination}.tmp" remote set-url origin "${cfg.url}"
+          else
+            echo "[seed-repo] cloning ${cfg.url} to ${cfg.destination}"
+            git clone "${cfg.url}" "${cfg.destination}.tmp"
+          fi
+
+          mv "${cfg.destination}.tmp" "${cfg.destination}"
+        fi
+
+        chown -R "${cfg.user}" "${cfg.destination}"
       '';
     };
   };
