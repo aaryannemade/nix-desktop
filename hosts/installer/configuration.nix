@@ -17,6 +17,7 @@
 
 let
   nixDesktopInstall = import ./deploy.nix { inherit pkgs; };
+  installHelp = import ./help.nix { inherit pkgs; };
 in
 {
   imports = [
@@ -39,8 +40,14 @@ in
 
   environment.systemPackages = [
     pkgs.git
+    installHelp
     nixDesktopInstall
   ];
+
+  programs.bash.shellAliases.helpme = "${installHelp}/bin/nix-desktop-install-help";
+  programs.bash.interactiveShellInit = ''
+    ${installHelp}/bin/nix-desktop-install-help
+  '';
 
   image.fileName = "nix-desktop-installer.iso";
 
