@@ -166,14 +166,10 @@ pkgs.writeShellApplication {
 
       services.openssh.enable = true;
 
-      programs.zsh.enable = true;
-      users.defaultUserShell = pkgs.zsh;
-
       users.users.$USER_NAME = {
         isNormalUser = true;
         uid = $USER_UID;
         extraGroups = [ "wheel" "networkmanager" ];
-        shell = pkgs.zsh;
       };
 
       system.stateVersion = "$STATE_VERSION";

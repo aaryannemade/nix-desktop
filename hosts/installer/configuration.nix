@@ -42,10 +42,6 @@ in
     nixDesktopInstall
   ];
 
-  # zsh login shell in the live environment.
-  programs.zsh.enable = true;
-  users.users.root.shell = pkgs.zsh;
-
   image.fileName = "nix-desktop-installer.iso";
 
   system.stateVersion = "25.05";
