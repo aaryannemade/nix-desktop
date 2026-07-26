@@ -162,6 +162,8 @@ pkgs.writeShellApplication {
 
       nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+      environment.systemPackages = [ pkgs.git ];
+
       services.openssh.enable = true;
 
       programs.zsh.enable = true;
