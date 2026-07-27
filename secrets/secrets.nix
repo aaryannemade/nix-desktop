@@ -29,7 +29,7 @@ let
 in
 {
   # API Keys
-  "deepseek.age".publicKeys = users ++ allHosts;
+  "deepseek-api.age".publicKeys = users ++ allHosts;
   "opencode-api.age".publicKeys = users ++ allHosts;
 
   # Git SHH Keys
