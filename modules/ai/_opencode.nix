@@ -13,6 +13,8 @@
   xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
     plugin = [ "opencode-claude-auth@latest" ];
+    model = "openai/gpt-5.6-sol";
+    small_model = "deepseek/deepseek-v4-flash";
     provider = {
       deepseek.options.apiKey = "{file:${osConfig.age.secrets.deepseek-api.path}}";
       opencode.options.apiKey = "{file:${osConfig.age.secrets.opencode-api.path}}";
