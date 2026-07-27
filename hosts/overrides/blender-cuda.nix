@@ -7,7 +7,7 @@
   my.unfreePackages = [ "blender" ];
 
   nixpkgs.config.packageOverrides = pkgs: {
-    blender = inputs.blender-cuda.packages.${pkgs.system}.blender-with-cuda;
+    blender = inputs.blender-cuda.packages.${pkgs.stdenv.hostPlatform.system}.blender-with-cuda;
   };
 
   nix.settings = {
