@@ -72,6 +72,12 @@ in
     mode = "0400";
   };
 
+  age.secrets.openrouter-api = {
+    file = ../../secrets/openrouter-api.age;
+    owner = username;
+    mode = "0400";
+  };
+
   # Git SSH auth keys. Consumed by Home Manager's programs.ssh (see
   # modules/development/_git-config.nix) via osConfig.age.secrets.<name>.path.
   # Mode 0600 is required: ssh refuses to use a private key with looser perms.

@@ -31,6 +31,7 @@ in
   # API Keys
   "deepseek-api.age".publicKeys = users ++ allHosts;
   "opencode-api.age".publicKeys = users ++ allHosts;
+  "openrouter-api.age".publicKeys = users ++ allHosts;
 
   # Git SSH Keys
   "git.age".publicKeys = users ++ allHosts;
