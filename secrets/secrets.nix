@@ -32,11 +32,9 @@ in
   "deepseek-api.age".publicKeys = users ++ allHosts;
   "opencode-api.age".publicKeys = users ++ allHosts;
 
-  # Git SHH Keys
-  "gitlab-main.age".publicKeys = users ++ allHosts;
-  "gitlab-burner.age".publicKeys = users ++ allHosts;
-  "github-main.age".publicKeys = users ++ allHosts;
-  "github-burner.age".publicKeys = users ++ allHosts;
+  # Git SSH Keys
+  "git.age".publicKeys = users ++ allHosts;
+  "git-burner.age".publicKeys = users ++ allHosts;
 
   # Local SSH Keys
   "nerv-centr.age".publicKeys = users ++ allHosts;

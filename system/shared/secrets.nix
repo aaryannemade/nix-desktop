@@ -75,26 +75,14 @@ in
   # Git SSH auth keys. Consumed by Home Manager's programs.ssh (see
   # modules/development/_git-config.nix) via osConfig.age.secrets.<name>.path.
   # Mode 0600 is required: ssh refuses to use a private key with looser perms.
-  age.secrets.gitlab-main = {
-    file = ../../secrets/gitlab-main.age;
+  age.secrets.git = {
+    file = ../../secrets/git.age;
     owner = username;
     mode = "0600";
   };
 
-  age.secrets.gitlab-burner = {
-    file = ../../secrets/gitlab-burner.age;
-    owner = username;
-    mode = "0600";
-  };
-
-  age.secrets.github-main = {
-    file = ../../secrets/github-main.age;
-    owner = username;
-    mode = "0600";
-  };
-
-  age.secrets.github-burner = {
-    file = ../../secrets/github-burner.age;
+  age.secrets.git-burner = {
+    file = ../../secrets/git-burner.age;
     owner = username;
     mode = "0600";
   };

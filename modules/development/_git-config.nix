@@ -16,8 +16,8 @@
   };
 
   # SSH host aliases for multi-account git auth. Each alias points at the real
-  # host but selects a distinct agenix-decrypted private key. Clone/remote with
-  # the alias, e.g. `git@github-main:owner/repo.git`.
+  # host and selects the shared main or burner agenix-decrypted key. Clone or
+  # set remotes with the alias, e.g. `git@gh:owner/repo.git`.
   #
   # identitiesOnly = true stops ssh from offering other keys in the agent first,
   # which otherwise causes "too many auth failures" against GitHub/GitLab.
@@ -25,25 +25,25 @@
     gh = {
       hostname = "github.com";
       user = "git";
-      identityFile = osConfig.age.secrets.github-main.path;
+      identityFile = osConfig.age.secrets.git.path;
       identitiesOnly = true;
     };
     gh-burner = {
       hostname = "github.com";
       user = "git";
-      identityFile = osConfig.age.secrets.github-burner.path;
+      identityFile = osConfig.age.secrets.git-burner.path;
       identitiesOnly = true;
     };
     glab = {
       hostname = "gitlab.com";
       user = "git";
-      identityFile = osConfig.age.secrets.gitlab-main.path;
+      identityFile = osConfig.age.secrets.git.path;
       identitiesOnly = true;
     };
     glab-burner = {
       hostname = "gitlab.com";
       user = "git";
-      identityFile = osConfig.age.secrets.gitlab-burner.path;
+      identityFile = osConfig.age.secrets.git-burner.path;
       identitiesOnly = true;
     };
   };
