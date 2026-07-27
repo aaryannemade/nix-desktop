@@ -1,4 +1,5 @@
 {
+  inputs,
   pkgs,
   username,
   ...
@@ -47,6 +48,8 @@ let
   '';
 in
 {
+  environment.systemPackages = [ inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default ];
+
   age.ageBin = "${ageWithPlaceholderFallback}";
 
   # Decrypted at activation (tmpfs, never in store/git). Owned by the user so
