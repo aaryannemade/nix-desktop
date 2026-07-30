@@ -98,6 +98,10 @@
         enableExtraDiagnostics = true;
         enableFormat = true;
         enableTreesitter = true;
+        markdown = {
+          enable = true;
+          extensions.render-markdown-nvim.enable = true;
+        };
         nix.enable = true;
         lua.enable = true;
         rust.enable = true;
