@@ -16,4 +16,8 @@
     ./kernel.nix
     ./opendeck.nix
   ];
+
+  boot.binfmt.emulatedSystems = [
+    "aarch64-linux"
+  ];
 }
