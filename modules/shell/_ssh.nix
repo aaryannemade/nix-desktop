@@ -47,6 +47,16 @@
           "TERM_PROGRAM_VERSION"
         ];
       };
+      eva = {
+        user = "admin";
+        identityFile = osConfig.age.secrets.nerv-centr.path;
+        identitiesOnly = true;
+        sendEnv = [
+          "COLORTERM"
+          "TERM_PROGRAM"
+          "TERM_PROGRAM_VERSION"
+        ];
+      };
     };
   };
 }
