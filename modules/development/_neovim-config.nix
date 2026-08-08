@@ -20,7 +20,7 @@
     trash-cli
     glib
 
-    nixpkgs-fmt # nix formatter
+    nixfmt # nix formatter, RFC-style (matches nvf languages.nix.format.type)
   ];
 
   programs.nvf = {
@@ -102,7 +102,10 @@
           enable = true;
           extensions.render-markdown-nvim.enable = true;
         };
-        nix.enable = true;
+        nix = {
+          enable = true;
+          format.type = [ "nixfmt" ];
+        };
         lua.enable = true;
         rust.enable = true;
         go.enable = true;
@@ -248,7 +251,15 @@
               ];
             };
             explorer.enabled = true;
-            indent.enabled = true;
+            indent = {
+              enabled = true;
+              indent.enabled = true;
+              scope = {
+                enabled = true;
+                cursor = true;
+                edge = false;
+              };
+            };
             input.enabled = true;
             notifier.enabled = true;
             picker.enabled = true;
