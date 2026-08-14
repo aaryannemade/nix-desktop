@@ -347,6 +347,7 @@
         "NONE,XF86AudioMicMute,spawn,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"
         "NONE,XF86MonBrightnessUp,spawn,brightnessctl set 5%+"
         "NONE,XF86MonBrightnessDown,spawn,brightnessctl set 5%-"
+        "NONE,XF86TouchpadToggle,toggle_trackpad_enable"
 
         # ─── Media Controls ───────────────────────────────────────────────────────────
         #bind=NONE,XF86AudioPlay,spawn,playerctl play-pause
