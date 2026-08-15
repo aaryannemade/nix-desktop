@@ -25,7 +25,6 @@
       setSessionVariables = false;
       createDirectories = true;
       extraConfig = {
-        docker = "${config.home.homeDirectory}/docker";
         screenshots = "${config.home.homeDirectory}/Pictures/screenshots";
         screenrecordings = "${config.home.homeDirectory}/Videos/screenrecordings";
         trash = "${config.home.homeDirectory}/Trash";

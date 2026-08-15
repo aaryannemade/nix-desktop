@@ -4,6 +4,6 @@
   environment.systemPackages = with pkgs; [
     git
     neovim
-    docker-compose
+    podman-compose
   ];
 }
