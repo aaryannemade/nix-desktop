@@ -3,6 +3,7 @@
 {
   home.packages = with pkgs; [
     bat
+    tree
   ];
 
   programs.zsh = {

@@ -11,9 +11,6 @@
     extraGroups = [
       "wheel"
     ];
-    packages = with pkgs; [
-      tree
-    ];
     shell = pkgs.zsh;
   };
 }
