@@ -5,5 +5,6 @@
     git
     neovim
     podman-compose
+    podman-tui
   ];
 }
