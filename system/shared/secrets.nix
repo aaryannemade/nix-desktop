@@ -98,4 +98,10 @@ in
     owner = username;
     mode = "0600";
   };
+
+  age.secrets.pwnagotchi = {
+    file = ../../secrets/pwnagotchi.age;
+    owner = username;
+    mode = "0600";
+  };
 }

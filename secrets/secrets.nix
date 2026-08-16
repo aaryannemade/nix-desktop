@@ -39,4 +39,5 @@ in
 
   # Local SSH Keys
   "nerv-centr.age".publicKeys = users ++ allHosts;
+  "pwnagotchi.age".publicKeys = users ++ allHosts;
 }

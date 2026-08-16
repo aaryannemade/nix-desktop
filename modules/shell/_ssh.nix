@@ -57,6 +57,17 @@
           "TERM_PROGRAM_VERSION"
         ];
       };
+      pwnagotchi = {
+        user = "pi";
+        hostname = "pwnagotchi.local";
+        identityFile = osConfig.age.secrets.pwnagotchi.path;
+        identitiesOnly = true;
+        sendEnv = [
+          "COLORTERM"
+          "TERM_PROGRAM"
+          "TERM_PROGRAM_VERSION"
+        ];
+      };
     };
   };
 }
