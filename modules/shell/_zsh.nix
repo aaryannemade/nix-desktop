@@ -1,9 +1,15 @@
 { config, pkgs, ... }:
 
 {
+  imports = [
+    ./wrappers/rsync.nix
+  ];
+
   home.packages = with pkgs; [
     bat
     tree
+    pv
+    rsync
   ];
 
   programs.zsh = {
@@ -26,6 +32,8 @@
     shellAliases = {
       cat = "bat";
       c = "clear";
+      cp = "rsync-progress -ah";
+      slow-cp = "rsync-progress -ah --bwlimit=5M";
       ll = "ls -la";
       btw = "echo I use nixos now, btw";
       vpn-connect = "protonvpn connect --country DE";
