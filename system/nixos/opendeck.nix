@@ -1,10 +1,11 @@
 { inputs, pkgs, ... }:
 
+let
+  opendeck = inputs.opendeck-nix.packages.${pkgs.stdenv.hostPlatform.system}.opendeck;
+in
 {
-  nixpkgs.overlays = [ inputs.opendeck-nix.overlays.default ];
-
-  environment.systemPackages = [ pkgs.opendeck ];
-  services.udev.packages = [ pkgs.opendeck ];
+  environment.systemPackages = [ opendeck ];
+  services.udev.packages = [ opendeck ];
 
   systemd.user.services.opendeck = {
     description = "OpenDeck";
@@ -13,7 +14,7 @@
     wantedBy = [ "graphical-session.target" ];
 
     serviceConfig = {
-      ExecStart = "${pkgs.opendeck}/bin/opendeck --hide";
+      ExecStart = "${opendeck}/bin/opendeck --hide";
       Restart = "on-failure";
       RestartSec = 5;
     };
