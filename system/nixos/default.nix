@@ -15,6 +15,7 @@
     ./game-development.nix
     ./kernel.nix
     ./opendeck.nix
+    ./thunderbolt.nix
   ];
 
   boot.binfmt.emulatedSystems = [
