@@ -10,7 +10,7 @@
       user.email = "aaryan.nemade@pm.me";
 
       init.defaultBranch = "main";
-      pull.rebase = false;
+      pull.rebase = true;
       push.autoSetupRemote = true;
     };
   };
