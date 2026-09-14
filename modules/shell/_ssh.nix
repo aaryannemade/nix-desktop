@@ -28,7 +28,7 @@
         ];
       };
       rei = {
-        user = "aaryan";
+        user = "admin";
         identityFile = osConfig.age.secrets.nerv-centr.path;
         identitiesOnly = true;
         sendEnv = [
