@@ -7,6 +7,21 @@
 
   networking.networkmanager.enable = true;
 
+  # Disable WiFi power save.
+  #
+  # In power save the card only wakes on DTIM beacons to collect buffered
+  # *multicast* traffic, and drops a lot of it. Unicast is unaffected, so ping,
+  # SSH and DNS all look perfectly healthy while mDNS quietly breaks: avahi
+  # misses announcements and its queries go unanswered, so <host>.local stops
+  # resolving. Observed on iwlwifi at -46 dBm with zero beacon loss but
+  # "rx drop misc" climbing.
+  #
+  # Apple devices are immune because mDNSResponder sets the QU bit
+  # (RFC 6762 section 5.4) to ask for unicast replies; avahi uses multicast
+  # replies, which is why an iPad on the same AP resolved names this host could
+  # not. Costs a little idle battery.
+  networking.networkmanager.wifi.powersave = false;
+
   # ---------------------------------------------------------------------------
   # Raspberry Pi USB gadget mode (Internet Connection Sharing)
   #
