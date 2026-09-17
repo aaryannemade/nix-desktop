@@ -14,7 +14,6 @@
     ./users.nix
     ./game-development.nix
     ./kernel.nix
-    ./opendeck.nix
     ./thunderbolt.nix
   ];
 

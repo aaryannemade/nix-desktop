@@ -12,6 +12,9 @@
     ./graphics.nix # Import graphics/display config
     ./overrides.nix # Import CUDA/feature overrides
     ./drive-mounts.nix # Import for local drive mounts
+
+    # Extra system apps
+    ../../system/nixos/opendeck.nix
   ];
 
   time.timeZone = "Asia/Calcutta";
