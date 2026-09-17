@@ -26,7 +26,9 @@
         "npm"
         "node"
       ];
-      theme = "robbyrussell";
+      # External theme, see https://github.com/ohmyzsh/ohmyzsh/wiki/External-themes
+      theme = "spaceship";
+      custom = "${pkgs.spaceship-prompt}/share/zsh/themes";
     };
 
     shellAliases = {
