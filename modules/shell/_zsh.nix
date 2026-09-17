@@ -40,6 +40,7 @@
 
     shellAliases = {
       cat = "bat";
+      cd = "z";
       c = "clear";
       cp = "rsync-progress -ah";
       slow-cp = "rsync-progress -ah --bwlimit=5M";
