@@ -25,6 +25,13 @@
         "git"
         "npm"
         "node"
+        "zoxide"
+        "web-search"
+        "systemd"
+        "sudo"
+        "shrink-path"
+        "podman"
+        "fzf"
       ];
       # External theme, see https://github.com/ohmyzsh/ohmyzsh/wiki/External-themes
       theme = "spaceship";
