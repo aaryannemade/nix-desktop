@@ -8,6 +8,7 @@
     extraGroups = [
       "wheel"
       "networkmanager"
+      "dialout"
     ];
     shell = pkgs.zsh;
   };
