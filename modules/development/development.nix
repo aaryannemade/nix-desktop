@@ -4,6 +4,7 @@
   imports = [
     # shared (all platforms)
     ./_git-config.nix
+    ./_herdr.nix
     ./_neovim-config.nix
     ./_zed.nix
   ]
