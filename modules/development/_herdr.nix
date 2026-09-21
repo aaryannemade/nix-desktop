@@ -79,6 +79,14 @@ in
   # without them, and because they light up once opencode reads tui.jsonc --
   # which is also what `session.resume_agents_on_restore` below needs in order
   # to get session refs back from opencode.
+  # NOTE: installing these files is necessary but NOT sufficient. herdr only
+  # accepts state reports for a pane it has already claimed as an agent, and it
+  # claims panes by matching the foreground process name. Nix's makeWrapper
+  # renames opencode's real binary to `.opencode-unwrapped`, which herdr does
+  # not recognise, so the pane stays a plain terminal and the Agents sidebar
+  # stays empty no matter how healthy `herdr integration status` looks. The
+  # workaround (HERDR_AGENT=opencode on the wrapper) lives in
+  # modules/ai/_opencode.nix, next to the package it patches.
   xdg.configFile = {
     # Reports agent state (thinking/idle/waiting) to herdr over a unix socket;
     # this is what drives the sidebar status indicators configured below.

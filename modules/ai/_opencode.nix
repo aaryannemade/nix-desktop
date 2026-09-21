@@ -5,10 +5,35 @@
   ...
 }:
 
+let
+  opencodeUnwrapped = inputs.opencode-nix.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
+
+  # herdr decides which agent lives in a pane by looking at the pane's
+  # foreground process. Nix builds opencode with makeWrapper, which renames the
+  # real executable to `.opencode-unwrapped` and leaves a shell script that
+  # execs it -- so the foreground process herdr sees is `.opencode-unwrapped`,
+  # not `opencode`. Detection fails, the pane is never claimed as an agent, and
+  # nothing shows up in the Agents sidebar. The herdr-agent-state plugin still
+  # connects and its `pane.report_agent` calls are ACKed, but herdr drops them
+  # because the pane has no agent to attach state to.
+  #
+  # HERDR_AGENT is herdr's documented escape hatch for exactly this case (see
+  # "VMs and sandbox wrappers" in https://herdr.dev/docs/agents/). It is read
+  # from the foreground process's environment, so setting it on the wrapper
+  # scopes the hint to opencode instead of every process in every pane -- which
+  # is what `home.sessionVariables` would do.
+  opencode = pkgs.symlinkJoin {
+    name = "opencode-herdr-wrapped";
+    paths = [ opencodeUnwrapped ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postBuild = ''
+      wrapProgram $out/bin/opencode --set HERDR_AGENT opencode
+    '';
+  };
+in
+
 {
-  home.packages = [
-    inputs.opencode-nix.packages.${pkgs.stdenv.hostPlatform.system}.opencode
-  ];
+  home.packages = [ opencode ];
 
   xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
