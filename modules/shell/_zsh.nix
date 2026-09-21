@@ -1,5 +1,20 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
+let
+  # nixpkgs' oh-my-zsh snapshot is too old to contain the `herdr` plugin (see
+  # the `ohmyzsh` input in flake.nix). Override only the source: nixpkgs keeps
+  # doing the Nix-specific patching we want, namely rewriting ZSH to the store
+  # path and unfunction-ing the self-updater.
+  ohMyZsh = pkgs.oh-my-zsh.overrideAttrs (_old: {
+    version = inputs.ohmyzsh.shortRev or "unstable";
+    src = inputs.ohmyzsh;
+  });
+in
 {
   imports = [
     ./wrappers/rsync.nix
@@ -21,6 +36,7 @@
 
     oh-my-zsh = {
       enable = true;
+      package = ohMyZsh;
       plugins = [
         "git"
         "npm"
@@ -32,6 +48,7 @@
         "shrink-path"
         "podman"
         "fzf"
+        "herdr"
       ];
       # External theme, see https://github.com/ohmyzsh/ohmyzsh/wiki/External-themes
       theme = "spaceship";
@@ -52,6 +69,15 @@
     };
 
     initContent = ''
+      # The herdr oh-my-zsh plugin defines `hrdrup='herdr update'`, which tries
+      # to download and self-install over the read-only /nix/store path. herdr
+      # is pinned by the `herdr` flake input, so updates happen via
+      # `nix flake update herdr` instead. Guarded because the plugin bails out
+      # early (defining no aliases) when herdr isn't on PATH.
+      if (( $+aliases[hrdrup] )); then
+        unalias hrdrup
+      fi
+
       function __zoxide_fzf() {
         local dir
         dir=$(zoxide query -l | fzf --preview 'ls -la --color=always -- {}' --height 40% --reverse)

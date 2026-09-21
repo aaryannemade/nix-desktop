@@ -68,6 +68,25 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Terminal workspace manager for AI coding agents.
+    # Deliberately NOT following our nixpkgs: herdr pins nixos-unstable plus a
+    # rust-overlay toolchain from its rust-toolchain.toml. Forcing it onto our
+    # stable nixpkgs is untested upstream and risks a full Rust rebuild.
+    herdr = {
+      url = "github:herdrdev/herdr";
+    };
+
+    # oh-my-zsh upstream, tracked directly rather than via nixpkgs. The nixpkgs
+    # snapshot lags well behind: 26.05 ships 2026-02-19 and even nixos-unstable
+    # only has 2026-08-16, both older than the `herdr` plugin which landed
+    # upstream on 2026-09-10. Consumed in modules/shell/_zsh.nix, which swaps
+    # this in as `src` so nixpkgs still owns the Nix-specific patching.
+    # Locked in flake.lock; bump with `nix flake update ohmyzsh`.
+    ohmyzsh = {
+      url = "github:ohmyzsh/ohmyzsh";
+      flake = false;
+    };
+
     caveman = {
       url = "github:JuliusBrussee/caveman";
       flake = false;
