@@ -18,6 +18,18 @@
     satty
   ];
 
+  # Local noctalia plugin: bar widget showing the current mango layout.
+  # noctalia always scans $XDG_DATA_HOME/noctalia/plugins; the plugin still has
+  # to be listed in settings.plugins.enabled below.
+  xdg.dataFile = {
+    "noctalia/plugins/mango-layout/plugin.toml".source = ./_noctalia-plugins/mango-layout/plugin.toml;
+    "noctalia/plugins/mango-layout/widget.luau".source =
+      pkgs.replaceVars ./_noctalia-plugins/mango-layout/widget.luau
+        {
+          mmsg = "${config.wayland.windowManager.mango.package}/bin/mmsg";
+        };
+  };
+
   programs.noctalia = {
     enable = true;
     systemd.enable = true;
@@ -92,6 +104,9 @@
           path = "${config.home.homeDirectory}/Pictures/Wallpapers/eva.png";
         };
       };
+      plugins = {
+        enabled = [ "aaryan/mango-layout" ];
+      };
       desktop_widgets = {
         enabled = false;
       };
@@ -135,6 +150,7 @@
           start = [
             "control-center"
             "workspaces"
+            "aaryan/mango-layout:layout"
           ];
           center = [
             "clock"
@@ -189,6 +205,7 @@
           capsule = false;
 
           start = [
+            "aaryan/mango-layout:layout"
           ];
           center = [
             "workspaces"

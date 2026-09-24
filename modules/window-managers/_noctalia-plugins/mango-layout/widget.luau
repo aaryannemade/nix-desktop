@@ -1,0 +1,68 @@
+-- Noctalia bar widget: shows the MangoWM layout of the monitor this bar lives on.
+-- Driven by `mmsg watch all-monitors`, which emits one JSON line per change, so
+-- the widget updates instantly when switch_layout (Super+Alt+Space) is used.
+
+local MMSG = "@mmsg@"
+
+-- symbol -> { label, tabler glyph } (symbols from mango src/layout/layout.h)
+local LAYOUTS = {
+  T = { "Tile", "layout-sidebar" },
+  S = { "Scroller", "carousel-horizontal" },
+  G = { "Grid", "layout-grid" },
+  M = { "Monocle", "app-window" },
+  K = { "Deck", "layout-cards" },
+  CT = { "Center Tile", "layout-columns" },
+  RT = { "Right Tile", "layout-sidebar-right" },
+  VS = { "Vertical Scroller", "carousel-vertical" },
+  VT = { "Vertical Tile", "layout-navbar" },
+  VG = { "Vertical Grid", "layout-grid" },
+  VK = { "Vertical Deck", "layout-cards" },
+  DW = { "Dwindle", "layout-dashboard" },
+  F = { "Fair", "layout-2" },
+  VF = { "Vertical Fair", "layout-2" },
+}
+
+local lastSymbol = nil
+
+local function pickMonitor(monitors)
+  local output = barWidget.outputName()
+  local active = nil
+  for _, mon in ipairs(monitors) do
+    if output ~= nil and mon.name == output then
+      return mon
+    end
+    if mon.active then
+      active = mon
+    end
+  end
+  return active or monitors[1]
+end
+
+local function render(symbol)
+  if symbol == nil or symbol == lastSymbol then
+    return
+  end
+  lastSymbol = symbol
+  local info = LAYOUTS[symbol] or { symbol, "layout" }
+  barWidget.setGlyph(info[2])
+  barWidget.setText(info[1])
+  barWidget.setTooltip("Layout: " .. info[1] .. "\nClick or Super+Alt+Space to cycle")
+end
+
+local function handleLine(line)
+  local ok, data = pcall(noctalia.json.decode, line)
+  if not ok or type(data) ~= "table" or type(data.monitors) ~= "table" then
+    return
+  end
+  local mon = pickMonitor(data.monitors)
+  if mon ~= nil then
+    render(mon.layout_symbol)
+  end
+end
+
+-- Restart the watcher if mango's IPC drops (e.g. compositor reload).
+noctalia.runStream("while :; do " .. MMSG .. " watch all-monitors; sleep 1; done", handleLine)
+
+function onClick()
+  noctalia.runAsync(MMSG .. " dispatch switch_layout")
+end
