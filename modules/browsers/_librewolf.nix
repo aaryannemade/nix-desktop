@@ -3,6 +3,15 @@
 {
   home.sessionVariables.BROWSER = "librewolf";
 
+  # `programs.librewolf` populates `mozilla.librewolfNativeMessagingHosts`,
+  # which activates home-manager's mozilla-messaging-hosts module wholesale.
+  # That module then declares the *Firefox* host path as well, even though
+  # `mozilla.firefoxNativeMessagingHosts` is empty: it guards the submodule
+  # value with `lib.mkIf false`, which drops the definition but leaves the
+  # attribute name in `home.file`. Net effect is a stub ~/.mozilla holding
+  # nothing but a `.keep` symlink. We do not run Firefox, so drop it.
+  home.file.".mozilla/native-messaging-hosts".enable = false;
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {

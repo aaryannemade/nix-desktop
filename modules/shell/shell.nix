@@ -3,6 +3,7 @@
 {
   imports = [
     # shared (all platforms)
+    ./_xdg.nix
     ./_zsh.nix
     ./_zoxide.nix
     ./_fzf.nix

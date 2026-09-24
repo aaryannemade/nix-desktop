@@ -29,10 +29,18 @@ in
 
   programs.zsh = {
     enable = true;
-    dotDir = "${config.home.homeDirectory}/.config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
+
+    # Keep the history out of $HOME. Home-manager emits the `mkdir -p` for the
+    # parent directory in .zshrc, so nothing has to pre-create it.
+    #
+    # Note that ~/.zshenv cannot be eliminated: it is the stub home-manager
+    # writes to export ZDOTDIR and source $ZDOTDIR/.zshenv. Something has to
+    # live in $HOME to bootstrap a non-default ZDOTDIR.
+    history.path = "${config.xdg.stateHome}/zsh/history";
 
     oh-my-zsh = {
       enable = true;
@@ -63,6 +71,9 @@ in
       slow-cp = "rsync-progress -ah --bwlimit=5M";
       ll = "ls -la";
       btw = "echo I use nixos now, btw";
+      # nvidia-settings has no environment variable for its rc file, only this
+      # flag. The directory is pre-created in ./_xdg.nix.
+      nvidia-settings = "nvidia-settings --config=${config.xdg.configHome}/nvidia/settings";
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
       claude-activation = "nix develop gitlab:aaryandesignsgames/claude-activation";

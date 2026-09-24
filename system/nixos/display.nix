@@ -26,6 +26,13 @@
       initial_info_text = "${hostname}";
       hide_version_string = true;
       clock = "%H:%M";
+
+      # ly's own etc/config.ini ships `session_log = .local/state/ly-session.log`,
+      # but the NixOS module builds config.ini from scratch (`defaultConfig //
+      # cfg.settings`) and never includes this key, so ly falls back to its
+      # compiled-in default and drops `~/ly-session.log` on every login. The
+      # path is resolved relative to $HOME.
+      session_log = ".local/state/ly-session.log";
     };
   };
 
