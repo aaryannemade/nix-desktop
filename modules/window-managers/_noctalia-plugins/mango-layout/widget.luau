@@ -23,19 +23,35 @@ local LAYOUTS = {
 }
 
 local lastSymbol = nil
+local lastMonitors = nil
+
+-- barWidget.outputName() only works in host-driven calls (load, update, clicks):
+-- runStream callbacks run without the widget snapshot, so it returns nil there.
+-- Cache it while it's available and use the cached value in the stream callback.
+local outputName = barWidget.outputName()
+
+local function refreshOutputName()
+  local name = barWidget.outputName()
+  if name ~= nil and name ~= "" then
+    outputName = name
+  end
+end
 
 local function pickMonitor(monitors)
-  local output = barWidget.outputName()
-  local active = nil
-  for _, mon in ipairs(monitors) do
-    if output ~= nil and mon.name == output then
-      return mon
-    end
-    if mon.active then
-      active = mon
+  if outputName ~= nil then
+    for _, mon in ipairs(monitors) do
+      if mon.name == outputName then
+        return mon
+      end
     end
   end
-  return active or monitors[1]
+  -- Output name unknown (or not reported by mango): fall back to the focused monitor.
+  for _, mon in ipairs(monitors) do
+    if mon.active then
+      return mon
+    end
+  end
+  return monitors[1]
 end
 
 local function render(symbol)
@@ -54,6 +70,7 @@ local function handleLine(line)
   if not ok or type(data) ~= "table" or type(data.monitors) ~= "table" then
     return
   end
+  lastMonitors = data.monitors
   local mon = pickMonitor(data.monitors)
   if mon ~= nil then
     render(mon.layout_symbol)
@@ -63,6 +80,24 @@ end
 -- Restart the watcher if mango's IPC drops (e.g. compositor reload).
 noctalia.runStream("while :; do " .. MMSG .. " watch all-monitors; sleep 1; done", handleLine)
 
+-- Host-driven (has the snapshot): keep the cached output name fresh and re-render
+-- in case stream data arrived before the name was known.
+function update()
+  refreshOutputName()
+  if lastMonitors ~= nil then
+    local mon = pickMonitor(lastMonitors)
+    if mon ~= nil then
+      render(mon.layout_symbol)
+    end
+  end
+end
+
 function onClick()
-  noctalia.runAsync(MMSG .. " dispatch switch_layout")
+  refreshOutputName()
+  -- Focus this bar's monitor first so the click cycles *its* layout.
+  if outputName ~= nil then
+    noctalia.runAsync(MMSG .. " dispatch focusmon," .. outputName .. " && " .. MMSG .. " dispatch switch_layout")
+  else
+    noctalia.runAsync(MMSG .. " dispatch switch_layout")
+  end
 end
