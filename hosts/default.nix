@@ -80,6 +80,7 @@ let
                 username
                 shownGpus
                 platform
+                unstablePkgs
                 ;
               homeDirectory = effectiveHomeDirectory;
             };

@@ -37,7 +37,9 @@ in
 
   xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
-    plugin = [ "opencode-claude-auth@latest" ];
+    # Pinning avoids OpenCode's persistent @latest cache, which can leave an
+    # older plugin version that ignores CLAUDE_CONFIG_DIR.
+    plugin = [ "opencode-claude-auth@2.2.1" ];
     model = "openai/gpt-5.6-sol";
     small_model = "deepseek/deepseek-v4-flash";
     provider = {

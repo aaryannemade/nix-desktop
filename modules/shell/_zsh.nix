@@ -76,7 +76,7 @@ in
       nvidia-settings = "nvidia-settings --config=${config.xdg.configHome}/nvidia/settings";
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
-      claude-activation = "nix develop gitlab:aaryandesignsgames/claude-activation";
+      claude-activation = "claude -p --model haiku \"Output exactly this text and nothing else: Claude Auth Valid\"";
     };
 
     initContent = ''

@@ -3,6 +3,7 @@
 {
   imports = [
     # shared (all platforms)
+    ./_claude.nix
     ./_opencode.nix
   ]
   ++ lib.optionals (platform == "nixos") [
