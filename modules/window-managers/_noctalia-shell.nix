@@ -9,16 +9,16 @@ let
   idleTimeouts =
     if osConfig.networking.hostName == "phantom" then
       {
+        lock = 180;
+        screenOff = 210;
+        suspend = 600;
+      } # 3m / 3.5m / 10m
+    else
+      {
         lock = 300;
         screenOff = 330;
         suspend = 900;
-      } # 5m / 5.5m / 15m
-    else
-      {
-        lock = 600;
-        screenOff = 660;
-        suspend = 1800;
-      }; # 10m / 11m / 30m (wraith)
+      }; # 5m / 5.5m / 15m (wraith)
 
   communityPlugins = pkgs.applyPatches {
     name = "noctalia-community-plugins";
@@ -89,19 +89,23 @@ in
             action = "lock";
             enabled = true;
           };
-          # Not action = "screen_off": on mango that runs disable_monitor, which
-          # removes the outputs entirely -- the lock screen loses its surfaces
-          # (so lock-before-suspend never completes) and mango crashes when they
-          # come back. wlopm uses wlr-output-power-management, which only blanks.
+          # screen_off on mango dispatches sleep_monitor / wakeup_monitor, which
+          # only powers outputs down (only_sleep) and keeps them in the layout,
+          # so the lock screen keeps its surfaces. (Older noctalia used
+          # disable_monitor here, which removed the outputs and crashed mango.)
           dpms = {
             timeout = idleTimeouts.screenOff;
-            action = "command";
-            command = "${pkgs.wlopm}/bin/wlopm --off '*'";
-            resume_command = "${pkgs.wlopm}/bin/wlopm --on '*'";
+            # noctalia re-arms every idle timer when the session locks, so while
+            # locked the countdown restarts from the lock time. locked_timeout is
+            # the timeout used while locked; keep the original schedule by
+            # subtracting the lock delay.
+            locked_timeout = idleTimeouts.screenOff - idleTimeouts.lock;
+            action = "screen_off";
             enabled = true;
           };
           suspend = {
             timeout = idleTimeouts.suspend;
+            locked_timeout = idleTimeouts.suspend - idleTimeouts.lock;
             action = "suspend";
             enabled = true;
           };
