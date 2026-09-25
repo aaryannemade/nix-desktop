@@ -15,6 +15,7 @@ let
     version = inputs.ohmyzsh.shortRev or "unstable";
     src = inputs.ohmyzsh;
   });
+
 in
 {
   imports = [
@@ -78,6 +79,10 @@ in
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
       c-activate = "claude -p --model haiku \"Output exactly this text and nothing else: 'Claude Auth Valid'\"";
+      # Explicitly finish a remote session and suspend five seconds later. The
+      # delay lets SSH close cleanly; -i overrides this session's sleep
+      # inhibitor. Use only when all remote work is finished.
+      suspend-exit = "systemd-run --user --quiet --collect --unit=ssh-suspend --on-active=5s ${pkgs.systemd}/bin/systemctl suspend -i && exit";
     };
 
     initContent = lib.mkMerge [

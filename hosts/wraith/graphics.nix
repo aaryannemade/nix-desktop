@@ -31,6 +31,11 @@
 
     powerManagement.enable = true;
     powerManagement.finegrained = false;
+    # Defaults to true on 595+ open modules. Use the classic nvidia-sleep.sh
+    # systemd services instead (VT switch around suspend), so mango fully
+    # re-acquires and re-modesets every output on resume; with the kernel
+    # notifiers a monitor intermittently stayed dark ("Failed to disable CRTC").
+    powerManagement.kernelSuspendNotifier = false;
 
     open = true;
     nvidiaSettings = true;

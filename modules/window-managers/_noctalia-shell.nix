@@ -15,28 +15,16 @@ let
       } # 3m / 3.5m / 10m
     else
       {
-        lock = 300;
-        screenOff = 330;
-        suspend = 900;
+        lock = 30;
+        screenOff = 45;
+        suspend = 120;
       }; # 5m / 5.5m / 15m (wraith)
 
-  # Idle suspend that respects blocking sleep inhibitors (e.g. an open SSH
-  # session, see modules/shell/_zsh.nix). --check-inhibitors=yes makes
-  # systemctl refuse instead of overriding them, so retry until they're gone:
-  # disconnecting SSH after the idle timeout suspends within ~30s. Any input at
-  # the desk runs the resume command, which cancels the wait.
-  idleSuspendPid = "\${XDG_RUNTIME_DIR:-/tmp}/noctalia-idle-suspend.pid";
+  # One-shot idle suspend that respects blocking sleep inhibitors (e.g. an
+  # open SSH session, see modules/shell/_zsh.nix). If blocked, stay awake after
+  # SSH disconnects; `suspend-exit` explicitly closes SSH and suspends instead.
   idleSuspend = pkgs.writeShellScript "noctalia-idle-suspend" ''
-    echo $$ > "${idleSuspendPid}"
-    until ${osConfig.systemd.package}/bin/systemctl suspend --check-inhibitors=yes 2>/dev/null; do
-      sleep 30
-    done
-    rm -f "${idleSuspendPid}"
-  '';
-  idleSuspendCancel = pkgs.writeShellScript "noctalia-idle-suspend-cancel" ''
-    f="${idleSuspendPid}"
-    [ -f "$f" ] && kill "$(cat "$f")" 2>/dev/null
-    rm -f "$f"
+    ${osConfig.systemd.package}/bin/systemctl suspend --check-inhibitors=yes
   '';
 
   communityPlugins = pkgs.applyPatches {
@@ -130,7 +118,6 @@ in
             locked_timeout = idleTimeouts.suspend - idleTimeouts.lock;
             action = "command";
             command = "${idleSuspend}";
-            resume_command = "${idleSuspendCancel}";
             enabled = true;
           };
         };
