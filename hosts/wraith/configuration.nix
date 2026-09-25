@@ -19,6 +19,11 @@
 
   time.timeZone = "Asia/Calcutta";
 
+  # Wake-on-LAN (magic packet) on the wired NIC, so it can be woken from
+  # suspend to SSH in. Global NM default, so it also applies to the
+  # auto-created "Wired connection 1" profile. MAC: 04:d4:c4:54:87:75
+  networking.networkmanager.settings.connection."ethernet.wake-on-lan" = "magic";
+
   programs = {
     steam = {
       enable = true;

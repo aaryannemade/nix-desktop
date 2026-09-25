@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   inputs,
   ...
@@ -79,7 +80,25 @@ in
       c-activate = "claude -p --model haiku \"Output exactly this text and nothing else: 'Claude Auth Valid'\"";
     };
 
-    initContent = ''
+    initContent = lib.mkMerge [
+      # Runs first: re-exec interactive SSH logins under a *sleep* inhibitor so
+      # the machine doesn't suspend while a session is open. Only sleep: the
+      # desk still locks and blanks on noctalia's normal timers, and noctalia's
+      # suspend rule waits for this to be released (see _noctalia-shell.nix).
+      # Released on disconnect. One-off `ssh host cmd`, scp and rsync aren't
+      # interactive, so they don't hold it. Inside the session, suspending
+      # manually needs `systemctl suspend -i`. Guarded to systemd hosts (skips
+      # darwin) and against recursion.
+      (lib.mkOrder 500 ''
+        if [[ -n "$SSH_CONNECTION" && -z "$__SSH_SLEEP_INHIBIT" && -o interactive \
+              && -d /run/systemd/system ]] && (( $+commands[systemd-inhibit] )); then
+          export __SSH_SLEEP_INHIBIT=1
+          exec systemd-inhibit --what=sleep --mode=block --who=ssh \
+            --why="SSH session from ''${SSH_CONNECTION%% *}" \
+            ${config.programs.zsh.package}/bin/zsh -l
+        fi
+      '')
+      ''
       # The herdr oh-my-zsh plugin defines `hrdrup='herdr update'`, which tries
       # to download and self-install over the read-only /nix/store path. herdr
       # is pinned by the `herdr` flake input, so updates happen via
@@ -100,6 +119,7 @@ in
 
       zle -N __zoxide_fzf
       bindkey '^g' __zoxide_fzf
-    '';
+      ''
+    ];
   };
 }

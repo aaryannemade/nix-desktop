@@ -24,5 +24,6 @@
     lm_sensors # Needed for CoolerControl
     liquidctl # Needed for CoolerControl
     openrgb-with-all-plugins
+    ethtool # Check Wake-on-LAN state: sudo ethtool eno1 | grep Wake-on
   ];
 }
