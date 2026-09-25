@@ -1,0 +1,35 @@
+--- a/mango_layouts/widget.luau	2026-09-25 12:40:15.232473444 +0530
++++ b/mango_layouts/widget.luau	2026-09-25 12:40:25.174605622 +0530
+@@ -23,10 +23,19 @@
+ 
+ local custom_color = noctalia.getConfig("custom_color")
+ 
++-- Monitor this bar lives on; nil when unknown (falls back to the focused monitor).
++local function barOutput()
++  local name = barWidget.outputName()
++  if name == nil or name == "" then return nil end
++  return name
++end
++
+ function update()
+   noctalia.setUpdateInterval(1000)
++  local output = barOutput()
++  local selector = if output then ".name == \"" .. output .. "\"" else ".active == true"
+   noctalia.runAsync(
+-    "mmsg get all-monitors | jq -r '.monitors[] | select(.active == true) | .layout_symbol'",
++    "mmsg get all-monitors | jq -r '.monitors[] | select(" .. selector .. ") | .layout_symbol'",
+     function(result)
+       if result and result.exitCode == 0 then
+         local sym = result.stdout:gsub("%s+", "")
+@@ -64,5 +73,11 @@
+ end
+ 
+ function onClick()
++  -- The panel applies layouts to the focused monitor, so focus this bar's
++  -- monitor first; picking a layout then changes the monitor you clicked on.
++  local output = barOutput()
++  if output then
++    noctalia.runAsync("mmsg dispatch focusmon," .. output)
++  end
+   noctalia.togglePanel("ezequiel/mango_layouts:panel")
+ end

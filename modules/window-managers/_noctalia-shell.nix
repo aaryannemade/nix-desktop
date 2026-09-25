@@ -19,6 +19,21 @@ let
         screenOff = 660;
         suspend = 1800;
       }; # 10m / 11m / 30m (wraith)
+
+  communityPlugins = pkgs.applyPatches {
+    name = "noctalia-community-plugins";
+    src = pkgs.fetchFromGitHub {
+      owner = "noctalia-dev";
+      repo = "community-plugins";
+      rev = "b195cdfc9a2e91febdcf78516f96ed17e6bd5316"; # 2026-09-25
+      hash = "sha256-2BhBbL6Y/k8pmU/OxMcagTIe8guQ/fqfBgPz0F3zTXo=";
+    };
+    patches = [
+      # Upstream widget shows the focused monitor's layout on every bar; show
+      # the layout of the monitor each bar is on instead.
+      ./_noctalia-patches/mango_layouts-per-monitor.patch
+    ];
+  };
 in
 {
   imports = [ inputs.noctalia.homeModules.default ];
@@ -32,18 +47,16 @@ in
 
   home.packages = with pkgs; [
     satty
+    jq # mango_layouts plugin pipes `mmsg get` through jq
   ];
 
-  # Local noctalia plugin: bar widget showing the current mango layout.
-  # noctalia always scans $XDG_DATA_HOME/noctalia/plugins; the plugin still has
-  # to be listed in settings.plugins.enabled below.
+  # Community noctalia plugins, pinned. noctalia always scans
+  # $XDG_DATA_HOME/noctalia/plugins; each plugin still has to be listed in
+  # settings.plugins.enabled below. To update: bump rev, set hash = "" and
+  # rebuild to get the new hash.
   xdg.dataFile = {
-    "noctalia/plugins/mango-layout/plugin.toml".source = ./_noctalia-plugins/mango-layout/plugin.toml;
-    "noctalia/plugins/mango-layout/widget.luau".source =
-      pkgs.replaceVars ./_noctalia-plugins/mango-layout/widget.luau
-        {
-          mmsg = "${config.wayland.windowManager.mango.package}/bin/mmsg";
-        };
+    "noctalia/plugins/mango_layouts".source = "${communityPlugins}/mango_layouts";
+    "noctalia/plugins/keybind-cheatsheet".source = "${communityPlugins}/keybind-cheatsheet";
   };
 
   programs.noctalia = {
@@ -147,7 +160,10 @@ in
         };
       };
       plugins = {
-        enabled = [ "aaryan/mango-layout" ];
+        enabled = [
+          "ezequiel/mango_layouts"
+          "kenn/keybind-cheatsheet"
+        ];
       };
       desktop_widgets = {
         enabled = false;
@@ -192,7 +208,7 @@ in
           start = [
             "control-center"
             "workspaces"
-            "aaryan/mango-layout:layout"
+            "mango-layout"
           ];
           center = [
             "clock"
@@ -247,7 +263,7 @@ in
           capsule = false;
 
           start = [
-            "aaryan/mango-layout:layout"
+            "mango-layout"
           ];
           center = [
             "workspaces"
@@ -279,6 +295,12 @@ in
         };
         control-center = {
           glyph = "ghost-3-filled";
+        };
+        # Named instance of the mango_layouts plugin widget; referenced by name
+        # in the bar lists above.
+        mango-layout = {
+          type = "ezequiel/mango_layouts:btn";
+          show_text = true;
         };
       };
     };
