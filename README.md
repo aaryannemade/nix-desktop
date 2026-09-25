@@ -1,8 +1,10 @@
 # Nixos Desktop Configuration
 
 ### To Do List
+
 - [x] Install Ollama
-- [x] Fix issue with nvidia dgpu battery management - no change to config, laptop batter was just shitty
+- [x] Fix issue with nvidia dgpu battery management - no change to config,
+      laptop batter was just shitty
 - [x] Install Blender
 - [x] Install Opencode and cluade auth plugin
 - [x] download wallpapers
@@ -26,6 +28,6 @@
 - [x] Set up RGB controls for PC host
 - [x] Set up fan controls for PC host
 - [x] Figure out Stream Deck set up
-- [ ] Set up auto-sleep on all hosts
+- [x] Set up auto-sleep on all hosts
 - [x] Fix opencode github flake input
 - [x] Implement the binary cache rollout above

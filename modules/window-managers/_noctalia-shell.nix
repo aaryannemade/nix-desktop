@@ -1,9 +1,25 @@
 {
   inputs,
   config,
+  osConfig,
   pkgs,
   ...
 }:
+let
+  idleTimeouts =
+    if osConfig.networking.hostName == "phantom" then
+      {
+        lock = 300;
+        screenOff = 330;
+        suspend = 900;
+      } # 5m / 5.5m / 15m
+    else
+      {
+        lock = 600;
+        screenOff = 660;
+        suspend = 1800;
+      }; # 10m / 11m / 30m (wraith)
+in
 {
   imports = [ inputs.noctalia.homeModules.default ];
 
@@ -50,6 +66,32 @@
             "ghostty"
             "mango"
           ];
+        };
+      };
+      idle = {
+        pre_action_fade_seconds = 0; # no fade
+        behavior = {
+          lock = {
+            timeout = idleTimeouts.lock;
+            action = "lock";
+            enabled = true;
+          };
+          # Not action = "screen_off": on mango that runs disable_monitor, which
+          # removes the outputs entirely -- the lock screen loses its surfaces
+          # (so lock-before-suspend never completes) and mango crashes when they
+          # come back. wlopm uses wlr-output-power-management, which only blanks.
+          dpms = {
+            timeout = idleTimeouts.screenOff;
+            action = "command";
+            command = "${pkgs.wlopm}/bin/wlopm --off '*'";
+            resume_command = "${pkgs.wlopm}/bin/wlopm --on '*'";
+            enabled = true;
+          };
+          suspend = {
+            timeout = idleTimeouts.suspend;
+            action = "suspend";
+            enabled = true;
+          };
         };
       };
       shell = {

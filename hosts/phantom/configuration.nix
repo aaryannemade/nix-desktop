@@ -46,5 +46,12 @@
     power-profiles-daemon = {
       enable = true;
     };
+    # Lid close suspends (on battery and AC); ignored when an external monitor
+    # is connected.
+    logind.settings.Login = {
+      HandleLidSwitch = "suspend";
+      HandleLidSwitchExternalPower = "suspend";
+      HandleLidSwitchDocked = "ignore";
+    };
   };
 }
