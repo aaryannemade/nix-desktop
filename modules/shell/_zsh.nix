@@ -104,41 +104,40 @@ in
         fi
       '')
       ''
-      # The herdr oh-my-zsh plugin defines `hrdrup='herdr update'`, which tries
-      # to download and self-install over the read-only /nix/store path. herdr
-      # is pinned by the `herdr` flake input, so updates happen via
-      # `nix flake update herdr` instead. Guarded because the plugin bails out
-      # early (defining no aliases) when herdr isn't on PATH.
-      if (( $+aliases[hrdrup] )); then
-        unalias hrdrup
-      fi
-
-      function __zoxide_fzf() {
-        local dir
-        dir=$(zoxide query -l | fzf --preview 'ls -la --color=always -- {}' --height 40% --reverse)
-        if [[ -n "$dir" ]]; then
-          builtin cd -- "$dir"
-          zle reset-prompt
+        # The herdr oh-my-zsh plugin defines `hrdrup='herdr update'`, which tries
+        # to download and self-install over the read-only /nix/store path. herdr
+        # is pinned by the `herdr` flake input, so updates happen via
+        # `nix flake update herdr` instead. Guarded because the plugin bails out
+        # early (defining no aliases) when herdr isn't on PATH.
+        if (( $+aliases[hrdrup] )); then
+          unalias hrdrup
         fi
-      }
 
-      zle -N __zoxide_fzf
-      bindkey '^g' __zoxide_fzf
+        function __zoxide_fzf() {
+          local dir
+          dir=$(zoxide query -l | fzf --preview 'ls -la --color=always -- {}' --height 40% --reverse)
+          if [[ -n "$dir" ]]; then
+            builtin cd -- "$dir"
+            zle reset-prompt
+          fi
+        }
+
+        zle -N __zoxide_fzf
+        bindkey '^g' __zoxide_fzf
+
+        # vpn-browser in the background (services/vpn-browser). Same arguments
+        # as `vb`, e.g. `vbg de`, `vbg --country Japan --persistence`. `&!`
+        # disowns it, so closing the terminal doesn't kill the browser. Output
+        # goes to a per-launch log; launch errors also show as notifications.
+        function vbg() {
+          (( $# )) || { vpn-browser --help; return 1; }
+          local logdir="${config.xdg.stateHome}/vpn-browser"
+          local log="$logdir/''${1//[^a-zA-Z0-9_.-]/_}.log"
+          mkdir -p "$logdir"
+          nohup vpn-browser "$@" >"$log" 2>&1 &!
+          print "vpn-browser started in background (log: $log)"
+        }
       ''
     ];
-
-      # vpn-browser in the background (services/vpn-browser). Same arguments
-      # as `vb`, e.g. `vbg de`, `vbg --country Japan --persistence`. `&!`
-      # disowns it, so closing the terminal doesn't kill the browser. Output
-      # goes to a per-launch log; launch errors also show as notifications.
-      function vbg() {
-        (( $# )) || { vpn-browser --help; return 1; }
-        local logdir="${config.xdg.stateHome}/vpn-browser"
-        local log="$logdir/''${1//[^a-zA-Z0-9_.-]/_}.log"
-        mkdir -p "$logdir"
-        nohup vpn-browser "$@" >"$log" 2>&1 &!
-        print "vpn-browser started in background (log: $log)"
-      }
-    '';
   };
 }
