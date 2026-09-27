@@ -3,6 +3,7 @@
 {
   imports = [
     ./system
+    ./services # Platform-dispatched on-demand services
   ];
 
   nix.settings = {

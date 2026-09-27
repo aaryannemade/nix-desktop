@@ -40,4 +40,11 @@ in
   # Local SSH Keys
   "nerv-centr.age".publicKeys = users ++ allHosts;
   "pwnagotchi.age".publicKeys = users ++ allHosts;
+
+  # VPN (services/vpn-browser): ProtonVPN WireGuard private key, raw base64.
+  # Only the NixOS desktops that import ../services need it.
+  "protonvpn-wg.age".publicKeys = users ++ [
+    phantom
+    wraith
+  ];
 }
