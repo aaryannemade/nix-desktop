@@ -15,9 +15,9 @@ let
       } # 3m / 3.5m / 10m
     else
       {
-        lock = 30;
-        screenOff = 45;
-        suspend = 120;
+        lock = 300;
+        screenOff = 330;
+        suspend = 900;
       }; # 5m / 5.5m / 15m (wraith)
 
   # One-shot idle suspend that respects blocking sleep inhibitors (e.g. an
