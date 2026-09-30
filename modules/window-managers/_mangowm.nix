@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   wayland.windowManager.mango = {
@@ -189,10 +189,20 @@
       # splitcolor="0x80cbc4ff";
       # dropcolor="0x37474fff";
 
+      # ─── Layouts ──────────────────────────────────────────────────────────────────
+
+      circle_layout = "
+        dwindle,
+        scroller,
+        grid,
+        vertical_scroller,
+        center_tile
+      ";
+
       # ─── Tag Layout Rules ─────────────────────────────────────────────────────────
       # layout options: tile, scroller, grid, deck, monocle, center_tile, vertical_tile, vertical_scroller, dwindle
       tagrule = [
-        "id:1,layout_name:scroller"
+        "id:1,layout_name:dwindle"
         "id:2,layout_name:dwindle"
         "id:3,layout_name:dwindle"
         "id:4,layout_name:dwindle"
@@ -254,8 +264,8 @@
         "SUPER,j,focusdir,down"
 
         # ─── Window: Overview & Stack Cycle ──────────────────────────────────────────
-        "SUPER,Tab,toggleoverview"
-        "SUPER+SHIFT,Tab,focusstack,next"
+        # "SUPER,Tab,toggleoverview"
+        # "SUPER+SHIFT,Tab,focusstack,next"
 
         # ─── Window: Swap ─────────────────────────────────────────────────────────────
         "SUPER+SHIFT,h,exchange_client,left"
