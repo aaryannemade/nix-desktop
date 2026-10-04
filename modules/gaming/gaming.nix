@@ -6,6 +6,7 @@
   ]
   ++ lib.optionals (platform == "nixos") [
     ./_gamescope.nix
+    ./_heroic-launcher.nix
     ./_mangohud.nix
     ./_proton.nix
   ]
