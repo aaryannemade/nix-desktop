@@ -191,13 +191,7 @@
 
       # ─── Layouts ──────────────────────────────────────────────────────────────────
 
-      circle_layout = "
-        dwindle,
-        scroller,
-        grid,
-        vertical_scroller,
-        center_tile
-      ";
+      circle_layout = "dwindle,scroller,grid,vertical_scroller,center_tile";
 
       # ─── Tag Layout Rules ─────────────────────────────────────────────────────────
       # layout options: tile, scroller, grid, deck, monocle, center_tile, vertical_tile, vertical_scroller, dwindle
