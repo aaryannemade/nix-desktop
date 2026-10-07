@@ -20,6 +20,8 @@
     trash-cli
     glib
 
+    nixd
+
     nixfmt # nix formatter, RFC-style (matches nvf languages.nix.format.type)
   ];
 

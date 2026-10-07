@@ -6,7 +6,6 @@
     ./_git-config.nix
     ./_herdr.nix
     ./_neovim-config.nix
-    ./_zed.nix
   ]
   ++ lib.optionals (platform == "nixos") [
   ]
