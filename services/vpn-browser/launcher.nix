@@ -44,6 +44,9 @@ pkgs.writeShellApplication {
     pkgs.gnused
     pkgs.findutils
     pkgs.libnotify
+    pkgs.gawk
+    pkgs.util-linux # column
+    # `protonvpn` (server cache refresh) is used from PATH when installed.
   ];
 
   text = ''
@@ -56,6 +59,7 @@ pkgs.writeShellApplication {
     GPU_DEFAULT=${lib.escapeShellArg cfg.gpu}
     GPU_DRIVERS=${graphicsDrivers}
     GPU_CLOSURE=${gpuClosure}/store-paths
+    TZ_TABLE=${pkgs.tzdata}/share/zoneinfo/zone1970.tab
 
     ${builtins.readFile ./vpn-browser.sh}
   '';

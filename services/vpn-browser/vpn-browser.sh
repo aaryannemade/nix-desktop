@@ -9,18 +9,33 @@
 #   PRESETS        JSON: { <name>: { env: {K: V}, tz: "..." } }
 #   DL_SUBDIR      downloads root relative to $HOME
 #   GPU_DEFAULT    auto|nvidia|dri|none (my.vpnBrowser.gpu)
+#   TZ_TABLE       tzdata zone1970.tab (server location -> timezone)
 
 readonly PREFIX="vpnb"
 readonly CHOME="/home/vpnb"
 readonly HEALTH_TIMEOUT=60
+
+# --server: ProtonVPN server names (DE#14) are resolved through the server
+# list cached by the official ProtonVPN CLI, which knows every logical server.
+# gluetun's bundled list keeps only one name per machine, so the tunnel is
+# pinned with gluetun's `custom` provider instead (Proton WG: fixed port and
+# client address; the one private key works for every server).
+SERVERLIST="${PROTON_SERVERLIST:-${XDG_CACHE_HOME:-$HOME/.cache}/Proton/VPN/serverlist.json}"
+readonly PROTON_WG_PORT=51820
+readonly PROTON_WG_ADDRESS="10.2.0.2/32"
+readonly US=$'\x1f' # field separator for jq -> read (non-whitespace keeps empty fields)
 
 usage() {
   cat <<EOF
 Usage:
   vpn-browser <preset> [options]           launch a preset (see --list)
   vpn-browser --country <C> [options]      ad-hoc location, no rebuild needed
+  vpn-browser --server <NAME> [options]    exact ProtonVPN server, e.g. DE#14
 
 Launch options:
+  --server <name>      exact ProtonVPN server (DE#14, CH-DE#2, de-14, ...);
+                       resolved via the ProtonVPN CLI's server cache. Not
+                       combinable with a preset or the location filters below.
   --country <name>     gluetun SERVER_COUNTRIES (repeatable)
   --city <name>        gluetun SERVER_CITIES (repeatable)
   --hostname <name>    gluetun SERVER_HOSTNAMES (repeatable)
@@ -32,6 +47,8 @@ Launch options:
 
 Management:
   --list               presets and running pods
+  --servers [filter]   ProtonVPN server names; filter by country code (DE)
+                       or city (Berlin)
   --ip <profile>       VPN exit IP / location
   --logs <profile>     gluetun logs
   --shell <profile>    bash inside the running browser container
@@ -42,6 +59,7 @@ Management:
 
 Environment:
   VPN_BROWSER_GPU=auto|nvidia|dri|none   GPU passthrough (default: $GPU_DEFAULT)
+  PROTON_SERVERLIST=<path>               server cache (default: $SERVERLIST)
 EOF
 }
 
@@ -151,6 +169,152 @@ cmd_forget() {
   log "deleted volume $v (downloads in ~/$DL_SUBDIR/$p are kept)"
 }
 
+# ── ProtonVPN server names ─────────────────────────────────────────────────
+
+serverlist_expired() {
+  jq -e '(.ExpirationTime // 0) < now' "$SERVERLIST" >/dev/null
+}
+
+# Makes sure the ProtonVPN CLI's server cache exists, refreshing it through the
+# CLI when expired. A stale cache is still usable (names rarely change).
+ensure_serverlist() {
+  if [[ ! -r "$SERVERLIST" ]]; then
+    die "no ProtonVPN server cache at $SERVERLIST; run 'protonvpn signin' and 'protonvpn countries list' (or set PROTON_SERVERLIST)"
+  fi
+  serverlist_expired || return 0
+
+  if command -v protonvpn >/dev/null; then
+    log "ProtonVPN server cache expired; refreshing via protonvpn CLI..."
+    # Any server-list command refreshes the cache when expired; it exits 0
+    # even when the refresh fails, so re-check the expiry afterwards.
+    timeout 60 protonvpn countries list >/dev/null 2>&1 || true
+  fi
+  if serverlist_expired; then
+    log "warning: using stale server cache (last updated $(jq -r '.LastModifiedTime // "?"' "$SERVERLIST")); is 'protonvpn info' signed in?"
+  fi
+}
+
+# Resolves a server name to one of its online machines. Sets SRV_* globals.
+# Matching: exact (case-insensitive), then ignoring punctuation (de-14 = DE#14).
+resolve_server() {
+  local query="$1" res
+  ensure_serverlist
+
+  # shellcheck disable=SC2016 # jq program
+  res="$(jq -r --arg q "$query" --argjson seed "$RANDOM" --arg us "$US" '
+    def norm: ascii_upcase | gsub("[^A-Z0-9]"; "");
+    .LogicalServers as $all
+    | .MaxTier as $maxtier
+    | [.LogicalServers[] | select((.Name | ascii_upcase) == ($q | ascii_upcase))] as $exact
+    | (if ($exact | length) > 0 then $exact
+       else [.LogicalServers[] | select((.Name | norm) == ($q | norm))] end) as $m
+    | if ($m | length) == 0 then "none"
+      elif ($m | length) > 1 then "ambiguous\($us)\($m | map(.Name) | join(" "))"
+      else $m[0] as $l
+        | [$l.Servers[] | select(.Status == 1 and .X25519PublicKey != null)] as $up
+        | if $l.Status != 1 or ($up | length) == 0 then "down\($us)\($l.Name)"
+          else $up[$seed % ($up | length)] as $s
+            | [$all[] | select(any(.Servers[]?; .EntryIP == $s.EntryIP)) | .Name]
+              | sort_by(capture("#(?<n>[0-9]+)").n // "0" | tonumber) as $siblings
+            | ["ok", $l.Name, $l.ExitCountry, $l.City, $l.Location.Lat, $l.Location.Long,
+               $s.Domain, $s.EntryIP, $s.X25519PublicKey, $l.Tier, $maxtier, ($up | length),
+               ($siblings | length), ($siblings | first), ($siblings | last)]
+            | map(. // "" | tostring) | join($us)
+          end
+      end
+  ' "$SERVERLIST")" || die "failed to read $SERVERLIST"
+
+  local status rest
+  IFS="$US" read -r status rest <<<"$res"
+  case "$status" in
+    ok) ;;
+    ambiguous) die "server '$query' is ambiguous: $rest" ;;
+    down) die "server $rest is offline / in maintenance right now; pick another (vpn-browser --servers)" ;;
+    *)
+      local prefix="${query%%#*}" near=""
+      if [[ "$prefix" != "$query" ]]; then
+        # shellcheck disable=SC2016 # jq program
+        near="$(jq -r --arg p "${prefix^^}#" '
+          [.LogicalServers[] | select(.Status == 1 and (.Name | startswith($p))) | .Name]
+          | sort_by(capture("#(?<n>[0-9]+)").n // "0" | tonumber) | .[:12] | join(" ")
+        ' "$SERVERLIST")"
+      fi
+      die "unknown ProtonVPN server '$query'${near:+ (e.g. $near)}; see vpn-browser --servers"
+      ;;
+  esac
+
+  IFS="$US" read -r _ SRV_NAME SRV_COUNTRY SRV_CITY SRV_LAT SRV_LON SRV_DOMAIN \
+    SRV_IP SRV_PUBKEY SRV_TIER SRV_MAXTIER SRV_MACHINES \
+    SRV_SIBLINGS SRV_SIB_FIRST SRV_SIB_LAST <<<"$res"
+  [[ -n "$SRV_IP" && -n "$SRV_PUBKEY" ]] || die "server $SRV_NAME has no WireGuard endpoint in the cache"
+  if [[ -n "$SRV_MAXTIER" ]] && ((SRV_TIER > SRV_MAXTIER)); then
+    log "warning: $SRV_NAME is tier $SRV_TIER but your plan is tier $SRV_MAXTIER; the handshake will likely fail"
+  fi
+}
+
+# Timezone for a server: nearest zone1970.tab entry whose primary country
+# matches, then any listed country, then nearest overall.
+tz_for() {
+  local cc="${1^^}" lat="${2:-0}" lon="${3:-0}"
+  case "$cc" in
+    UK) cc=GB ;; # Proton's code for the United Kingdom
+    XK) cc=RS ;; # Kosovo is not in tzdata; same zone as Belgrade
+  esac
+  awk -F'\t' -v cc="$cc" -v lat="$lat" -v lon="$lon" '
+    function dms(s, degdigits,   sign, v) {
+      sign = substr(s, 1, 1) == "-" ? -1 : 1
+      v = substr(s, 2)
+      return sign * (substr(v, 1, degdigits) + substr(v, degdigits + 1, 2) / 60 \
+        + (length(v) > degdigits + 2 ? substr(v, degdigits + 3, 2) / 3600 : 0))
+    }
+    /^#/ { next }
+    {
+      n = split($1, ccs, ",")
+      rank = 2
+      if (ccs[1] == cc) rank = 0
+      else for (i = 2; i <= n; i++) if (ccs[i] == cc) rank = 1
+      match($2, /^[+-][0-9]+/)
+      la = dms(substr($2, 1, RLENGTH), 2)
+      lo = dms(substr($2, RLENGTH + 1), 3)
+      dx = (lo - lon) * cos((la + lat) / 2 * 3.14159265 / 180)
+      dy = la - lat
+      d = dx * dx + dy * dy
+      if (!found || rank < brank || (rank == brank && d < bd)) {
+        found = 1; best = $3; brank = rank; bd = d
+      }
+    }
+    END { if (found) print best }
+  ' "$TZ_TABLE"
+}
+
+cmd_servers() {
+  local filter="${1:-}"
+  ensure_serverlist
+  # shellcheck disable=SC2016 # jq program
+  jq -r --arg f "$filter" '
+    def bit($b): ((. / $b | floor) % 2) == 1;
+    def feats: [ (if bit(1) then "secure-core" else empty end),
+                 (if bit(2) then "tor" else empty end),
+                 (if bit(4) then "p2p" else empty end),
+                 (if bit(8) then "stream" else empty end) ] | join(",");
+    ($f | ascii_upcase | if . == "GB" then "UK" else . end) as $cc
+    | ["NAME", "COUNTRY", "CITY", "LOAD", "FEATURES", "TIER", "STATUS", "HOSTNAME"],
+      ( [.LogicalServers[]
+         | select($f == "" or .ExitCountry == $cc or ((.City // "") | ascii_downcase) == ($f | ascii_downcase))]
+        | sort_by(.ExitCountry, (.Name | split("#")[0]), (.Name | capture("#(?<n>[0-9]+)").n // "0" | tonumber))
+        | .[]
+        | [ .Name,
+            (if .EntryCountry != .ExitCountry then "\(.EntryCountry)->\(.ExitCountry)" else .ExitCountry end),
+            (.City // "-"),
+            "\(.Load // "?")%",
+            (.Features | feats | if . == "" then "-" else . end),
+            (if .Tier == 0 then "free" else "plus" end),
+            (if .Status == 1 then "online" else "maint" end),
+            (.Domain // "-") ] )
+    | @tsv
+  ' "$SERVERLIST" | column -t -s $'\t'
+}
+
 # ── launch ─────────────────────────────────────────────────────────────────
 
 ensure_images() {
@@ -203,11 +367,16 @@ gpu_args() {
 }
 
 cmd_launch() {
-  local preset="" profile="" tz="" persistent=false secure_core=false
+  local preset="" profile="" tz="" persistent=false secure_core=false server=""
   local -a countries=() cities=() hostnames=()
 
   while (($#)); do
     case "$1" in
+      --server)
+        [[ -z "$server" ]] || die "only one --server allowed"
+        server="${2:?--server needs a value}"
+        shift 2
+        ;;
       --country) countries+=("${2:?--country needs a value}"); shift 2 ;;
       --city) cities+=("${2:?--city needs a value}"); shift 2 ;;
       --hostname) hostnames+=("${2:?--hostname needs a value}"); shift 2 ;;
@@ -225,8 +394,30 @@ cmd_launch() {
   done
 
   # Resolve gluetun environment: preset first, flags appended (last wins).
+  local provider=protonvpn
   local -a genv=()
-  if [[ -n "$preset" ]]; then
+  if [[ -n "$server" ]]; then
+    if [[ -n "$preset" ]] || ((${#countries[@]} + ${#cities[@]} + ${#hostnames[@]})) || $secure_core; then
+      die "--server pins one exact server; drop the preset / --country / --city / --hostname / --secure-core"
+    fi
+    resolve_server "$server"
+    local machines=""
+    ((SRV_MACHINES > 1)) && machines=" (random pick of $SRV_MACHINES machines)"
+    log "server $SRV_NAME (${SRV_CITY:-?}, $SRV_COUNTRY) -> $SRV_DOMAIN $SRV_IP$machines"
+    # Names sharing a machine differ only by a label the official app sends to
+    # Proton's local agent; plain WireGuard (gluetun) can't select it.
+    ((SRV_SIBLINGS > 1)) &&
+      log "note: this machine also serves $SRV_SIB_FIRST..$SRV_SIB_LAST ($SRV_SIBLINGS names); they are equivalent here, and Proton picks the exit IP"
+    provider=custom
+    genv=(
+      "WIREGUARD_ENDPOINT_IP=$SRV_IP"
+      "WIREGUARD_ENDPOINT_PORT=$PROTON_WG_PORT"
+      "WIREGUARD_PUBLIC_KEY=$SRV_PUBKEY"
+      "WIREGUARD_ADDRESSES=$PROTON_WG_ADDRESS"
+    )
+    [[ -n "$tz" ]] || tz="$(tz_for "$SRV_COUNTRY" "$SRV_LAT" "$SRV_LON")"
+    [[ -n "$profile" ]] || profile="$(slugify "$SRV_NAME")"
+  elif [[ -n "$preset" ]]; then
     jq -e --arg p "$preset" 'has($p)' "$PRESETS" >/dev/null ||
       die "unknown preset '$preset' (see --list)"
     mapfile -t genv < <(jq -r --arg p "$preset" '.[$p].env | to_entries[] | "\(.key)=\(.value)"' "$PRESETS")
@@ -244,7 +435,7 @@ cmd_launch() {
 
   if [[ -z "$profile" ]]; then
     local seed="${hostnames[0]:-${cities[0]:-${countries[0]:-}}}"
-    [[ -n "$seed" ]] || die "give a preset or at least one of --country/--city/--hostname (see --help)"
+    [[ -n "$seed" ]] || die "give a preset, --server, or at least one of --country/--city/--hostname (see --help)"
     profile="$(slugify "$seed")"
   fi
   valid_profile "$profile"
@@ -288,7 +479,7 @@ cmd_launch() {
   local kv
   for kv in "${genv[@]}"; do genv_args+=(-e "$kv"); done
 
-  log "starting gluetun (${genv[*]:-any server})"
+  log "starting gluetun ($provider: ${genv[*]:-any server})"
   podman run -d \
     --pod "$pod" \
     --name "$gl" \
@@ -296,7 +487,7 @@ cmd_launch() {
     --cap-add=NET_ADMIN \
     --device=/dev/net/tun \
     -v "$(realpath "$SECRET_PATH"):/run/secrets/wireguard_private_key:ro" \
-    -e VPN_SERVICE_PROVIDER=protonvpn \
+    -e "VPN_SERVICE_PROVIDER=$provider" \
     -e VPN_TYPE=wireguard \
     -e WIREGUARD_PRIVATE_KEY_SECRETFILE=/run/secrets/wireguard_private_key \
     -e HTTP_CONTROL_SERVER_ADDRESS=127.0.0.1:8000 \
@@ -382,6 +573,7 @@ need_arg() { [[ -n "${1:-}" ]] || die "missing <profile> argument (see --help)";
 case "${1:-}" in
   "" | -h | --help) usage ;;
   --list) cmd_list ;;
+  --servers) cmd_servers "${2:-}" ;;
   --ip) need_arg "${2:-}"; cmd_ip "$2" ;;
   --logs) need_arg "${2:-}"; cmd_logs "$2" ;;
   --shell) need_arg "${2:-}"; cmd_shell "$2" ;;

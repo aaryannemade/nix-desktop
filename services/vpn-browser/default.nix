@@ -10,6 +10,9 @@
 #
 #   vpn-browser de                     # preset from my.vpnBrowser.profiles
 #   vpn-browser --country Japan        # ad-hoc location, no rebuild
+#   vpn-browser --server DE#14         # exact ProtonVPN server (needs the
+#                                      #   ProtonVPN CLI's server cache)
+#   vpn-browser --servers DE           # list server names
 #   vpn-browser --help
 #
 # Everything runs as rootless podman under ${username}: no systemd units, no
