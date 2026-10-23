@@ -16,10 +16,17 @@
 lib.optionalAttrs (platform == "nixos" || platform == "wsl") {
   services.ollama = {
     enable = true;
+    host = "0.0.0.0";
+    openFirewall = true;
     package = lib.mkDefault unstablePkgs.ollama;
     environmentVariables = {
-      OLLAMA_CONTEXT_LENGTH = "98304";
+      OLLAMA_CONTEXT_LENGTH = "32768";
+      # Flash attention is required for a quantized KV cache. q8_0 roughly halves
+      # KV-cache VRAM vs f16 with negligible quality loss.
+      OLLAMA_FLASH_ATTENTION = "1";
+      OLLAMA_KV_CACHE_TYPE = "q8_0";
     };
+    # test key for litellm: sk-zzwW1Kf4azzSkCAnvbyi9Q
   };
 }
 // lib.optionalAttrs (platform == "darwin") {
