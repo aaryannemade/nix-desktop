@@ -1,6 +1,14 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
+  home.pointerCursor = {
+    package = pkgs.bibata-cursors;
+    name = "Bibata-Modern-Classic";
+    size = 20;
+    gtk.enable = true;
+    x11.enable = true;
+  };
+
   wayland.windowManager.mango = {
     enable = true;
 
@@ -166,7 +174,7 @@
       mouse_accel_speed = -0.2;
 
       # ─── Cursor ───────────────────────────────────────────────────────────────────
-      cursor_size = 28;
+      cursor_size = 20;
       cursor_theme = "Bibata-Modern-Classic";
 
       # ─── Appearance ───────────────────────────────────────────────────────────────
