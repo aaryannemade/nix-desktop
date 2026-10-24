@@ -153,7 +153,8 @@ in
           clipboard_placement = "centered";
           control_center_placement = "attached";
           wallpaper_placement = "attached";
-          session_placement = "centered";
+          session_placement = "floating";
+          session_position = "center";
           open_near_click_control_center = false;
           open_near_click_launcher = false;
           open_near_click_clipboard = false;

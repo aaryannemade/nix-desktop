@@ -233,6 +233,7 @@
         "ALT,space,spawn,noctalia msg panel-toggle launcher"
         "ALT,m,spawn,noctalia msg settings-toggle"
         "SUPER,s,spawn,noctalia msg panel-toggle control-center"
+        "SUPER,Escape,spawn,noctalia msg panel-toggle session"
         "SUPER,Return,spawn,ghostty"
 
         #bind = SUPER,e,spawn,qs ipc call launcher openEmoji
