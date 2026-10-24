@@ -202,11 +202,11 @@ in
       ];
       next_tab = [
         "prefix+n"
-        "ctrl+alt+]"
+        "ctrl+alt+l"
       ];
       previous_tab = [
         "prefix+p"
-        "ctrl+alt+["
+        "ctrl+alt+h"
       ];
 
       split_horizontal = [
@@ -225,19 +225,15 @@ in
       # vim-style pane focus
       focus_pane_left = [
         "prefix+h"
-        "ctrl+alt+h"
       ];
       focus_pane_down = [
         "prefix+j"
-        "ctrl+alt+j"
       ];
       focus_pane_up = [
         "prefix+k"
-        "ctrl+alt+k"
       ];
       focus_pane_right = [
         "prefix+l"
-        "ctrl+alt+l"
       ];
 
       # navigate-mode movement (plain keys are allowed here only)
