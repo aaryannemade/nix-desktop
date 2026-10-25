@@ -79,6 +79,7 @@ in
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
       c-activate = "claude -p --model haiku \"Output exactly this text and nothing else: 'Claude Auth Valid'\"";
+      litellm-clear-cache = ''rm -f -- "''${XDG_CACHE_HOME:-$HOME/.cache}"/opencode-litellm/models-*.json(N)'';
       # Explicitly finish a remote session and suspend five seconds later. The
       # delay lets SSH close cleanly; -i overrides this session's sleep
       # inhibitor. Use only when all remote work is finished.
