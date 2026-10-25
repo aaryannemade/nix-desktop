@@ -6,6 +6,8 @@
 }:
 
 let
+  litellmURL = "https://llm.nerv-centr.xyz";
+  litellmKey = "{file:${osConfig.age.secrets.litellm-api.path}}";
   opencodeUnwrapped = inputs.opencode-nix.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
 
   # herdr decides which agent lives in a pane by looking at the pane's
@@ -37,9 +39,12 @@ in
 
   xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
-    # Pinning avoids OpenCode's persistent @latest cache, which can leave an
-    # older plugin version that ignores CLAUDE_CONFIG_DIR.
-    plugin = [ "opencode-claude-auth@2.2.1" ];
+    # Pin npm plugins explicitly to avoid OpenCode's persistent @latest cache.
+    # Claude auth 2.2.1 supports CLAUDE_CONFIG_DIR; LiteLLM 1.7.1 supports 1.x.
+    plugin = [
+      "opencode-claude-auth@2.2.1"
+      "opencode-plugin-litellm@1.7.1"
+    ];
     model = "openai/gpt-5.6-sol";
     small_model = "deepseek/deepseek-v4-flash";
     provider = {
@@ -47,6 +52,26 @@ in
       opencode.options.apiKey = "{file:${osConfig.age.secrets.opencode-api.path}}";
       openrouter.options.apiKey = "{file:${osConfig.age.secrets.openrouter-api.path}}";
       minimax.options.apiKey = "{file:${osConfig.age.secrets.minimax-api.path}}";
+      litellm = {
+        name = "Nerv Centr (LiteLLM)";
+        npm = "@ai-sdk/openai-compatible";
+        options = {
+          baseURL = "${litellmURL}/v1";
+          apiKey = litellmKey;
+        };
+        # The plugin discovers models, limits, pricing, and capabilities from
+        # LiteLLM at runtime, using the same resolved agenix key as completions.
+      };
+    };
+    # The gateway aggregates Brave Search, Context7, GitHub, and GitLab, and
+    # automatically exposes any additional servers allowed by this key.
+    mcp.nerv-centr = {
+      type = "remote";
+      url = "${litellmURL}/mcp/";
+      enabled = true;
+      oauth = false;
+      headers."x-litellm-api-key" = "Bearer ${litellmKey}";
+      timeout = 30000;
     };
     # caveman skills (skills-only, no plugin/hooks). The caveman flake input
     # ships a skills/ dir of SKILL.md folders; point opencode at it.
