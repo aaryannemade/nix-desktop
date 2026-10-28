@@ -39,8 +39,6 @@ in
 
   xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
-    # Pin npm plugins explicitly to avoid OpenCode's persistent @latest cache.
-    # Claude auth 2.2.1 supports CLAUDE_CONFIG_DIR; LiteLLM 1.7.1 supports 1.x.
     plugin = [
       "opencode-claude-auth@2.2.1"
     ];
@@ -54,7 +52,11 @@ in
           baseURL = "${AGProxy}/v1";
           apiKey = "${AGProxyKey}";
         };
-        models.orion-rp.name = "Orion";
+        models = {
+          "glm5.3-flash" = {
+            name = "GLM 5.3 Flash";
+          };
+        };
       };
       deepseek.options.apiKey = "{file:${osConfig.age.secrets.deepseek-api.path}}";
       opencode.options.apiKey = "{file:${osConfig.age.secrets.opencode-api.path}}";
