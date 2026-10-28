@@ -21,7 +21,7 @@ lib.optionalAttrs (platform == "nixos" || platform == "wsl") {
     package = lib.mkDefault unstablePkgs.ollama;
     environmentVariables = {
       OLLAMA_KEEP_ALIVE = "15m";
-      OLLAMA_CONTEXT_LENGTH = "64000";
+      OLLAMA_CONTEXT_LENGTH = "32768";
       # Flash attention is required for a quantized KV cache. q8_0 roughly halves
       # KV-cache VRAM vs f16 with negligible quality loss.
       OLLAMA_FLASH_ATTENTION = "1";
