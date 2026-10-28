@@ -84,8 +84,8 @@ in
     mode = "0400";
   };
 
-  age.secrets.litellm-api = {
-    file = ../../secrets/litellm-api.age;
+  age.secrets.ag-api = {
+    file = ../../secrets/ag-api.age;
     owner = username;
     mode = "0400";
   };
