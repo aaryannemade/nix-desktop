@@ -47,6 +47,15 @@ in
     model = "openai/gpt-5.6-sol";
     small_model = "deepseek/deepseek-v4-flash";
     provider = {
+      hellish-dev = {
+        npm = "@ai-sdk/openai-compatible";
+        name = "hellish-dev";
+        options = {
+          baseURL = "${AGProxy}/v1";
+          apiKey = "${AGProxyKey}";
+        };
+        models.orion-rp.name = "Orion";
+      };
       deepseek.options.apiKey = "{file:${osConfig.age.secrets.deepseek-api.path}}";
       opencode.options.apiKey = "{file:${osConfig.age.secrets.opencode-api.path}}";
       openrouter.options.apiKey = "{file:${osConfig.age.secrets.openrouter-api.path}}";
