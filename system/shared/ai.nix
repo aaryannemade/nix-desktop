@@ -26,6 +26,7 @@ lib.optionalAttrs (platform == "nixos" || platform == "wsl") {
       # KV-cache VRAM vs f16 with negligible quality loss.
       OLLAMA_FLASH_ATTENTION = "1";
       OLLAMA_KV_CACHE_TYPE = "q8_0";
+      OLLAMA_ORIGINS = "http://192.168.64.*,https://192.168.64.*";
     };
     # test key for litellm: sk-zzwW1Kf4azzSkCAnvbyi9Q
   };
