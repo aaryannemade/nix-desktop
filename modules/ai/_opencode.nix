@@ -29,7 +29,8 @@ let
     paths = [ opencodeUnwrapped ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
-      wrapProgram $out/bin/opencode --set HERDR_AGENT opencode
+      wrapProgram $out/bin/opencode --set HERDR_AGENT opencode \
+        --set OPENCODE_DISABLE_LSP_DOWNLOAD true
     '';
   };
 in
@@ -78,6 +79,11 @@ in
     # caveman skills (skills-only, no plugin/hooks). The caveman flake input
     # ships a skills/ dir of SKILL.md folders; point opencode at it.
     skills.paths = [ "${inputs.caveman}/skills" ];
+    # Enable all built-in LSP servers. Servers come from PATH (installed in
+    # modules/development/_neovim-config.nix); auto-downloads are disabled on
+    # the wrapper above (OPENCODE_DISABLE_LSP_DOWNLOAD), since downloaded
+    # generic-Linux binaries don't run on NixOS.
+    lsp = true;
   };
 
   xdg.configFile."opencode/tui.json".text = builtins.toJSON {
