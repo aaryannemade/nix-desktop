@@ -28,7 +28,6 @@ lib.optionalAttrs (platform == "nixos" || platform == "wsl") {
       OLLAMA_KV_CACHE_TYPE = "q8_0";
       OLLAMA_ORIGINS = "*";
     };
-    # test key for litellm: sk-zzwW1Kf4azzSkCAnvbyi9Q
   };
 }
 // lib.optionalAttrs (platform == "darwin") {
