@@ -20,7 +20,22 @@
     trash-cli
     glib
 
-    nixd
+    # Language servers on PATH, not just inside the nvf wrapper, so other tools
+    # (e.g. opencode's LSP integration) can find them. Same packages nvf's LSP
+    # presets use (modules/plugins/lsp/presets in nvf), so the store paths are
+    # shared with nvim. Keep in sync with `languages` below.
+    nil # nix (nvf's default nix server)
+    lua-language-server # lua
+    rust-analyzer # rust
+    gopls # go
+    zls # zig
+    typescript-language-server # typescript/javascript + tsx/jsx
+    marksman # markdown
+    yaml-language-server # yaml (incl. compose via SchemaStore)
+    docker-language-server # dockerfile + compose
+    superhtml # html
+    clang-tools # c/c++ (clangd)
+    basedpyright # python
 
     nixfmt # nix formatter, RFC-style (matches nvf languages.nix.format.type)
   ];
@@ -112,8 +127,13 @@
         rust.enable = true;
         go.enable = true;
         zig.enable = true;
-        typescript.enable = true;
-        tsx.enable = true;
+        typescript.enable = true; # also covers javascript
+        tsx.enable = true; # also covers jsx
+        yaml.enable = true;
+        docker.enable = true; # dockerfile + docker compose
+        html.enable = true;
+        clang.enable = true; # c/c++
+        python.enable = true;
       };
 
       autocomplete.blink-cmp = {
