@@ -43,8 +43,8 @@ in
     plugin = [
       "opencode-claude-auth@2.2.1"
     ];
-    model = "openai/gpt-5.6-sol";
-    small_model = "deepseek/deepseek-v4-flash";
+    model = "openai/gpt-6.1-sol";
+    small_model = "deepseek/deepseek-v4-pro";
     provider = {
       hellish-dev = {
         npm = "@ai-sdk/openai-compatible";
