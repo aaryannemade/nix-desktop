@@ -40,7 +40,15 @@
     open = true;
     nvidiaSettings = true;
 
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # Latest stable (production) branch from the kernel package set, i.e. the
+    # nix-cachyos-kernel flake's nixpkgs pin (see system/nixos/kernel.nix), so
+    # the version moves with that input. Falls back to `latest` if that package
+    # set ever stops providing `stable`.
+    package =
+      let
+        nvidiaPackages = config.boot.kernelPackages.nvidiaPackages;
+      in
+      nvidiaPackages.stable or nvidiaPackages.latest;
   };
 
 }

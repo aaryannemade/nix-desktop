@@ -6,11 +6,13 @@
       "https://noctalia.cachix.org"
       "https://cache.nixos-cuda.org"
       "https://adithyagenie.cachix.org"
+      "https://cache.lantian.pub/lantian"
     ];
     extra-trusted-public-keys = [
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
       "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
       "adithyagenie.cachix.org-1:h6BSMboeVfxyrULWuRQqAyweo4AJRATekb88xotfQwc="
+      "lantian:WVGO7vsRMSEN+h7Lp7kv6SAmrkEXgUGbbXm7jMDjBuQ="
     ];
   };
 
@@ -53,6 +55,16 @@
 
     noctalia = {
       url = "github:noctalia-dev/noctalia";
+    };
+
+    # CachyOS kernels (system/nixos/kernel.nix). The `release` branch only
+    # advances after upstream's Hydra has built (and cached) the kernels, NVIDIA
+    # test configs included. Deliberately NOT following our nixpkgs: its
+    # `pinned` overlay builds against its own nixos-unstable-small pin, which
+    # is what the binary cache contains. That pin also supplies the NVIDIA
+    # driver, so `nix flake update nix-cachyos-kernel` bumps kernel + driver.
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/release";
     };
 
     opendeck-nix = {
