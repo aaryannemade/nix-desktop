@@ -6,26 +6,8 @@
   ...
 }:
 let
-  idleTimeouts =
-    if osConfig.networking.hostName == "phantom" then
-      {
-        lock = 180;
-        screenOff = 210;
-        suspend = 600;
-      } # 3m / 3.5m / 10m
-    else
-      {
-        lock = 300;
-        screenOff = 330;
-        suspend = 900;
-      }; # 5m / 5.5m / 15m (wraith)
-
-  # One-shot idle suspend that respects blocking sleep inhibitors (e.g. an
-  # open SSH session, see modules/shell/_zsh.nix). If blocked, stay awake after
-  # SSH disconnects; `suspend-exit` explicitly closes SSH and suspends instead.
-  idleSuspend = pkgs.writeShellScript "noctalia-idle-suspend" ''
-    ${osConfig.systemd.package}/bin/systemctl suspend --check-inhibitors=yes
-  '';
+  # Set per host in hosts/<host>/configuration.nix (see system/nixos/idle.nix).
+  idleTimeouts = osConfig.my.idleTimeouts;
 
   communityPlugins = pkgs.applyPatches {
     name = "noctalia-community-plugins";
@@ -110,14 +92,10 @@ in
             action = "screen_off";
             enabled = true;
           };
-          # Not action = "suspend": that ignores SSH's sleep inhibitor (or
-          # prompts to override it). The lock rule has already fired by now,
-          # and noctalia's "Lock before sleep" hook covers the rest.
           suspend = {
             timeout = idleTimeouts.suspend;
             locked_timeout = idleTimeouts.suspend - idleTimeouts.lock;
-            action = "command";
-            command = "${idleSuspend}";
+            action = "suspend";
             enabled = true;
           };
         };

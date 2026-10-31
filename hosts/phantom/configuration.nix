@@ -18,6 +18,13 @@
 
   time.timeZone = "Asia/Calcutta";
 
+  # Idle timeouts in seconds (noctalia): 3m lock / 5m screen off / 10m suspend.
+  my.idleTimeouts = {
+    lock = 180;
+    screenOff = 300;
+    suspend = 600;
+  };
+
   programs = {
     steam = {
       enable = true;

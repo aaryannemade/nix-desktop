@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   inputs,
   ...
@@ -79,65 +78,67 @@ in
       vpn-connect = "protonvpn connect --country DE";
       vpn-disconnect = "protonvpn disconnect";
       c-activate = "claude -p --model haiku \"Output exactly this text and nothing else: 'Claude Auth Valid'\"";
-      # Explicitly finish a remote session and suspend five seconds later. The
-      # delay lets SSH close cleanly; -i overrides this session's sleep
-      # inhibitor. Use only when all remote work is finished.
-      suspend-exit = "systemd-run --user --quiet --collect --unit=ssh-suspend --on-active=5s ${pkgs.systemd}/bin/systemctl suspend -i && exit";
     };
 
-    initContent = lib.mkMerge [
-      # Runs first: re-exec interactive SSH logins under a *sleep* inhibitor so
-      # the machine doesn't suspend while a session is open. Only sleep: the
-      # desk still locks and blanks on noctalia's normal timers, and noctalia's
-      # suspend rule waits for this to be released (see _noctalia-shell.nix).
-      # Released on disconnect. One-off `ssh host cmd`, scp and rsync aren't
-      # interactive, so they don't hold it. Inside the session, suspending
-      # manually needs `systemctl suspend -i`. Guarded to systemd hosts (skips
-      # darwin) and against recursion.
-      (lib.mkOrder 500 ''
-        if [[ -n "$SSH_CONNECTION" && -z "$__SSH_SLEEP_INHIBIT" && -o interactive \
-              && -d /run/systemd/system ]] && (( $+commands[systemd-inhibit] )); then
-          export __SSH_SLEEP_INHIBIT=1
-          exec systemd-inhibit --what=sleep --mode=block --who=ssh \
-            --why="SSH session from ''${SSH_CONNECTION%% *}" \
-            ${config.programs.zsh.package}/bin/zsh -l
+    initContent = ''
+      # The herdr oh-my-zsh plugin defines `hrdrup='herdr update'`, which tries
+      # to download and self-install over the read-only /nix/store path. herdr
+      # is pinned by the `herdr` flake input, so updates happen via
+      # `nix flake update herdr` instead. Guarded because the plugin bails out
+      # early (defining no aliases) when herdr isn't on PATH.
+      if (( $+aliases[hrdrup] )); then
+        unalias hrdrup
+      fi
+
+      function __zoxide_fzf() {
+        local dir
+        dir=$(zoxide query -l | fzf --preview 'ls -la --color=always -- {}' --height 40% --reverse)
+        if [[ -n "$dir" ]]; then
+          builtin cd -- "$dir"
+          zle reset-prompt
         fi
-      '')
-      ''
-        # The herdr oh-my-zsh plugin defines `hrdrup='herdr update'`, which tries
-        # to download and self-install over the read-only /nix/store path. herdr
-        # is pinned by the `herdr` flake input, so updates happen via
-        # `nix flake update herdr` instead. Guarded because the plugin bails out
-        # early (defining no aliases) when herdr isn't on PATH.
-        if (( $+aliases[hrdrup] )); then
-          unalias hrdrup
+      }
+
+      zle -N __zoxide_fzf
+      bindkey '^g' __zoxide_fzf
+
+      # vpn-browser in the background (services/vpn-browser). Same arguments
+      # as `vb`, e.g. `vbg de`, `vbg --country Japan --persistence`. `&!`
+      # disowns it, so closing the terminal doesn't kill the browser. Output
+      # goes to a per-launch log; launch errors also show as notifications.
+      # Toggle noctalia's caffeine (idle inhibitor), e.g. before leaving an SSH
+      # session running. Over SSH WAYLAND_DISPLAY is unset, so point the client
+      # at whichever noctalia IPC socket exists (noctalia-<display>.sock).
+      function caffeine() {
+        local cmd
+        case "$1" in
+          -e|--enable|on) cmd=caffeine-enable ;;
+          -d|--disable|off) cmd=caffeine-disable ;;
+          -t|--toggle) cmd=caffeine-toggle ;;
+          *)
+            print -u2 "usage: caffeine --enable|--disable|--toggle"
+            return 1
+            ;;
+        esac
+        (( $+commands[noctalia] )) || { print -u2 "caffeine: noctalia not found"; return 1; }
+        local display=$WAYLAND_DISPLAY
+        if [[ -z "$display" ]]; then
+          local sock=( "''${XDG_RUNTIME_DIR:-/tmp}"/noctalia-wayland-*.sock(N[1]) )
+          (( $#sock )) || { print -u2 "caffeine: noctalia is not running"; return 1; }
+          display=''${''${sock:t}#noctalia-}
+          display=''${display%.sock}
         fi
+        WAYLAND_DISPLAY=$display noctalia msg $cmd
+      }
 
-        function __zoxide_fzf() {
-          local dir
-          dir=$(zoxide query -l | fzf --preview 'ls -la --color=always -- {}' --height 40% --reverse)
-          if [[ -n "$dir" ]]; then
-            builtin cd -- "$dir"
-            zle reset-prompt
-          fi
-        }
-
-        zle -N __zoxide_fzf
-        bindkey '^g' __zoxide_fzf
-
-        # vpn-browser in the background (services/vpn-browser). Same arguments
-        # as `vb`, e.g. `vbg de`, `vbg --country Japan --persistence`. `&!`
-        # disowns it, so closing the terminal doesn't kill the browser. Output
-        # goes to a per-launch log; launch errors also show as notifications.
-        function vbg() {
-          (( $# )) || { vpn-browser --help; return 1; }
-          local logdir="${config.xdg.stateHome}/vpn-browser"
-          local log="$logdir/''${1//[^a-zA-Z0-9_.-]/_}.log"
-          mkdir -p "$logdir"
-          nohup vpn-browser "$@" >"$log" 2>&1 &!
-          print "vpn-browser started in background (log: $log)"
-        }
-      ''
-    ];
+      function vbg() {
+        (( $# )) || { vpn-browser --help; return 1; }
+        local logdir="${config.xdg.stateHome}/vpn-browser"
+        local log="$logdir/''${1//[^a-zA-Z0-9_.-]/_}.log"
+        mkdir -p "$logdir"
+        nohup vpn-browser "$@" >"$log" 2>&1 &!
+        print "vpn-browser started in background (log: $log)"
+      }
+    '';
   };
 }

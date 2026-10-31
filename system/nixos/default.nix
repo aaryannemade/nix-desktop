@@ -15,6 +15,7 @@
     ./game-development.nix
     ./kernel.nix
     ./thunderbolt.nix
+    ./idle.nix
   ];
 
   boot.binfmt.emulatedSystems = [

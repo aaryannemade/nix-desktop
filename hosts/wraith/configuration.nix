@@ -19,6 +19,13 @@
 
   time.timeZone = "Asia/Calcutta";
 
+  # Idle timeouts in seconds (noctalia): 10m lock / 15m screen off / 30m suspend.
+  my.idleTimeouts = {
+    lock = 600;
+    screenOff = 900;
+    suspend = 1800;
+  };
+
   # Wake-on-LAN (magic packet) on the wired NIC, so it can be woken from
   # suspend to SSH in. Global NM default, so it also applies to the
   # auto-created "Wired connection 1" profile. MAC: 04:d4:c4:54:87:75
