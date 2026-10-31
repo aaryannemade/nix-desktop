@@ -8,6 +8,7 @@
     ./_neovim-config.nix
   ]
   ++ lib.optionals (platform == "nixos") [
+    ./_playwright.nix
   ]
   ++ lib.optionals (platform == "wsl") [
   ]

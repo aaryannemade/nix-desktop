@@ -1,4 +1,6 @@
 {
+  config,
+  lib,
   pkgs,
   inputs,
   osConfig,
@@ -36,9 +38,18 @@ let
 in
 
 {
-  home.packages = [ opencode ];
+  # Extra opencode MCP servers contributed by other (possibly platform-gated)
+  # modules, e.g. modules/development/_playwright.nix on NixOS hosts only.
+  # Merged into the `mcp` block of opencode.json below.
+  options.my.opencode.mcp = lib.mkOption {
+    type = lib.types.attrsOf lib.types.anything;
+    default = { };
+    description = "Additional opencode MCP server definitions, keyed by server name.";
+  };
 
-  xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
+  config.home.packages = [ opencode ];
+
+  config.xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
     "$schema" = "https://opencode.ai/config.json";
     plugin = [
       "opencode-claude-auth@2.2.1"
@@ -75,7 +86,8 @@ in
         headers."Authorization" = "Bearer ${AGProxyKey}";
         timeout = 30000;
       };
-    };
+    }
+    // config.my.opencode.mcp;
     # caveman skills (skills-only, no plugin/hooks). The caveman flake input
     # ships a skills/ dir of SKILL.md folders; point opencode at it.
     skills.paths = [ "${inputs.caveman}/skills" ];
@@ -86,7 +98,7 @@ in
     lsp = true;
   };
 
-  xdg.configFile."opencode/tui.json".text = builtins.toJSON {
+  config.xdg.configFile."opencode/tui.json".text = builtins.toJSON {
     "$schema" = "https://opencode.ai/tui.json";
     theme = "catppuccin";
   };
