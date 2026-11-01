@@ -31,3 +31,23 @@
 - [x] Set up auto-sleep on all hosts
 - [x] Fix opencode github flake input
 - [x] Implement the binary cache rollout above
+
+## Agent skills
+
+[skills-hub](https://github.com/aaryannemade/skills) owns the pinned skill sources
+and selection through agent-skills-nix. `modules/ai/_skills.nix` imports its
+Home Manager module and installs the selected skills on all regular hosts:
+
+- Shared skills: `$XDG_CONFIG_HOME/agents/skills` (normally
+  `~/.config/agents/skills`). OpenCode explicitly loads this directory through
+  `skills.paths`; it is not an automatic discovery location.
+
+Change sources or selection in the hub repository, then update this consumer
+and apply it:
+
+```sh
+nix flake update skills-hub
+sudo nixos-rebuild switch --flake .#<hostname>
+```
+
+Quit and restart OpenCode after activation to load the updated skills.

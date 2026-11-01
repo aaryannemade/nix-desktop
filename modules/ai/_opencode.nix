@@ -88,9 +88,7 @@ in
       };
     }
     // config.my.opencode.mcp;
-    # caveman skills (skills-only, no plugin/hooks). The caveman flake input
-    # ships a skills/ dir of SKILL.md folders; point opencode at it.
-    skills.paths = [ "${inputs.caveman}/skills" ];
+    skills.paths = [ "${config.xdg.configHome}/agents/skills" ];
     # Enable all built-in LSP servers. Servers come from PATH (installed in
     # modules/development/_neovim-config.nix); auto-downloads are disabled on
     # the wrapper above (OPENCODE_DISABLE_LSP_DOWNLOAD), since downloaded

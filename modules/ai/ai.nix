@@ -5,6 +5,7 @@
     # shared (all platforms)
     ./_claude.nix
     ./_opencode.nix
+    ./_skills.nix
   ]
   ++ lib.optionals (platform == "nixos") [
   ]

@@ -99,9 +99,9 @@
       flake = false;
     };
 
-    caveman = {
-      url = "github:JuliusBrussee/caveman";
-      flake = false;
+    skills-hub = {
+      url = "github:aaryannemade/skills";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     nvim-config = {

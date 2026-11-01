@@ -20,6 +20,43 @@
         "type": "github"
       }
     },
+    "agent-skills": {
+      "inputs": {
+        "nixpkgs": [
+          "skills-hub",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1792594212,
+        "narHash": "sha256-XWx3R/AIeYdyZ3guuZVNqirEUPPpehICrIRV3VabR+U=",
+        "owner": "Kyure-A",
+        "repo": "agent-skills-nix",
+        "rev": "f48aa227f3d157ae3abda12cd9c4ab867f400419",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Kyure-A",
+        "repo": "agent-skills-nix",
+        "type": "github"
+      }
+    },
+    "anthropic-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793215238,
+        "narHash": "sha256-MkCOANBAqCc1WmNf7S8PsyAphGJAIzEXGyCm8RrCR9M=",
+        "owner": "anthropics",
+        "repo": "skills",
+        "rev": "ca45fc496a3436251f191354091d557da31c15b5",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anthropics",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "blender-cuda": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -669,7 +706,6 @@
       "inputs": {
         "agenix": "agenix",
         "blender-cuda": "blender-cuda",
-        "caveman": "caveman",
         "helium": "helium",
         "herdr": "herdr",
         "home-manager": "home-manager",
@@ -684,7 +720,8 @@
         "nvim-config": "nvim-config",
         "ohmyzsh": "ohmyzsh",
         "opencode-nix": "opencode-nix",
-        "opendeck-nix": "opendeck-nix"
+        "opendeck-nix": "opendeck-nix",
+        "skills-hub": "skills-hub"
       }
     },
     "rust-overlay": {
@@ -728,6 +765,29 @@
       "original": {
         "owner": "wlrfx",
         "repo": "scenefx",
+        "type": "github"
+      }
+    },
+    "skills-hub": {
+      "inputs": {
+        "agent-skills": "agent-skills",
+        "anthropic-skills": "anthropic-skills",
+        "caveman": "caveman",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793551431,
+        "narHash": "sha256-ukm2vSXY5ufHx67LPyZHclV8Xb8yKQaDw+r4Ph0a0Ac=",
+        "owner": "aaryannemade",
+        "repo": "skills",
+        "rev": "aa4f2a331e147268c878e17c8ebd29c8c61d07fd",
+        "type": "github"
+      },
+      "original": {
+        "owner": "aaryannemade",
+        "repo": "skills",
         "type": "github"
       }
     },
