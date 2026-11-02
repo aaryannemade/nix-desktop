@@ -81,11 +81,11 @@
     "caveman": {
       "flake": false,
       "locked": {
-        "lastModified": 1792915057,
-        "narHash": "sha256-fuSsPP7GMuAZ5Ab2paS41RAo5k/objd503ElcMeMgsk=",
+        "lastModified": 1793595589,
+        "narHash": "sha256-DFS9Xp9msSFF4WwdPd9RdghjBzc0x4yVomM6nxQWPKw=",
         "owner": "JuliusBrussee",
         "repo": "caveman",
-        "rev": "9b68f7ed12b05e7efaff18e65c5a3fc2849fd0a4",
+        "rev": "2e068f735253cce28256744804785f01887d9646",
         "type": "github"
       },
       "original": {
@@ -688,6 +688,22 @@
         "type": "github"
       }
     },
+    "playwright-skill": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1786715493,
+        "narHash": "sha256-T2iRhG4HkKNjIR4XbFf0e06GJ9SwXUfslErVOH9RtlA=",
+        "owner": "lackeyjb",
+        "repo": "playwright-skill",
+        "rev": "dd47a6a023e249eb1b36e9e943eab89d0900865d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "lackeyjb",
+        "repo": "playwright-skill",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "agenix": "agenix",
@@ -761,14 +777,15 @@
         "caveman": "caveman",
         "nixpkgs": [
           "nixpkgs"
-        ]
+        ],
+        "playwright-skill": "playwright-skill"
       },
       "locked": {
-        "lastModified": 1793551431,
-        "narHash": "sha256-ukm2vSXY5ufHx67LPyZHclV8Xb8yKQaDw+r4Ph0a0Ac=",
+        "lastModified": 1793628758,
+        "narHash": "sha256-gsxGqopJqvq6pThH3BOcB9JfLhasJCC5wQwDlzNa7Yc=",
         "owner": "aaryannemade",
         "repo": "agent-skills",
-        "rev": "aa4f2a331e147268c878e17c8ebd29c8c61d07fd",
+        "rev": "9ad767f782f91f59380b8c33faffa3a17a4b2b35",
         "type": "github"
       },
       "original": {
