@@ -1,4 +1,6 @@
 result
+tmp
+tmp/*
 
 # Plaintext secrets — never commit. *.age files ARE encrypted and SHOULD be committed.
 *.pem
