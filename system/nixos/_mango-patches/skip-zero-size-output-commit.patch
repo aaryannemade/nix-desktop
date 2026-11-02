@@ -1,0 +1,61 @@
+--- a/src/manage/monitor.c
++++ b/src/manage/monitor.c
+@@ -360,12 +360,58 @@
+ 	}
+ }
+ 
++/*
++ * Whether committing @state would give @output a non-zero resolution.
++ * wlroots asserts width > 0 && height > 0 when it (re)creates the primary
++ * swapchain, so a zero-sized output must never reach build_state.
++ */
++static bool output_state_has_size(struct wlr_output *output,
++								  const struct wlr_output_state *state) {
++	int32_t width = output->width;
++	int32_t height = output->height;
++
++	/* Disabling an output does not allocate a swapchain. */
++	if (state->committed & WLR_OUTPUT_STATE_ENABLED) {
++		if (!state->enabled)
++			return true;
++	} else if (!output->enabled) {
++		return true;
++	}
++
++	if (state->committed & WLR_OUTPUT_STATE_MODE) {
++		if (state->mode_type == WLR_OUTPUT_STATE_MODE_FIXED) {
++			width = state->mode ? state->mode->width : 0;
++			height = state->mode ? state->mode->height : 0;
++		} else {
++			width = state->custom_mode.width;
++			height = state->custom_mode.height;
++		}
++	}
++
++	return width > 0 && height > 0;
++}
++
+ bool mango_scene_output_commit(struct wlr_scene_output *scene_output,
+ 							   struct wlr_output_state *state) {
+ 	struct wlr_output *wlr_output = scene_output->output;
+ 	Monitor *m = wlr_output->data;
+ 	bool committed = false;
+ 
++	/*
++	 * After resume from suspend a DRM connector (seen with NVIDIA USB-C
++	 * outputs) can briefly report a 0x0 mode while the link retrains.
++	 * Committing then aborts inside wlr_swapchain_create. Skip this commit,
++	 * keep the pending state, and retry shortly instead of crashing.
++	 */
++	if (!output_state_has_size(wlr_output, state)) {
++		mango_error(true, WLR_INFO,
++					"Output %s has no valid size yet, deferring commit",
++					wlr_output->name);
++		if (m && m->skip_frame_timeout)
++			wl_event_source_timer_update(m->skip_frame_timeout, 250);
++		return false;
++	}
++
+ 	bool frame_allow_tearing = check_tearing_frame_allow(m);
+ 
+ 	/*

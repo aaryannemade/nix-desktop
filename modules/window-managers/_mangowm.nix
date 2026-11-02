@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, osConfig, ... }:
 
 {
   home.pointerCursor = {
@@ -11,6 +11,8 @@
 
   wayland.windowManager.mango = {
     enable = true;
+    # Patched build from system/nixos/display.nix.
+    package = osConfig.programs.mango.package;
 
     autostart_sh = ''
       systemctl --user import-environment WAYLAND_DISPLAY DISPLAY XDG_CURRENT_DESKTOP XDG_SESSION_TYPE DBUS_SESSION_BUS_ADDRESS
