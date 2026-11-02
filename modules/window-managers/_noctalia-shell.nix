@@ -65,9 +65,17 @@ in
           enable_builtin_templates = true;
           builtin_ids = [
             "btop"
-            "ghostty"
             "mango"
           ];
+          # Replaces the builtin ghostty template. Since noctalia 698c920 the
+          # builtin gives ANSI colors fixed hues only nudged toward the
+          # wallpaper; this keeps the old mapping onto the Material roles so
+          # the (ANSI-colored) spaceship prompt follows the wallpaper.
+          user.ghostty = {
+            input_path = "${./_noctalia-templates/ghostty}";
+            output_path = "$XDG_CONFIG_HOME/ghostty/themes/noctalia";
+            post_hook = "bash ${config.programs.noctalia.package}/share/noctalia/assets/templates/ghostty/reload.sh";
+          };
         };
       };
       idle = {
