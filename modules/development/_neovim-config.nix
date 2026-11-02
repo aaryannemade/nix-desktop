@@ -21,7 +21,7 @@
     glib
 
     # Language servers on PATH, not just inside the nvf wrapper, so other tools
-    # (e.g. opencode's LSP integration) can find them. Same packages nvf's LSP
+    # can find them (opencode 2 no longer runs LSPs itself). Same packages nvf's LSP
     # presets use (modules/plugins/lsp/presets in nvf), so the store paths are
     # shared with nvim. Keep in sync with `languages` below.
     nil # nix (nvf's default nix server)

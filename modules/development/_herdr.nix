@@ -32,9 +32,11 @@ let
   # The installer refuses to run unless the opencode config dir already exists,
   # hence the mkdir. It only writes local files -- no network access needed.
   #
-  # It emits five files, but `herdr integration status` only requires four;
-  # cli.json is optional (verified by bisecting the install). Dropping any of
-  # the other four downgrades the status to "needs repair".
+  # It emits five files. We copy four; the fifth, cli.json, is OpenCode 2's
+  # terminal-client config, which modules/ai/_opencode.nix owns. Its only
+  # herdr content, the `./herdr-opencode` plugin entry, is contributed via
+  # my.opencode.cliPlugins below instead. Dropping any of the other four
+  # downgrades `herdr integration status` to "needs repair".
   herdrOpencodeIntegration = pkgs.runCommand "herdr-opencode-integration" { } ''
     export HOME="$NIX_BUILD_TOP/home"
     mkdir -p "$HOME/.config/opencode"
@@ -65,24 +67,23 @@ in
 
   # herdr's half of the opencode integration. Lives here rather than in
   # modules/ai/_opencode.nix because herdr owns these files; _opencode.nix owns
-  # opencode.json and tui.json and manages neither plugins/ nor any of the
+  # opencode.json and cli.json and manages neither plugins/ nor any of the
   # paths below, so there is no home-manager collision.
   #
   # These land as read-only store symlinks, so `herdr integration install` can
   # no longer overwrite them -- despite the "managed by herdr" header in the
   # generated files. That is intended: they now track the flake input instead.
   #
-  # CAVEAT: on opencode 1.18.4 only the plugins/ entry actually does anything.
-  # opencode reads tui.json and ignores tui.jsonc (it accepts the .jsonc
-  # extension for opencode.json only), so the three TUI files below are inert
-  # for now. They are still installed because herdr reports "needs repair"
-  # without them, and because they light up once opencode reads tui.jsonc --
-  # which is also what `session.resume_agents_on_restore` below needs in order
-  # to get session refs back from opencode.
+  # On OpenCode 2 the active piece is herdr-opencode/tui.js, registered as the
+  # `./herdr-opencode` terminal plugin in cli.json (see my.opencode.cliPlugins
+  # below); in a V2 full TUI it owns both session selection and lifecycle
+  # reporting. plugins/herdr-agent-state.js, herdr-tui-session.js and
+  # tui.jsonc are the V1 halves -- inert on V2, but still installed because
+  # herdr reports "needs repair" without them.
   # NOTE: installing these files is necessary but NOT sufficient. herdr only
   # accepts state reports for a pane it has already claimed as an agent, and it
   # claims panes by matching the foreground process name. Nix's makeWrapper
-  # renames opencode's real binary to `.opencode-unwrapped`, which herdr does
+  # renames opencode's real binary to `.opencode-wrapped`, which herdr does
   # not recognise, so the pane stays a plain terminal and the Agents sidebar
   # stays empty no matter how healthy `herdr integration status` looks. The
   # workaround (HERDR_AGENT=opencode on the wrapper) lives in
@@ -95,9 +96,17 @@ in
       integrationFile "agent-state" "plugins/herdr-agent-state.js";
 
     "opencode/herdr-tui-session.js".source = integrationFile "tui-session" "herdr-tui-session.js";
-    "opencode/herdr-opencode/tui.js".source = integrationFile "tui-entrypoint" "herdr-opencode/tui.js";
+    # Keep the real store path beside ../herdr-tui-session.js: the loader
+    # resolves symlinks before resolving the entrypoint's relative import.
+    "opencode/herdr-opencode".source = "${herdrOpencodeIntegration}/herdr-opencode";
     "opencode/tui.jsonc".source = integrationFile "tui-config" "tui.jsonc";
   };
+
+  # OpenCode 2 TUI registration, exactly what `herdr integration install
+  # opencode` writes to cli.json (resolved relative to ~/.config/opencode, so
+  # it loads herdr-opencode/tui.js above). Re-check this entry when bumping
+  # herdr if `herdr integration status` reports "needs repair".
+  my.opencode.cliPlugins = [ "./herdr-opencode" ];
 
   xdg.configFile."herdr/config.toml".source = toml.generate "herdr-config.toml" {
     # Skip first-run setup; herdr would otherwise try to write this key back.

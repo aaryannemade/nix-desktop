@@ -55,7 +55,9 @@ in
       "--caps"
       "devtools"
     ];
-    enabled = true;
-    timeout = 60000;
+    timeout = {
+      catalog = 60000;
+      execution = 60000;
+    };
   };
 }

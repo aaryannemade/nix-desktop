@@ -252,24 +252,6 @@
         "type": "github"
       }
     },
-    "flake-utils_3": {
-      "inputs": {
-        "systems": "systems_4"
-      },
-      "locked": {
-        "lastModified": 1731533236,
-        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "helium": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -563,11 +545,11 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1767364772,
-        "narHash": "sha256-fFUnEYMla8b7UKjijLnMe+oVFOz6HjijGGNS1l7dYaQ=",
+        "lastModified": 1790510107,
+        "narHash": "sha256-EVMNYv7hYDDD9TGVT/hIyTYgpiXA8y3m5xIEIxuGNU0=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "16c7794d0a28b5a37904d55bcca36003b9109aaa",
+        "rev": "3181085bfd08663b6b9e60bc7a8395c2aaa741bd",
         "type": "github"
       },
       "original": {
@@ -665,22 +647,22 @@
         "type": "github"
       }
     },
-    "opencode-nix": {
+    "opencode": {
       "inputs": {
-        "flake-utils": "flake-utils_3",
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1792681329,
-        "narHash": "sha256-HtV4ZjVpfjX7hiYSd+i23aPF+XoC7+jb43OAo3fU5iM=",
-        "owner": "dominicnunez",
-        "repo": "opencode-nix",
-        "rev": "0b012c2931c7adc0d40d4b6b2a993361720f68b0",
+        "lastModified": 1793398011,
+        "narHash": "sha256-/a1czcXi12KWPXcESqplNdOZcjEs8gWCMO7w4nQYLkw=",
+        "owner": "anomalyco",
+        "repo": "opencode",
+        "rev": "9bbb8ce18c80f099e0e448775f59d965ead40a21",
         "type": "github"
       },
       "original": {
-        "owner": "dominicnunez",
-        "repo": "opencode-nix",
+        "owner": "anomalyco",
+        "ref": "v2.2.5",
+        "repo": "opencode",
         "type": "github"
       }
     },
@@ -719,7 +701,7 @@
         "nvf": "nvf",
         "nvim-config": "nvim-config",
         "ohmyzsh": "ohmyzsh",
-        "opencode-nix": "opencode-nix",
+        "opencode": "opencode",
         "opendeck-nix": "opendeck-nix",
         "skills-hub": "skills-hub"
       }
@@ -834,21 +816,6 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default-linux",
-        "type": "github"
-      }
-    },
-    "systems_4": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
         "type": "github"
       }
     },
