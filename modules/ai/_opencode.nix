@@ -7,23 +7,12 @@
 }:
 
 let
-  # Upstream refreshes nix/hashes.json on `dev` after cutting a release, so the
-  # node_modules hash shipped at a release tag is often stale ("hash mismatch
-  # in fixed-output derivation ... opencode-node_modules"). Override it for
-  # the pinned tag. When bumping the tag in flake.nix, set this to
-  # lib.fakeHash, rebuild, and paste the "got:" hash (or drop the override if
-  # upstream's hash matches).
-  nodeModulesHash = "sha256-+GgLX4lq8fPOJVoDGp220uiCTLB0ZwrBkcNo36q9MZU=";
-  opencodeUnwrapped =
-    inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode.overrideAttrs
-      (old: {
-        node_modules = old.node_modules.override { hash = nodeModulesHash; };
-      });
+  opencodeUnwrapped = inputs.opencode.packages.${pkgs.stdenv.hostPlatform.system}.opencode;
 
   # herdr decides which agent lives in a pane by looking at the pane's
-  # foreground process. Nix wraps opencode (upstream's package and the
+  # foreground process. Nix wraps opencode (the opencode-nix package and the
   # wrapProgram below), which renames the real executable to
-  # `.opencode-wrapped` -- so the foreground process herdr sees is not
+  # `.opencode-unwrapped` / `.opencode-wrapped` -- so the foreground process herdr sees is not
   # `opencode`. Detection fails, the pane is never claimed as an agent, and
   # nothing shows up in the Agents sidebar. The herdr integration still
   # connects and its `pane.report_agent` calls are ACKed, but herdr drops them

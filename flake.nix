@@ -71,14 +71,9 @@
       url = "github:Yeradon/opendeck-nix";
     };
 
-    # Official opencode flake. Builds from source (bun) -- upstream publishes
-    # no binary cache (anomalyco/opencode#22500, closed not planned), so each
-    # bump compiles locally. Pinned to a release tag because the default
-    # branch is `dev`. Bump by editing the tag, then `nix flake update opencode`.
-    # Deliberately NOT following our nixpkgs: the build needs nixpkgs'
-    # `models-dev` and bun at versions upstream has tested against.
     opencode = {
-      url = "github:anomalyco/opencode/v2.2.5";
+      url = "github:aaryannemade/opencode-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     helium = {
