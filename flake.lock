@@ -763,13 +763,13 @@
         "lastModified": 1793551431,
         "narHash": "sha256-ukm2vSXY5ufHx67LPyZHclV8Xb8yKQaDw+r4Ph0a0Ac=",
         "owner": "aaryannemade",
-        "repo": "skills",
+        "repo": "agent-skills",
         "rev": "aa4f2a331e147268c878e17c8ebd29c8c61d07fd",
         "type": "github"
       },
       "original": {
         "owner": "aaryannemade",
-        "repo": "skills",
+        "repo": "agent-skills",
         "type": "github"
       }
     },

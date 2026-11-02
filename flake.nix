@@ -106,7 +106,7 @@
     };
 
     skills-hub = {
-      url = "github:aaryannemade/skills";
+      url = "github:aaryannemade/agent-skills";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
