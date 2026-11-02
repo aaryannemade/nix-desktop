@@ -46,24 +46,19 @@ in
 
 {
   options.my.opencode = {
-    # opencode MCP servers, one module per server: modules/development/
-    # _hellish-mcp.nix (all platforms) and _playwright.nix (NixOS only).
-    # Written as `mcp.servers` of opencode.json below, so entries must use the
+    # opencode MCP servers
     mcp = lib.mkOption {
       type = lib.types.attrsOf lib.types.anything;
       default = { };
-      description = "opencode MCP server definitions (V2 shape), keyed by server name.";
+      description = "opencode MCP server definitions, keyed by server name.";
     };
-    # opencode providers, one module per provider/API key: modules/ai/providers/.
-    # Written as `providers` of opencode.json below (V2 shape: `package`,
-    # `settings`, `models`).
+    # opencode llm provider
     providers = lib.mkOption {
       type = lib.types.attrsOf lib.types.anything;
       default = { };
-      description = "opencode provider definitions (V2 shape), keyed by provider ID.";
+      description = "opencode provider definitions, keyed by provider ID.";
     };
-    # Terminal-client plugins contributed by other modules, e.g. herdr's TUI
-    # integration (modules/development/_herdr.nix). Written to cli.json.
+    # Terminal-client plugin
     cliPlugins = lib.mkOption {
       type = lib.types.listOf lib.types.anything;
       default = [ ];
@@ -74,7 +69,6 @@ in
   config = {
     home.packages = [ opencode ];
 
-    # Native OpenCode 2 config shape (https://opencode.ai/v2/docs/migrate-v1).
     xdg.configFile."opencode/opencode.json".text = builtins.toJSON {
       "$schema" = "https://opencode.ai/config.json";
       # opencode-claude-auth 3.x is the V2 build (2.2.1 was the last for V1).
