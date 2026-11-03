@@ -23,12 +23,19 @@ let
   # from the foreground process's environment, so setting it on the wrapper
   # scopes the hint to opencode instead of every process in every pane -- which
   # is what `home.sessionVariables` would do.
+  #
+  # opencode 2's native clipboard backend dlopen()s libwayland-client.so.0 at
+  # runtime. NixOS has no global library path, so without it on
+  # LD_LIBRARY_PATH the host clipboard is unavailable and pasting images with
+  # ctrl+v silently does nothing (text still pastes via the terminal).
   opencode = pkgs.symlinkJoin {
     name = "opencode-herdr-wrapped";
     paths = [ opencodeUnwrapped ];
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
-      wrapProgram $out/bin/opencode --set HERDR_AGENT opencode
+      wrapProgram $out/bin/opencode \
+        --set HERDR_AGENT opencode \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ pkgs.wayland ]}
     '';
   };
 in
