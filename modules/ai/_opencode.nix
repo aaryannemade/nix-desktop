@@ -82,6 +82,11 @@ in
           resource = "*";
           effect = "ask";
         }
+        {
+          action = "external_directory";
+          resource = "/tmp/directory/*";
+          effect = "allow";
+        }
       ];
       experimental = {
         todo = true;
