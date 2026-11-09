@@ -84,7 +84,7 @@ in
         }
         {
           action = "external_directory";
-          resource = "/tmp/directory/*";
+          resource = "/tmp/*";
           effect = "allow";
         }
       ];
