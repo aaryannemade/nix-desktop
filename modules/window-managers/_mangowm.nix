@@ -229,7 +229,7 @@
       #   SUPER+ALT       = layout-level controls (gaps, proportions, layout switch)
       #   ALT+SHIFT       = monitor focus / client-to-monitor
       #   CTRL+SHIFT      = floating window move
-      #   CTRL+ALT        = floating window resize
+      #   SUPER+SHIFT+arrows = window resize (CTRL+ALT+arrows is Herdr pane focus)
       # ═══════════════════════════════════════════════════════════════════════════════
       bind = [
         # ─── Session ──────────────────────────────────────────────────────────────────
@@ -343,10 +343,10 @@
         "CTRL+SHIFT,Right,movewin,+20,+0"
 
         # ─── Window: Resize ───────────────────────────────────────────────────────────
-        "CTRL+ALT,Up,resizewin,+0,-20"
-        "CTRL+ALT,Down,resizewin,+0,+20"
-        "CTRL+ALT,Left,resizewin,-20,+0"
-        "CTRL+ALT,Right,resizewin,+20,+0"
+        "SUPER+SHIFT,Up,resizewin,+0,-20"
+        "SUPER+SHIFT,Down,resizewin,+0,+20"
+        "SUPER+SHIFT,Left,resizewin,-20,+0"
+        "SUPER+SHIFT,Right,resizewin,+20,+0"
 
         # ─── Mouse ────────────────────────────────────────────────────────────────────
         #"SUPER,btn_left,moveresize,curmove"

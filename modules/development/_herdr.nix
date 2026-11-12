@@ -231,18 +231,22 @@ in
         "ctrl+alt+z"
       ];
 
-      # vim-style pane focus
+      # Direct arrow-key focus alongside the vim-style prefix bindings.
       focus_pane_left = [
         "prefix+h"
+        "ctrl+alt+left"
       ];
       focus_pane_down = [
         "prefix+j"
+        "ctrl+alt+down"
       ];
       focus_pane_up = [
         "prefix+k"
+        "ctrl+alt+up"
       ];
       focus_pane_right = [
         "prefix+l"
+        "ctrl+alt+right"
       ];
 
       # navigate-mode movement (plain keys are allowed here only)
