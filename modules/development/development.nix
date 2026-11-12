@@ -9,6 +9,7 @@
     ./_neovim-config.nix
   ]
   ++ lib.optionals (platform == "nixos") [
+    ./_blender-mcp.nix
     ./_playwright.nix
   ]
   ++ lib.optionals (platform == "wsl") [
