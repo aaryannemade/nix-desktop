@@ -77,6 +77,7 @@ let
               inherit
                 import-tree
                 inputs
+                hostname
                 username
                 shownGpus
                 platform

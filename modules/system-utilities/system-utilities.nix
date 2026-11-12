@@ -6,6 +6,7 @@
   ]
   ++ lib.optionals (platform == "nixos") [
     ./_bluetooth-ui.nix
+    ./_localsend.nix
     ./_obs.nix
   ]
   ++ lib.optionals (platform == "wsl") [
