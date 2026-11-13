@@ -49,6 +49,12 @@
         identityFile = osConfig.age.secrets.nerv-centr.path;
         identitiesOnly = true;
       };
+      whatbox = {
+        hostname = "nectarine.whatbox.ca";
+        user = "love00404";
+        identityFile = osConfig.age.secrets.nerv-centr.path;
+        identitiesOnly = true;
+      };
       eva = {
         hostname = "eva.local";
         user = "admin";
