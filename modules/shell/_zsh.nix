@@ -102,10 +102,6 @@ in
       zle -N __zoxide_fzf
       bindkey '^g' __zoxide_fzf
 
-      # vpn-browser in the background (services/vpn-browser). Same arguments
-      # as `vb`, e.g. `vbg de`, `vbg --country Japan --persistence`. `&!`
-      # disowns it, so closing the terminal doesn't kill the browser. Output
-      # goes to a per-launch log; launch errors also show as notifications.
       # Toggle noctalia's caffeine (idle inhibitor), e.g. before leaving an SSH
       # session running. Over SSH WAYLAND_DISPLAY is unset, so point the client
       # at whichever noctalia IPC socket exists (noctalia-<display>.sock).
@@ -131,6 +127,10 @@ in
         WAYLAND_DISPLAY=$display noctalia msg $cmd
       }
 
+      # vpn-browser in the background (services/vpn-browser). Same arguments
+      # as `vb`, e.g. `vbg de`, `vbg --country Japan --persistence`. `&!`
+      # disowns it, so closing the terminal doesn't kill the browser. Output
+      # goes to a per-launch log; launch errors also show as notifications.
       function vbg() {
         (( $# )) || { vpn-browser --help; return 1; }
         local logdir="${config.xdg.stateHome}/vpn-browser"

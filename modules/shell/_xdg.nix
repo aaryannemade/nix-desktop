@@ -37,6 +37,7 @@ in
   #   Unfixable upstream: ~/.ssh, ~/.steam, ~/.steampid, ~/.mozilla,
   #   ~/.librewolf, ~/.ollama, ~/.pki, ~/.claude.json, ~/.nix-defexpr.
   home.sessionVariables = {
+    EDITOR = "nvim";
     # npm. USERCONFIG also moves ~/.npmrc. NPM_CONFIG_TMP is intentionally
     # omitted: npm >= 7 ignores it and warns about it on every invocation.
     NPM_CONFIG_USERCONFIG = "${configHome}/npm/npmrc";
