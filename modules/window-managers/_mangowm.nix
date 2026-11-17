@@ -1,5 +1,39 @@
 { pkgs, osConfig, ... }:
 
+let
+  # LibreWolf maps extension popouts titled just "LibreWolf" and only renames
+  # them afterwards, while mango evaluates window_rule once at map time. So
+  # watch for the rename and float + resize + center the window ourselves.
+  float-bitwarden-popups = pkgs.writeShellApplication {
+    name = "float-bitwarden-popups";
+    runtimeInputs = [
+      osConfig.programs.mango.package
+      pkgs.jq
+    ];
+    text = ''
+      width=380
+      height=630
+      seen=" "
+      while true; do
+        mmsg watch all-clients |
+          jq --unbuffered -r '.clients[]
+            | select(.appid == "librewolf"
+                and (.title | startswith("Extension: (Bitwarden Password Manager)"))
+                and (.is_floating | not))
+            | "\(.id) \(.width) \(.height)"' |
+          while read -r id w h; do
+            # Only once per window, so tiling it back by hand sticks.
+            [[ "$seen" == *" $id "* ]] && continue
+            seen+="$id "
+            mmsg dispatch togglefloating "client,$id" >/dev/null
+            mmsg dispatch "resizewin,$((width - w)),$((height - h))" "client,$id" >/dev/null
+            mmsg dispatch centerwin "client,$id" >/dev/null
+          done || true
+        sleep 1
+      done
+    '';
+  };
+in
 {
   home.pointerCursor = {
     package = pkgs.bibata-cursors;
@@ -21,6 +55,7 @@
       systemctl --user restart opendeck.service
       wl-paste --type text --watch cliphist store &
       wl-paste --type image --watch cliphist store &
+      ${float-bitwarden-popups}/bin/float-bitwarden-popups &
     '';
 
     settings = {
