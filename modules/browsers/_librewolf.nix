@@ -40,8 +40,9 @@
           install_url = "https://addons.mozilla.org/firefox/downloads/latest/proton-pass/latest.xpi";
           installation_mode = "force_installed";
           private_browsing = true;
-          # Pin the toolbar button to the navigation bar by default.
-          default_area = "navbar";
+          # Backup / email aliases only; keep it in the extensions menu so
+          # Bitwarden owns the toolbar.
+          default_area = "menupanel";
         };
 
         # Bitwarden — installed directly from AMO, always latest version.
