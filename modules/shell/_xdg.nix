@@ -35,7 +35,7 @@ in
   #                handles our secrets.
   #   HISTFILE   - owned by programs.zsh.history.path in ./_zsh.nix.
   #   Unfixable upstream: ~/.ssh, ~/.steam, ~/.steampid, ~/.mozilla,
-  #   ~/.librewolf, ~/.ollama, ~/.pki, ~/.claude.json, ~/.nix-defexpr.
+  #   ~/.librewolf, ~/.ollama, ~/.pki, ~/.nix-defexpr.
   home.sessionVariables = {
     EDITOR = "nvim";
     # npm. USERCONFIG also moves ~/.npmrc. NPM_CONFIG_TMP is intentionally
@@ -63,8 +63,8 @@ in
     # client code, so this applies to us as well.
     PULSE_COOKIE = "${configHome}/pulse/cookie";
 
-    # Claude Code. ~/.claude.json is still hardcoded, see
-    # https://github.com/anthropics/claude-code/issues/1455.
+    # Claude Code (also moves ~/.claude.json). opencode-claude-auth reads
+    # credentials from here too.
     CLAUDE_CONFIG_DIR = "${configHome}/claude";
 
     # wget reads its per-user startup file from $WGETRC instead of ~/.wgetrc.
