@@ -55,6 +55,12 @@
         identityFile = osConfig.age.secrets.nerv-centr.path;
         identitiesOnly = true;
       };
+      asuka = {
+        hostname = "2.24.158.12";
+        user = "admin";
+        identityFile = osConfig.age.secrets.nerv-centr.path;
+        identitiesOnly = true;
+      };
       eva = {
         hostname = "eva.local";
         user = "admin";
