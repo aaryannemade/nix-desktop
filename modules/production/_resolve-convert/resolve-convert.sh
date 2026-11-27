@@ -79,11 +79,14 @@ video_args() {
   esac
 }
 
-# Sets: P_VCODEC P_PIXFMT P_ACODECS (space-separated, one per audio stream).
+# Sets: P_VCODEC P_PIXFMT
+#       P_ASTREAMS  decodable audio streams, space-separated "index:codec"
+#       P_ADROPPED  undecodable audio tracks by fourcc, e.g. "apac" (iPhone
+#                   spatial audio, which ffmpeg can't decode)
 # Returns 1 for files that aren't usable media (images, broken files, ...).
 probe() {
   local json
-  json="$(ffprobe -v error -show_entries stream=codec_type,codec_name,pix_fmt:stream_disposition=attached_pic:format=format_name -of json -- "$1" 2>/dev/null)" ||
+  json="$(ffprobe -v error -show_entries stream=index,codec_type,codec_name,codec_tag_string,pix_fmt:stream_disposition=attached_pic:format=format_name -of json -- "$1" 2>/dev/null)" ||
     return 1
 
   # Still images probe as single-frame "video"; they import into Resolve as-is.
@@ -91,8 +94,10 @@ probe() {
 
   P_VCODEC="$(jq -r '[.streams[] | select(.codec_type == "video" and (.disposition.attached_pic // 0) == 0)][0] | .codec_name // ""' <<<"$json")"
   P_PIXFMT="$(jq -r '[.streams[] | select(.codec_type == "video" and (.disposition.attached_pic // 0) == 0)][0] | .pix_fmt // ""' <<<"$json")"
-  P_ACODECS="$(jq -r '[.streams[] | select(.codec_type == "audio") | .codec_name] | join(" ")' <<<"$json")"
-  [[ -n "$P_VCODEC" || -n "$P_ACODECS" ]]
+  # ffprobe omits codec_name (or reports "unknown") when there is no decoder.
+  P_ASTREAMS="$(jq -r '[.streams[] | select(.codec_type == "audio" and ((.codec_name // "unknown") | IN("unknown", "none") | not)) | "\(.index):\(.codec_name)"] | join(" ")' <<<"$json")"
+  P_ADROPPED="$(jq -r '[.streams[] | select(.codec_type == "audio" and ((.codec_name // "unknown") | IN("unknown", "none"))) | .codec_tag_string // "?"] | join(" ")' <<<"$json")"
+  [[ -n "$P_VCODEC" || -n "$P_ASTREAMS" ]]
 }
 
 # Converts $1 to $2. Prints a one-line plan; returns non-zero on failure.
@@ -124,10 +129,11 @@ convert() {
     fi
   fi
 
-  if [[ -n "$P_ACODECS" ]]; then
-    args+=(-map '0:a')
-    local i=0 c aplan=""
-    for c in $P_ACODECS; do
+  if [[ -n "$P_ASTREAMS" ]]; then
+    local i=0 s c aplan=""
+    for s in $P_ASTREAMS; do
+      c="${s#*:}"
+      args+=(-map "0:${s%%:*}")
       if [[ "$c" == pcm_* ]]; then
         args+=("-c:a:$i" copy)
       else
@@ -138,6 +144,7 @@ convert() {
     done
     plan="${plan:+$plan, }audio: ${aplan:-copy (pcm)}"
   fi
+  [[ -n "$P_ADROPPED" ]] && plan="${plan:+$plan, }dropped undecodable audio: $P_ADROPPED"
 
   if $DRY_RUN; then
     echo "$src -> $dst  [$plan]"
