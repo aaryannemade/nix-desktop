@@ -16,6 +16,7 @@
     ./game-development.nix
     ./kernel.nix
     ./thunderbolt.nix
+    ./filesystems.nix
     ./idle.nix
   ];
 
