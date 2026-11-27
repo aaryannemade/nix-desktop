@@ -9,5 +9,6 @@
     ../overrides/blender-cuda.nix
     ../overrides/obs-cuda.nix
     ../overrides/steam.nix
+    ../overrides/davinci-resolve.nix
   ];
 }
