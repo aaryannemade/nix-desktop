@@ -10,8 +10,6 @@
 #
 #   resolve-convert clip.mp4 ~/Downloads/footage   # -> ~/Videos/resolve
 #   resolve-convert --help
-#
-# Unfree: allowed per host via hosts/overrides/davinci-resolve.nix.
 let
   resolve-convert = import ./_resolve-convert {
     inherit pkgs lib;
@@ -19,6 +17,8 @@ let
   };
 in
 {
+  my.unfreePackages = [ "davinci-resolve" ];
+
   home.packages = [
     pkgs.davinci-resolve
     resolve-convert

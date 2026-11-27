@@ -1,5 +1,4 @@
 {
-  pkgs,
   hostname,
   ...
 }:
@@ -26,16 +25,6 @@
   };
 
   programs = {
-    steam = {
-      enable = true;
-      extraCompatPackages = [
-        pkgs.proton-ge-bin
-      ];
-      gamescopeSession.enable = true;
-    };
-    gamescope = {
-      enable = true;
-    };
     zsh.shellAliases = {
       nrs = "sudo nixos-rebuild switch --flake ~/nix-desktop#${hostname}";
     };

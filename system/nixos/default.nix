@@ -12,6 +12,7 @@
     ./authentication.nix
     ./virtualization.nix
     ./users.nix
+    ./gaming.nix
     ./game-development.nix
     ./kernel.nix
     ./thunderbolt.nix
