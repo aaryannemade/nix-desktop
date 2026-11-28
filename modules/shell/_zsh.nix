@@ -26,6 +26,7 @@ in
     tree
     pv
     rsync
+    just
   ];
 
   programs.zsh = {
